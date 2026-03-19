@@ -1,0 +1,1552 @@
+📦 PROJECT STRUCTURE:
+.
+├── 📄 .antigravityignore
+├── 📄 .dockerignore
+├── 📂 .vscode/
+│   └── 📄 settings.json
+├── 📂 apps/
+│   ├── 📄 .gitignore
+│   ├── 📂 api/
+│   │   ├── 📄 .dockerignore
+│   │   ├── 📄 .env.example
+│   │   ├── 📄 Dockerfile
+│   │   ├── 📄 pyrightconfig.json
+│   │   ├── 📄 requirements.txt
+│   │   ├── 📂 agents/
+│   │   ├── 📂 app/
+│   │   │   ├── 📄 main.py
+│   │   │   ├── 📂 __pycache__/
+│   │   │   ├── 📂 api/
+│   │   │   │   ├── 📄 endpoints.py
+│   │   │   │   ├── 📄 routes.py
+│   │   │   │   └── 📂 __pycache__/
+│   │   │   ├── 📂 core/
+│   │   │   │   ├── 📄 config.py
+│   │   │   │   ├── 📄 database.py
+│   │   │   │   ├── 📂 __pycache__/
+│   │   │   │   └── 📂 database/
+│   │   │   ├── 📂 models/
+│   │   │   │   └── 📄 __init__.py
+│   │   │   ├── 📂 schemas/
+│   │   │   │   ├── 📄 schemas.py
+│   │   │   │   └── 📂 __pycache__/
+│   │   │   └── 📂 services/
+│   │   │       └── 📄 github_sync.py
+│   │   ├── 📂 core/
+│   │   ├── 📂 routes/
+│   │   ├── 📂 script/
+│   │   │   └── 📄 seed.py
+│   │   └── 📂 services/
+│   └── 📂 web/
+│       ├── 📄 .dockerignore
+│       ├── 📄 .env.example
+│       ├── 📄 .eslintrc.json
+│       ├── 📄 Dockerfile
+│       ├── 📄 next-env.d.ts
+│       ├── 📄 next.config.js
+│       ├── 📄 package.json
+│       ├── 📄 postcss.config.js
+│       ├── 📄 tailwind.config.js
+│       ├── 📄 tsconfig.json
+│       ├── 📂 app/
+│       │   ├── 📄 globals.css
+│       │   ├── 📄 layout.tsx
+│       │   └── 📄 page.tsx
+│       ├── 📂 components/
+│       │   ├── 📄 FloatingContact.tsx
+│       │   └── 📂 bento/
+│       │       ├── 📄 HeaderTile.tsx
+│       │       ├── 📄 HeroTile.tsx
+│       │       ├── 📄 ProjectTile.tsx
+│       │       ├── 📄 SocialTile.tsx
+│       │       └── 📄 TerminalTile.tsx
+│       ├── 📂 contents/
+│       ├── 📂 hooks/
+│       ├── 📂 lib/
+│       └── 📂 public/
+│           ├── 📄 favicon.ico
+│           └── 📂 images/
+├── 📂 docs/
+└── 📂 infrastructure/
+    ├── 📄 docker-compose.yml
+    └── 📂 nginx/
+        └── 📄 nginx.conf
+
+==================================================
+
+START OF FILE: .dockerignore
+------------------------------
+**/venv
+**/node_modules
+**/.next
+**/.git
+------------------------------
+END OF FILE: .dockerignore
+
+START OF FILE: .antigravityignore
+------------------------------
+**/node_modules/**
+**/venv/**
+**/.next/**
+**/.git/**
+**/__pycache__/**
+**/dist/**
+**/build/**
+------------------------------
+END OF FILE: .antigravityignore
+
+START OF FILE: .vscode/settings.json
+------------------------------
+{
+  "python.defaultInterpreterPath": "/Users/mahdi/Desktop/OthersProjects/1. My Portfolio/1.mahdi0jafari/apps/api/venv/bin/python",
+  "python.languageServer": "Pylance",
+  "python.analysis.extraPaths": [
+    "/Users/mahdi/Desktop/OthersProjects/1. My Portfolio/1.mahdi0jafari/apps/api"
+  ],
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.useLibraryCodeForTypes": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.venvPath": "/Users/mahdi/Desktop/OthersProjects/1. My Portfolio/1.mahdi0jafari/apps/api",
+  "python.venvPath": "/Users/mahdi/Desktop/OthersProjects/1. My Portfolio/1.mahdi0jafari/apps/api",
+  "css.lint.unknownAtRules": "ignore"
+}
+
+------------------------------
+END OF FILE: .vscode/settings.json
+
+START OF FILE: infrastructure/docker-compose.yml
+------------------------------
+services:
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/mahdi_node
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  web:
+    build:
+      context: ../apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    networks:
+      - frontend
+    # ❌ Volumes removed: این خط همان باگی بود که فایل server.js را غیب می‌کرد
+
+  postgres:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: mahdi_node
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      web:
+        condition: service_started
+      api:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    restart: always
+    networks:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  frontend:
+  backend:
+------------------------------
+END OF FILE: infrastructure/docker-compose.yml
+
+START OF FILE: infrastructure/nginx/nginx.conf
+------------------------------
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 80;
+
+        # Frontend Next.js app
+        location / {
+            proxy_pass http://web:3000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # Backend FastAPI app
+        location /api/ {
+            proxy_pass http://api:8000/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            
+            # WebSocket support for realtime chat
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+        }
+    }
+}
+
+------------------------------
+END OF FILE: infrastructure/nginx/nginx.conf
+
+START OF FILE: apps/.gitignore
+------------------------------
+node_modules/
+venv/
+.next/
+.git/
+__pycache__/
+*.pyc
+.DS_Store
+------------------------------
+END OF FILE: apps/.gitignore
+
+START OF FILE: apps/web/tailwind.config.js
+------------------------------
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          background: '#050505',
+          primary: '#FFFFFF',
+          secondary: '#A0A0A0',
+          accent: '#00F0FF',
+          card: 'rgba(20, 20, 20, 0.6)',
+        }
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'sans-serif'],
+        mono: ['var(--font-jetbrains)', 'monospace'],
+      },
+      borderRadius: {
+        '3xl': '24px',
+      },
+      animation: {
+        blink: 'blink 1s step-end infinite',
+      },
+      keyframes: {
+        blink: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        }
+      }
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/container-queries'),
+  ],
+}
+
+------------------------------
+END OF FILE: apps/web/tailwind.config.js
+
+START OF FILE: apps/web/Dockerfile
+------------------------------
+FROM node:18-alpine AS base
+
+# ۱. مرحله نصب وابستگی‌ها
+FROM base AS deps
+RUN sed -i 's/dl-cdn.alpinelinux.org/uk.alpinelinux.org/g' /etc/apk/repositories && \
+    apk add --no-cache libc6-compat
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install --legacy-peer-deps
+
+# ۲. مرحله بیلد
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm run build
+
+# ۳. مرحله اجرای نهایی (Runner)
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
+
+# کپی کردن محتویات استندالون به ریشه ورک‌دایرکتوری
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+EXPOSE 3000
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]
+------------------------------
+END OF FILE: apps/web/Dockerfile
+
+START OF FILE: apps/web/next.config.js
+------------------------------
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone',
+  images: {
+    domains: ['najvagram.ir'], // Adding the domain from your mockup for the profile picture
+  },
+}
+
+module.exports = nextConfig
+
+------------------------------
+END OF FILE: apps/web/next.config.js
+
+START OF FILE: apps/web/next-env.d.ts
+------------------------------
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+/// <reference path="./.next/types/routes.d.ts" />
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+
+------------------------------
+END OF FILE: apps/web/next-env.d.ts
+
+START OF FILE: apps/web/.dockerignore
+------------------------------
+**/venv
+**/node_modules
+**/.next
+**/.git
+------------------------------
+END OF FILE: apps/web/.dockerignore
+
+START OF FILE: apps/web/package.json
+------------------------------
+{
+  "name": "mahdi0jafari-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.577.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.0",
+    "@tailwindcss/forms": "^0.5.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.1.6",
+    "postcss": "^8.4.0",
+    "typescript": "^5.0.0"
+  }
+}
+
+------------------------------
+END OF FILE: apps/web/package.json
+
+START OF FILE: apps/web/tsconfig.json
+------------------------------
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "incremental": true,
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "paths": {
+            "@/*": [
+                "./*"
+            ]
+        }
+    },
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
+------------------------------
+END OF FILE: apps/web/tsconfig.json
+
+START OF FILE: apps/web/.env.example
+------------------------------
+
+------------------------------
+END OF FILE: apps/web/.env.example
+
+START OF FILE: apps/web/postcss.config.js
+------------------------------
+module.exports = {
+    plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+    },
+}
+------------------------------
+END OF FILE: apps/web/postcss.config.js
+
+START OF FILE: apps/web/.eslintrc.json
+------------------------------
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ]
+}
+
+------------------------------
+END OF FILE: apps/web/.eslintrc.json
+
+START OF FILE: apps/web/app/layout.tsx
+------------------------------
+import './globals.css'
+import { Inter, JetBrains_Mono } from 'next/font/google'
+import clsx from 'clsx'
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
+  display: 'swap',
+})
+
+export const metadata = {
+  title: 'mahdi0jafari | AI-Native Systems Architect',
+  description: 'Specializing in distributed systems and autonomous agent orchestration.',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en" className="scroll-smooth">
+      <body className={clsx(
+        inter.variable, 
+        jetbrainsMono.variable,
+        "antialiased selection:bg-brand-accent selection:text-brand-background px-4 py-6 md:px-12 md:py-12 max-w-[1400px] mx-auto font-sans"
+      )}>
+        {children}
+      </body>
+    </html>
+  )
+}
+
+------------------------------
+END OF FILE: apps/web/app/layout.tsx
+
+START OF FILE: apps/web/app/page.tsx
+------------------------------
+import HeaderTile from '@/components/bento/HeaderTile'
+import HeroTile from '@/components/bento/HeroTile'
+import SocialTile from '@/components/bento/SocialTile'
+import ProjectTile from '@/components/bento/ProjectTile'
+import TerminalTile from '@/components/bento/TerminalTile'
+import FloatingContact from '@/components/FloatingContact'
+
+export default function Home() {
+  return (
+    <>
+      <FloatingContact />
+      <main className="bento-grid relative">
+        <HeaderTile />
+        <HeroTile />
+        <SocialTile />
+        
+        <ProjectTile 
+          title="Lyraz"
+          description="Media orchestration engine leveraging AI for dynamic content synthesis and stream management."
+          status="Production"
+          tags={["Python", "FFmpeg"]}
+        />
+        
+        <ProjectTile 
+          title="Barnamz"
+          description="Educational SaaS platform designed for high-concurrency learning environments and adaptive testing."
+          status="Production"
+          tags={["React", "PostgreSQL"]}
+        />
+        
+        <ProjectTile 
+          title="Konkur Bot"
+          description="Autonomous assistant bot for national entrance exam preparation with RAG-driven knowledge retrieval."
+          status="Beta"
+          tags={["Gemini API", "Node.js"]}
+        />
+
+        <TerminalTile />
+
+        <a href="https://github.com/mahdi0jafari?tab=repositories" target="_blank" rel="noreferrer" className="col-span-full glass-effect p-5 rounded-2xl flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4 text-sm font-mono text-brand-secondary hover:text-brand-primary hover:border-brand-accent/30 transition-all duration-300 card-glow group cursor-pointer">
+          <span className="text-brand-accent group-hover:text-white transition-colors">&gt; cd ./archive && ls -la</span>
+          <span className="opacity-50 hidden md:inline">|</span>
+          <span>View 12+ other deployed projects & experiments &rarr;</span>
+        </a>
+
+        <footer id="contact" className="col-span-full glass-effect p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between card-glow gap-6">
+          <div className="text-center md:text-left">
+            <p className="text-xl font-bold mb-1">Let's build something future-proof.</p>
+            <p className="text-brand-secondary text-sm">Now accepting new system architecture design invitations.</p>
+          </div>
+          <a href="mailto:hello@mahdijafari.ir" className="px-8 py-4 bg-white text-black font-bold rounded-2xl hover:bg-brand-accent hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 w-full md:w-auto text-center">
+            Deploy Message
+          </a>
+        </footer>
+      </main>
+    </>
+  )
+}
+
+------------------------------
+END OF FILE: apps/web/app/page.tsx
+
+START OF FILE: apps/web/app/globals.css
+------------------------------
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .card-glow {
+    transition: all 0.4s ease;
+  }
+  
+  .card-glow:hover {
+    border-color: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+body {
+  background-color: #050505;
+  color: #FFFFFF;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+/* Base grid layout class used in main Bento container */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+------------------------------
+END OF FILE: apps/web/app/globals.css
+
+START OF FILE: apps/web/components/FloatingContact.tsx
+------------------------------
+import { Terminal } from 'lucide-react'
+
+export default function FloatingContact() {
+    return (
+      <a 
+        href="mailto:hello@mahdijafari.ir" 
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-30 flex items-center gap-2 border border-brand-accent/40 bg-[#050505] px-6 py-3 font-mono text-sm font-bold uppercase tracking-widest text-brand-accent transition-all hover:bg-brand-accent hover:text-black hover:shadow-[0_0_25px_rgba(0,240,255,0.4)]"
+      >
+        <Terminal size={16} className="animate-pulse" />
+        <span>EXECUTE_CONTACT</span>
+      </a>
+    )
+  }
+
+------------------------------
+END OF FILE: apps/web/components/FloatingContact.tsx
+
+START OF FILE: apps/web/components/bento/HeroTile.tsx
+------------------------------
+import Image from 'next/image'
+
+export default function HeroTile() {
+  return (
+    <section className="col-span-full lg:col-span-3 glass-effect p-10 md:p-14 rounded-3xl relative overflow-hidden flex flex-col justify-end min-h-[420px] card-glow group">
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-brand-accent opacity-5 blur-[120px] rounded-full transition-opacity group-hover:opacity-10 duration-700"></div>
+      
+      <div className="relative z-10">
+        <div className="flex items-center gap-6 mb-8">
+          <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <Image 
+              src="https://najvagram.ir/najva/uploads/c4b3e76c00d04dcd978b16db62ad99ea.jpg" 
+              alt="Mahdi Jafari"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div className="flex flex-col items-start gap-2">
+            <span className="inline-block px-3 py-1 rounded-full bg-brand-accent/10 text-brand-accent text-xs font-mono border border-brand-accent/20">
+              SYSTEMS_ARCHITECT_V3.0
+            </span>
+            <span className="text-brand-secondary text-sm font-mono">Based in Iran | Global Operator</span>
+          </div>
+        </div>
+
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
+          Engineering Autonomous Systems <br className="hidden md:block"/>
+          <span className="text-brand-secondary">@ Speed of AI</span>
+        </h1>
+        <p className="text-brand-secondary max-w-xl text-lg leading-relaxed">
+          Orchestrating scalable infrastructure with deterministic precision.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+------------------------------
+END OF FILE: apps/web/components/bento/HeroTile.tsx
+
+START OF FILE: apps/web/components/bento/ProjectTile.tsx
+------------------------------
+interface ProjectProps {
+    title: string;
+    description: string;
+    status: 'Production' | 'Beta' | 'Archived';
+    tags: string[];
+  }
+  
+  export default function ProjectTile({ title, description, status, tags }: ProjectProps) {
+    
+    const getStatusStyle = (s: string) => {
+      switch(s) {
+        case 'Production': return 'bg-green-500/10 text-green-400 border-green-500/20';
+        case 'Beta': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
+        default: return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+      }
+    }
+  
+    return (
+      <article className="col-span-full md:col-span-2 lg:col-span-1 glass-effect p-8 rounded-3xl flex flex-col justify-between card-glow h-[350px]">
+        <div>
+          <div className="flex justify-between items-start mb-6">
+            <span className={`px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wider border ${getStatusStyle(status)}`}>
+              {status}
+            </span>
+          </div>
+          <h3 className="text-2xl font-bold mb-3">{title}</h3>
+          <p className="text-brand-secondary text-sm leading-relaxed">
+            {description}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2 mt-4">
+          {tags.map((tag) => (
+            <span key={tag} className="text-[10px] font-mono text-brand-secondary px-2 py-1 bg-white/5 rounded border border-white/10">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </article>
+    )
+  }
+
+------------------------------
+END OF FILE: apps/web/components/bento/ProjectTile.tsx
+
+START OF FILE: apps/web/components/bento/SocialTile.tsx
+------------------------------
+export default function SocialTile() {
+  return (
+    <aside className="col-span-full lg:col-span-1 glass-effect p-8 rounded-3xl flex flex-col justify-between card-glow h-full min-h-[420px]">
+      <div className="space-y-4">
+        <a href="https://github.com/mahdi0jafari" target="_blank" rel="noreferrer" className="flex items-center gap-4 group cursor-pointer block">
+          <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-brand-accent/20 transition-colors">
+            <svg className="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-medium">@mahdi0jafari</p>
+            <p className="text-xs font-mono text-brand-secondary mt-1">2.1k+ Contributions</p>
+          </div>
+        </a>
+
+        <a href="https://x.com/mahdi0jafari" target="_blank" rel="noreferrer" className="flex items-center gap-4 group cursor-pointer block">
+          <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-brand-accent/20 transition-colors">
+            <svg className="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-medium">@mahdi0jafari</p>
+            <p className="text-xs font-mono text-brand-secondary mt-1">Proof of Work Log</p>
+          </div>
+        </a>
+
+        <a href="https://t.me/mahdi0jafari" target="_blank" rel="noreferrer" className="flex items-center gap-4 group cursor-pointer block">
+          <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-brand-accent/20 transition-colors">
+            <svg className="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-medium">@mahdi0jafari</p>
+            <p className="text-xs font-mono text-brand-secondary mt-1">Encrypted Channel</p>
+          </div>
+        </a>
+      </div>
+
+      <div className="mt-8 p-4 bg-brand-accent/5 rounded-2xl border border-brand-accent/10">
+        <p className="text-xs text-brand-secondary uppercase tracking-widest mb-1">Status</p>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></div>
+          <span className="text-sm font-medium text-brand-accent">System Online: Accepting Tasks</span>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+------------------------------
+END OF FILE: apps/web/components/bento/SocialTile.tsx
+
+START OF FILE: apps/web/components/bento/TerminalTile.tsx
+------------------------------
+'use client'
+
+import { useState, useRef, useEffect, KeyboardEvent } from 'react'
+import { createPortal } from 'react-dom'
+import { X, Send } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+interface Message {
+  id: string
+  text: string
+  sender: 'system' | 'agent' | 'user'
+  isHtml?: boolean
+}
+
+export default function TerminalTile() {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([
+    { id: '1', text: '$ ./init_agent.sh', sender: 'system' },
+  ])
+  const [input, setInput] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollContainerSmall = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // اسکرول هوشمند بدون پریدنِ صفحه
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+    if (scrollContainerSmall.current) {
+      scrollContainerSmall.current.scrollTo({
+        top: scrollContainerSmall.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [messages, isTyping, isExpanded])
+
+  // قفل کردن اسکرول بدنه سایت در زمان باز بودن مودال + خروج با دکمه ESC
+  useEffect(() => {
+    const handleEsc = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Escape') setIsExpanded(false)
+    }
+
+    if (isExpanded) {
+      document.body.style.overflow = 'hidden'
+      window.addEventListener('keydown', handleEsc)
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { 
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleEsc)
+    }
+  }, [isExpanded])
+
+  useEffect(() => {
+    const bootLines = [
+      { id: '2', text: '<div class="flex justify-between items-center"><span class="text-[#00F0FF]">&gt; FastAPI_Engine <span class="text-white/30 text-[10px]">[LOADED]</span></span></div>', isHtml: true, delay: 300 },
+      { id: '3', text: '<div class="flex justify-between items-center"><span class="text-white">&gt; Vector_DB <span class="text-white/30 text-[10px]">[SYNCED]</span></span></div>', isHtml: true, delay: 700 },
+      { id: '4', text: '<div class="flex justify-between items-center"><span class="text-green-400">&gt; Awaiting Query...</span></div>', isHtml: true, delay: 1100 },
+    ]
+    bootLines.forEach(({ id, text, isHtml, delay }) => {
+      setTimeout(() => {
+        setMessages(prev => {
+          if (prev.find(m => m.id === id)) return prev
+          return [...prev, { id, text, sender: 'system', isHtml }]
+        })
+      }, delay)
+    })
+  }, [])
+
+  const handleSend = () => {
+    const text = input.trim()
+    if (!text) return
+    setMessages(prev => [...prev, { id: Date.now().toString(), text, sender: 'user' }])
+    setInput('')
+    setIsTyping(true)
+    setTimeout(() => {
+      setIsTyping(false)
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        text: "This is a simulated response. Once the FastAPI backend is deployed, I will analyze your query.",
+        sender: 'agent',
+      }])
+    }, 1500)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') { e.stopPropagation(); handleSend() }
+  }
+
+  const terminalContent = (
+    <AnimatePresence>
+      {isExpanded && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-6" style={{ fontStyle: 'normal' }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+            onClick={() => setIsExpanded(false)}
+          />
+          
+          <motion.section
+            layoutId="terminal-wrapper"
+            className="w-full h-[100dvh] sm:h-[85vh] sm:max-w-4xl bg-[#050505] border-t sm:border border-[#00F0FF]/30 rounded-none sm:rounded-3xl flex flex-col overflow-hidden relative shadow-[0_0_50px_rgba(0,240,255,0.1)] glass-effect"
+            onLayoutAnimationComplete={() => inputRef.current?.focus()}
+          >
+            <TerminalHeader isExpanded={true} onClose={() => setIsExpanded(false)} />
+            
+            <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
+              <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-4 font-mono text-sm scrollbar-hide">
+                {messages.map(m => (
+                  <div key={m.id} className={`flex flex-col gap-1 ${m.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                    {m.sender !== 'system' && (
+                      <span className={`text-[10px] uppercase tracking-tighter ${m.sender === 'user' ? 'text-white/40' : 'text-[#00F0FF]'}`}>
+                        {m.sender}
+                      </span>
+                    )}
+                    <div className={
+                      m.sender === 'system'
+                        ? 'text-[#A0A0A0] w-full'
+                        : `p-3 rounded-xl max-w-[90%] ${m.sender === 'user' ? 'bg-white/10 text-white rounded-tr-none' : 'border border-white/10 text-[#A0A0A0] rounded-tl-none'}`
+                    }>
+                      {m.isHtml ? <div dangerouslySetInnerHTML={{ __html: m.text }} /> : m.text}
+                    </div>
+                  </div>
+                ))}
+                {isTyping && <div className="text-[#00F0FF] text-xs animate-pulse mt-2">Analyzing RAG database...</div>}
+                <div className="h-2 shrink-0" />
+              </div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mt-4 pt-4 border-t border-white/5 flex gap-3 items-center pb-safe"
+              >
+                <span className="text-[#00F0FF] font-bold tracking-tighter">{'>'}</span>
+                <input
+                  ref={inputRef}
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask about my systems..."
+                  className="flex-1 bg-transparent border-0 text-white focus:ring-0 p-0 text-sm font-mono outline-none shadow-none"
+                  autoComplete="off"
+                />
+                <button onClick={handleSend} className="text-[#00F0FF] p-2 hover:bg-[#00F0FF]/10 rounded-lg transition-colors">
+                  <Send size={18} />
+                </button>
+              </motion.div>
+            </div>
+          </motion.section>
+        </div>
+      )}
+    </AnimatePresence>
+  )
+
+  return (
+    <>
+      <motion.section
+        layoutId="terminal-wrapper"
+        onClick={() => setIsExpanded(true)}
+        className={`col-span-full lg:col-span-1 h-[350px] glass-effect rounded-3xl cursor-pointer flex flex-col overflow-hidden group border border-white/5 hover:border-[#00F0FF]/30 transition-colors ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
+        <TerminalHeader isExpanded={false} onClose={() => {}} />
+        <div className="p-6 font-mono text-xs text-[#A0A0A0] flex-1 flex flex-col justify-end relative">
+             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 backdrop-blur-sm z-20">
+                <span className="text-[#00F0FF] border border-[#00F0FF]/30 px-3 py-1 rounded-full bg-black/50">OPEN_AGENT_INTERFACE</span>
+             </div>
+             
+             <div ref={scrollContainerSmall} className="flex-1 overflow-y-auto space-y-2 scrollbar-hide z-10 flex flex-col justify-end mt-auto text-sm">
+                {messages.filter(m => m.sender === 'system').map(m =>
+                  m.isHtml ? (
+                    <div key={m.id} dangerouslySetInnerHTML={{ __html: m.text }} />
+                  ) : (
+                    <p key={m.id}>{m.text}</p>
+                  )
+                )}
+             </div>
+             <p className="animate-blink text-[#00F0FF] mt-2 z-10">_</p>
+        </div>
+      </motion.section>
+
+      {/* خروج از گرید و رندر در ریشه صفحه */}
+      {mounted && typeof document !== 'undefined' && createPortal(terminalContent, document.body)}
+      
+      <style>{`
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .animate-blink { animation: blink 1s step-end infinite; }
+      `}</style>
+    </>
+  )
+}
+
+function TerminalHeader({ isExpanded, onClose }: { isExpanded: boolean; onClose: (e: React.MouseEvent) => void }) {
+  return (
+    <div className="bg-black/80 px-5 py-3 border-b border-white/10 flex justify-between items-center z-10 sm:rounded-t-3xl shrink-0">
+      <div className="flex gap-2 items-center">
+        <div className="w-3 h-3 rounded-full bg-red-500/80" />
+        <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+        <div className="w-3 h-3 rounded-full bg-green-500/80" />
+        <span className="text-[11px] font-mono text-[#A0A0A0] ml-2 tracking-widest">mahdi_neural_node.sh</span>
+      </div>
+      {isExpanded && (
+        <button
+          onClick={e => { e.stopPropagation(); onClose(e); }}
+          className="text-[#A0A0A0] hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      )}
+    </div>
+  )
+}
+
+------------------------------
+END OF FILE: apps/web/components/bento/TerminalTile.tsx
+
+START OF FILE: apps/web/components/bento/HeaderTile.tsx
+------------------------------
+export default function HeaderTile() {
+    return (
+      <header className="col-span-full md:col-span-4 glass-effect px-8 py-4 rounded-3xl flex flex-wrap items-center justify-between card-glow">
+        <div className="flex items-center gap-3">
+          <div className="h-6 w-6 bg-brand-accent rounded flex items-center justify-center">
+            <span className="text-black font-bold text-xs">M</span>
+          </div>
+          <span className="font-mono text-lg font-bold tracking-tighter">mahdi0jafari</span>
+        </div>
+        <nav className="flex gap-8 text-sm font-medium text-brand-secondary">
+          <a href="#projects" className="hover:text-brand-accent transition-colors">Projects</a>
+          <a href="#stack" className="hover:text-brand-accent transition-colors">Stack</a>
+          <a href="#contact" className="hover:text-brand-accent transition-colors">Contact</a>
+        </nav>
+      </header>
+    )
+  }
+
+------------------------------
+END OF FILE: apps/web/components/bento/HeaderTile.tsx
+
+START OF FILE: apps/web/public/favicon.ico
+------------------------------
+
+------------------------------
+END OF FILE: apps/web/public/favicon.ico
+
+START OF FILE: apps/api/pyrightconfig.json
+------------------------------
+{
+  "venvPath": ".",
+  "venv": "venv",
+  "pythonVersion": "3.14",
+  "pythonPlatform": "Darwin",
+  "include": [
+    "app",
+    "script"
+  ],
+  "extraPaths": [
+    "."
+  ],
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true,
+  "reportMissingModuleSource": "none"
+}
+
+------------------------------
+END OF FILE: apps/api/pyrightconfig.json
+
+START OF FILE: apps/api/requirements.txt
+------------------------------
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.12.1
+APScheduler==3.11.2
+certifi==2026.2.25
+cffi==2.0.0
+charset-normalizer==3.4.5
+click==8.3.1
+cryptography==46.0.5
+distro==1.9.0
+fastapi==0.135.1
+google-auth==2.49.1
+google-genai==1.67.0
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.11
+jsonpatch==1.33
+jsonpointer==3.0.0
+langchain-core==1.2.19
+langgraph==1.1.2
+langgraph-checkpoint==4.0.1
+langgraph-prebuilt==1.0.8
+langgraph-sdk==0.3.11
+langsmith==0.7.17
+numpy==2.4.3
+orjson==3.11.7
+ormsgpack==1.12.2
+packaging==26.0
+pgvector==0.4.2
+asyncpg==0.29.0
+pyasn1==0.6.2
+pyasn1_modules==0.4.2
+pycparser==3.0
+pydantic==2.12.5
+pydantic-settings==2.13.1
+pydantic_core==2.41.5
+python-dotenv==1.2.2
+PyYAML==6.0.3
+requests==2.32.5
+requests-toolbelt==1.0.0
+sniffio==1.3.1
+SQLAlchemy==2.0.48
+starlette==0.52.1
+tenacity==9.1.4
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzlocal==5.3.1
+urllib3==2.6.3
+uuid_utils==0.14.1
+uvicorn==0.41.0
+websockets==16.0
+xxhash==3.6.0
+zstandard==0.25.0
+
+------------------------------
+END OF FILE: apps/api/requirements.txt
+
+START OF FILE: apps/api/Dockerfile
+------------------------------
+# ۱. انتخاب پایه ثابت
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# ۲. نصب ابزارهای سیستم‌عاملی با «صندوقچه ذخیره»
+# این خط باعث می‌شود حتی اگر لایه عوض شد، فایل‌های دانلود شده در سیستم تو بمانند
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    gcc \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# ۳. کپی کردن فقط فایل نیازمندی‌ها (جدا از کد اصلی)
+# این حرکت هوشمندانه است؛ چونrequirements.txt دیر به دیر عوض می‌شود
+COPY requirements.txt .
+
+# ۴. نصب پکیج‌های پایتون با «صندوقچه ذخیره اختصاصی»
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+    -i https://pypi.tuna.tsinghua.edu.cn/simple \
+    --default-timeout=100 \
+    -r requirements.txt
+
+# ۵. کپی کردن کد پروژه (این بخش مدام عوض می‌شود و باید لایه آخر باشد)
+COPY . .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+------------------------------
+END OF FILE: apps/api/Dockerfile
+
+START OF FILE: apps/api/.dockerignore
+------------------------------
+**/venv
+**/node_modules
+**/.next
+**/.git
+------------------------------
+END OF FILE: apps/api/.dockerignore
+
+START OF FILE: apps/api/.env.example
+------------------------------
+
+------------------------------
+END OF FILE: apps/api/.env.example
+
+START OF FILE: apps/api/app/main.py
+------------------------------
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+import logging
+
+from app.core.config import settings
+from app.api.routes import router as api_router
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: e.g., run background scheduler
+    logger.info("Starting up FastAPI application...")
+    yield
+    # Shutdown
+    logger.info("Shutting down FastAPI application...")
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version="1.0.0",
+    description="mahdi0jafari Autonomous Node API",
+    lifespan=lifespan
+)
+
+# Set up CORS for the Next.js frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(api_router, prefix=settings.API_V1_STR)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "message": "FastAPI engine running"}
+
+------------------------------
+END OF FILE: apps/api/app/main.py
+
+START OF FILE: apps/api/app/core/config.py
+------------------------------
+from typing import List, Union, Any
+from pydantic import AnyHttpUrl, validator
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "mahdi0jafari Autonomous Node"
+    API_V1_STR: str = "/api/v1"
+    
+    # CORS
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:3000"]
+
+    # Database
+    POSTGRES_SERVER: str = "postgres"
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgres"
+    POSTGRES_DB: str = "mahdi_node"
+    SQLALCHEMY_DATABASE_URI: str | None = None
+
+    @validator("SQLALCHEMY_DATABASE_URI", pre=True)
+    def assemble_db_connection(cls, v: str | None, values: dict[str, Any]) -> Any:
+        if isinstance(v, str):
+            return v
+        return f"postgresql+asyncpg://{values.get('POSTGRES_USER')}:{values.get('POSTGRES_PASSWORD')}@{values.get('POSTGRES_SERVER')}/{values.get('POSTGRES_DB')}"
+
+    # External APIs
+    GITHUB_TOKEN: str | None = None
+    GEMINI_API_KEY: str | None = None
+    
+    class Config:
+        case_sensitive = True
+        env_file = ".env"
+
+settings = Settings()
+
+------------------------------
+END OF FILE: apps/api/app/core/config.py
+
+START OF FILE: apps/api/app/core/database.py
+------------------------------
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from app.core.config import settings
+
+engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, pool_pre_ping=True)
+SessionLocal = sessionmaker(class_=AsyncSession, autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+
+async def init_db():
+    # Attempt to create the pgvector extension if it doesn't exist
+    try:
+        async with engine.begin() as conn:
+            await conn.execute(text('CREATE EXTENSION IF NOT EXISTS vector'))
+    except Exception as e:
+        print(f"Failed to create vector extension. PGVector might not be installed. Error: {e}")
+        pass
+    
+    # Import models package to ensure all ORM classes are registered with Base.metadata
+    import app.models  # noqa: F401
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+async def get_db():
+    async with SessionLocal() as db:
+        try:
+            yield db
+        finally:
+            await db.close()
+
+------------------------------
+END OF FILE: apps/api/app/core/database.py
+
+START OF FILE: apps/api/app/models/__init__.py
+------------------------------
+from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, ForeignKey, Float
+from sqlalchemy.orm import relationship
+from pgvector.sqlalchemy import Vector
+from datetime import datetime, timezone
+
+from app.core.database import Base
+
+class GitHubStat(Base):
+    __tablename__ = "github_stats"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    repo_name = Column(String, unique=True, index=True)
+    stars = Column(Integer, default=0)
+    commits = Column(Integer, default=0)
+    last_updated = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+class RAGDocument(Base):
+    """
+    Stores documents, architectural code snippets, or manifesto details 
+    along with their semantic embeddings for the Rag System.
+    """
+    __tablename__ = "rag_documents"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(Text, nullable=False)
+    metadata_json = Column(JSON, nullable=True) # E.g., file path, project name
+    embedding = Column(Vector(768)) # Gemini uses 768 dimensions usually by default
+
+class ChatSession(Base):
+    __tablename__ = "chat_sessions"
+    
+    id = Column(String, primary_key=True, index=True) # UUID
+    ip_hash = Column(String, index=True) # Privacy-first tracking
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    messages = relationship("ChatMessage", back_populates="session", cascade="all, delete-orphan")
+
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(String, ForeignKey("chat_sessions.id"))
+    role = Column(String) # user or agent
+    content = Column(Text)
+    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    tokens_used = Column(Integer, default=0) # Telemetry: Token economics
+    
+    session = relationship("ChatSession", back_populates="messages")
+
+------------------------------
+END OF FILE: apps/api/app/models/__init__.py
+
+START OF FILE: apps/api/app/schemas/schemas.py
+------------------------------
+from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+
+class ChatRequest(BaseModel):
+    message: str
+    session_id: str | None = None # Required to continue a conversation
+
+class ChatResponse(BaseModel):
+    response: str
+    tokens_used: int = 0
+    
+class GitHubStatResponse(BaseModel):
+    repo_name: str
+    stars: int
+    commits: int
+    last_updated: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+------------------------------
+END OF FILE: apps/api/app/schemas/schemas.py
+
+START OF FILE: apps/api/app/api/endpoints.py
+------------------------------
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.core.database import get_db
+from app.schemas.schemas import ChatRequest, ChatResponse
+
+chat_router = APIRouter()
+
+@chat_router.post("/", response_model=ChatResponse)
+async def chat_with_agent(request: ChatRequest, db: Session = Depends(get_db)):
+    # TODO: Implement Gemini / LangGraph logic
+    return ChatResponse(response="Agent logic not implemented yet", tokens_used=0)
+
+
+github_router = APIRouter()
+
+@github_router.get("/stats")
+async def get_github_stats(db: Session = Depends(get_db)):
+    # TODO: Fetch stats from DB
+    return []
+
+------------------------------
+END OF FILE: apps/api/app/api/endpoints.py
+
+START OF FILE: apps/api/app/api/routes.py
+------------------------------
+from fastapi import APIRouter
+from app.api import endpoints
+
+router = APIRouter()
+
+router.include_router(endpoints.chat_router, prefix="/chat", tags=["Agent Chat"])
+router.include_router(endpoints.github_router, prefix="/github", tags=["GitHub Stats"])
+
+------------------------------
+END OF FILE: apps/api/app/api/routes.py
+
+START OF FILE: apps/api/app/services/github_sync.py
+------------------------------
+import httpx
+import logging
+from datetime import datetime, timezone
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from app.models.github import GitHubStat
+
+logger = logging.getLogger(__name__)
+
+GITHUB_API_URL = "https://api.github.com/users/mahdi0jafari/repos"
+
+async def fetch_and_update_github_stats(db: AsyncSession, github_token: str | None = None):
+    headers = {"Accept": "application/vnd.github.v3+json"}
+    if github_token:
+        headers["Authorization"] = f"Bearer {github_token}"
+        
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(GITHUB_API_URL, headers=headers)
+            response.raise_for_status()
+            repos = response.json()
+            
+            for repo in repos:
+                repo_name = repo["name"]
+                stars = repo["stargazers_count"]
+                
+                result = await db.execute(select(GitHubStat).filter(GitHubStat.repo_name == repo_name))
+                stat = result.scalars().first()
+                if not stat:
+                    stat = GitHubStat(repo_name=repo_name)
+                    db.add(stat)
+                
+                stat.stars = stars
+                stat.last_updated = datetime.now(timezone.utc)
+            
+            await db.commit()
+            logger.info("Successfully updated GitHub stats.")
+            
+        except Exception as e:
+            logger.error(f"Failed to fetch GitHub stats: {e}")
+
+------------------------------
+END OF FILE: apps/api/app/services/github_sync.py
+
+START OF FILE: apps/api/script/seed.py
+------------------------------
+import asyncio
+from sqlalchemy import select
+from app.core.database import SessionLocal, init_db
+from app.services.github_sync import fetch_and_update_github_stats
+from app.core.config import settings
+from app.models.projects import RAGDocument
+
+async def seed_data():
+    await init_db()
+    
+    print("Initialising database tables...")
+    
+    async with SessionLocal() as db:
+        # 1. Fetch GitHub data (needs internet)
+        print("Fetching GitHub stats...")
+        await fetch_and_update_github_stats(db, settings.GITHUB_TOKEN)
+        
+        # 2. Seed some initial RAG content
+        manifesto_content = """This project is an "Agentic Portfolio". Its nature is a paradigm shift from a "Static Display" of information to an "Interactive Proof of Work". Instead of telling you what skills I have, the system directly enters into a technical dialogue with the employer or visitor through an Expanded Terminal interface, analyzes my code, and provides live statistics."""
+        
+        result = await db.execute(select(RAGDocument).limit(1))
+        if not result.scalars().first():
+            doc = RAGDocument(content=manifesto_content, metadata_json={"source": "manifesto.md"})
+            # We leave embedding generation to Gemini API in reality, so we skip here for demo
+            db.add(doc)
+            await db.commit()
+            print("RAG Documents seeded.")
+        
+    print("Seeding complete.")
+
+if __name__ == "__main__":
+    asyncio.run(seed_data())
+
+------------------------------
+END OF FILE: apps/api/script/seed.py
+
