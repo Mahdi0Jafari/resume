@@ -3,6 +3,9 @@ from app.core.config import settings
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.models import RAGDocument
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Security configuration mapping
 # The user will inject GEMINI_API_KEY from environment 
@@ -43,50 +46,61 @@ async def search_similar_docs(query_text: str, db: AsyncSession, limit: int = 5)
         print(f"Vector search failed: {e}")
         return []
 
-async def generate_answer(prompt: str, context: str, history: list[dict] = None) -> str:
-    """Invokes LLM synthesis dynamically based on the localized DB retrieved context context."""
+async def generate_answer(prompt: str, context: str, history: list[dict] = None, db: AsyncSession = None) -> str:
+    """Invokes LLM synthesis with a humble, strictly scoped persona and dynamic bio."""
     if not settings.GEMINI_API_KEY:
         return "I am currently disconnected from my neural core. Please secure the GEMINI_API_KEY."
 
-    # Selecting Flash for faster Inference processing and context capacity vs cost
-    model = genai.GenerativeModel('models/gemini-2.5-flash')
+    # Fetch dynamic bio from DB if available
+    owner_bio = (
+        "Mahdi Jafari is a Systems Architect and Software Engineer based in Iran. "
+        "He specializes in autonomous systems and scalable infrastructure."
+    )
+    if db:
+        from app.models import SiteSetting
+        try:
+            result = await db.execute(select(SiteSetting).where(SiteSetting.key == "owner_bio"))
+            setting = result.scalars().first()
+            if setting and setting.value:
+                owner_bio = setting.value
+        except Exception as e:
+            print(f"Failed to fetch dynamic bio: {e}")
+
+    model = genai.GenerativeModel('models/gemini-2.0-flash')
     
-    # Format history if exists
+    # Format history
     history_str = ""
     if history:
         for msg in history:
             role = "User" if msg["role"] == "user" else "Agent"
             history_str += f"{role}: {msg['content']}\n"
 
-    # ── System Directives ─────────────────────────────────────────────────────
-    
-    # Foundational context about Mahdi to prevent "I don't know" for basic stuff
-    mahdi_bio = (
-        "Mahdi Jafari is a Systems Architect and Software Engineer based in Iran. "
-        "He specializes in autonomous systems, scalable infrastructure, and AI integration. "
-        "He is the creator of Lyraz (a Python framework), Vajeh, and this AI-powered portfolio. "
-        "He is known for high-performance systems and deterministic precision."
-    )
-
+    # ── Humble & Strictly Scoped System Directives ────────────────────────────
     system_prompt = (
-        f"You are the helpful AI interface for Mahdi Jafari's portfolio.\n"
-        f"Mahdi's Bio: {mahdi_bio}\n\n"
-        f"Guidelines:\n"
-        f"1. Help the user understand Mahdi's projects and skills.\n"
-        f"2. Use the provided Context to give specific details about projects.\n"
-        f"3. If the Context doesn't have a specific answer, use your general knowledge to talk about Mahdi "
-        f"or explain what you can do. Avoid saying 'I do not have enough context' unless it's a very specific "
-        f"technical detail you truly can't find.\n"
-        f"4. Be Insightful, professional, and slightly futuristic in tone.\n"
-        f"5. ALWAYS reply in the SAME LANGUAGE as the user (Persian for Persian, English for English).\n\n"
-        f"--- CONTEXT DATA ---\n"
+        f"Context about Mahdi Jafari:\n{owner_bio}\n\n"
+        f"Directive:\n"
+        f"You are the technical assistant for Mahdi Jafari's portfolio. "
+        f"Your goal is to provide helpful, accurate, and concise information about Mahdi's projects and technical background.\n\n"
+        f"Strict Rules:\n"
+        f"1. Use a humble, reserved, and professional tone. Avoid boastful or superlative language.\n"
+        f"2. Answer ONLY based on the provided Context and Mahdi's Bio.\n"
+        f"3. Do NOT write code, scripts, or perform general-purpose tasks. If asked, politely explain you are focused only on this portfolio.\n"
+        f"4. If you don't know something about Mahdi, simply say you don't have that information.\n"
+        f"5. ALWAYS reply in the SAME LANGUAGE as the user.\n\n"
+        f"--- PORTFOLIO CONTEXT ---\n"
         f"{context}\n"
         f"--------------------\n\n"
-        f"--- RECENT HISTORY ---\n"
+        f"--- CONVERSATION HISTORY ---\n"
         f"{history_str}\n"
         f"--------------------\n\n"
         f"User Question: {prompt}\n"
     )
     
-    response = await model.generate_content_async(system_prompt)
-    return response.text
+    try:
+        response = await model.generate_content_async(system_prompt)
+        return response.text
+    except Exception as e:
+        if "429" in str(e) or "ResourceExhausted" in str(e):
+            return "I'm currently experiencing high traffic and have reached my temporary quota. Please try again in a few moments."
+        logger.error(f"AI Generation failed: {e}")
+        return "I encountered a technical glitch while processing your request. Please try again."

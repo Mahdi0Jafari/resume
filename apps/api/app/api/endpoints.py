@@ -1,28 +1,62 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.core.database import get_db
+from app.core.config import settings
 from app.schemas.schemas import ChatRequest, ChatResponse
-from app.models import GitHubStat
+from app.models import GitHubStat, SiteSetting
 from app.services.github_sync import sync_github_projects
+from app.services.ai_engine import search_similar_docs, generate_answer
+
+# ── Security Dependency ───────────────────────────────────────────────────────
+
+async def verify_admin(x_admin_token: str = Header(None)):
+    if not x_admin_token or x_admin_token != settings.ADMIN_TOKEN:
+        raise HTTPException(status_code=401, detail="Unauthorized: Invalid Admin Token")
+    return True
 
 # ── Chat ─────────────────────────────────────────────────────────────────────
-
-from app.services.ai_engine import search_similar_docs, generate_answer
 
 chat_router = APIRouter()
 
 @chat_router.post("", response_model=ChatResponse)
 async def chat_with_agent(request: ChatRequest, db: AsyncSession = Depends(get_db)):
-    # 1. Retrieve related context (RAG via Cosine similarity / L2 distance)
+    # 1. Retrieve related context (RAG)
     docs = await search_similar_docs(request.message, db)
     context = "\n".join([d.content for d in docs]) if docs else "No relevant local architectural context found."
     
-    # 2. Forward to Gemini for synthesis guided by system directives
-    answer = await generate_answer(request.message, context, request.history)
+    # 2. Forward to Gemini for synthesis with dynamic bio retrieval
+    answer = await generate_answer(request.message, context, request.history, db=db)
     
     return ChatResponse(response=answer, tokens_used=0)
+
+
+# ── Admin ────────────────────────────────────────────────────────────────────
+
+admin_router = APIRouter()
+
+@admin_router.get("/settings", dependencies=[Depends(verify_admin)])
+async def get_settings(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(SiteSetting))
+    settings_dict = {s.key: s.value for s in result.scalars().all()}
+    return settings_dict
+
+@admin_router.patch("/settings", dependencies=[Depends(verify_admin)])
+async def update_setting(payload: dict, db: AsyncSession = Depends(get_db)):
+    """
+    Updates specific site settings. Payload example: {"owner_bio": "New bio..."}
+    """
+    for key, value in payload.items():
+        result = await db.execute(select(SiteSetting).where(SiteSetting.key == key))
+        setting = result.scalars().first()
+        if setting:
+            setting.value = value
+        else:
+            db.add(SiteSetting(key=key, value=value))
+    
+    await db.commit()
+    return {"status": "updated", "keys": list(payload.keys())}
 
 
 # ── GitHub ────────────────────────────────────────────────────────────────────

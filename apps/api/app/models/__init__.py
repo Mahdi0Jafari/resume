@@ -48,3 +48,14 @@ class ChatMessage(Base):
     tokens_used = Column(Integer, default=0) # Telemetry: Token economics
     
     session = relationship("ChatSession", back_populates="messages")
+
+class SiteSetting(Base):
+    """
+    General configuration store for site-wide settings like AI persona, 
+    custom bio, and feature flags.
+    """
+    __tablename__ = "site_settings"
+    
+    key = Column(String, primary_key=True, index=True) # e.g. "owner_bio", "persona_tone"
+    value = Column(Text, nullable=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

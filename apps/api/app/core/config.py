@@ -50,6 +50,7 @@ class Settings(BaseSettings):
     GITHUB_TOKEN: str | None = None
     GITHUB_USERNAME: str = "mahdi0jafari"
     GEMINI_API_KEY: str | None = None
+    ADMIN_TOKEN: str = "change_me_in_production" # Security token for /admin endpoints
 
     class Config:
         case_sensitive = True
