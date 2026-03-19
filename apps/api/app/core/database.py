@@ -22,6 +22,22 @@ async def init_db():
     import app.models  # noqa: F401
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    
+    # Seed default settings if empty
+    from app.models import SiteSetting
+    async with SessionLocal() as db:
+        result = await db.execute(text("SELECT count(*) FROM site_settings"))
+        count = result.scalar()
+        if count == 0:
+            default_bio = (
+                "Mahdi Jafari is a Systems Architect and Software Engineer based in Iran. "
+                "He focuses on building autonomous systems and scalable infrastructure. "
+                "His work includes developing the Lyraz framework and various AI-native applications, "
+                "with a constant emphasis on technical precision and functional design."
+            )
+            db.add(SiteSetting(key="owner_bio", value=default_bio))
+            db.add(SiteSetting(key="persona_tone", value="humble_assistant"))
+            await db.commit()
 
 async def get_db():
     async with SessionLocal() as db:
