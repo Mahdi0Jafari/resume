@@ -1,0 +1,84 @@
+services:
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../apps/api/.env  # 👈 حالا داکر تمام متغیرها (مثل GITHUB_TOKEN) را از اینجا می‌خواند
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  web:
+    build:
+      context: ../apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ../apps/api/.env # اگر فرانت‌ هم نیاز به متغیر داشت
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - INTERNAL_API_URL=http://api:8000
+    networks:
+      - frontend
+      - backend
+
+  postgres:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: mahdi_node
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+    # پورت ۵۴۳۲ برای امنیت بسته ماند. فقط داخل شبکه داکر در دسترس است.
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      web:
+        condition: service_started
+      api:
+        condition: service_healthy
+    restart: always
+    networks:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  frontend:
+  backend:
