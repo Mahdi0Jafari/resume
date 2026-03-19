@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Float
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from pgvector.sqlalchemy import Vector
 from datetime import datetime
@@ -14,7 +15,7 @@ class GitHubStat(Base):
     commits = Column(Integer, default=0)
     last_updated = Column(DateTime, default=datetime.utcnow)
     description = Column(String, nullable=True)
-    languages = Column(JSON, nullable=True)
+    languages = Column(JSONB, nullable=True)
     url = Column(String, nullable=True)
 class RAGDocument(Base):
     """
@@ -25,7 +26,7 @@ class RAGDocument(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     content = Column(Text, nullable=False)
-    metadata_json = Column(JSON, nullable=True) # E.g., file path, project name
+    metadata_json = Column(JSONB, nullable=True) # E.g., file path, project name
     embedding = Column(Vector(3072)) # Gemini uses 768 dimensions usually by default
 
 class ChatSession(Base):
