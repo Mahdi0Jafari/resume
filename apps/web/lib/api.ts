@@ -10,28 +10,29 @@ export interface GitHubProject {
 }
 
 export async function getGitHubProjects(): Promise<GitHubProject[]> {
-  try {
-    // Determine the API URL depending on server vs client side
-    // From a server component inside docker, "http://api:8000" might be needed
-    // However, trying NEXT_PUBLIC_API_URL first (which works if the user is running both on host)
-    // Wait, the Next.js container connects to the FastAPI container using `http://api:8000` internally.
-    // If not inside Docker, it uses localhost. We'll use an environment variable or default to api:8000.
-    const apiUrl = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    
-    // We use cache: 'no-store' to ensure we always fetch fresh data, bypassing the aggressive Next.js fetch cache.
-    const res = await fetch(`${apiUrl}/api/v1/github/projects`, {
-      cache: 'no-store'
-    });
+  const apiUrl = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const url = `${apiUrl}/api/v1/github/projects`;
+  const timeout = 15000; 
 
-    if (!res.ok) {
-      console.error(`Error fetching GitHub projects: ${res.status} ${res.statusText}`);
-      return [];
+  for (let i = 0; i < 3; i++) {
+    try {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+
+      const res = await fetch(url, {
+        cache: 'no-store',
+        signal: controller.signal
+      });
+      
+      clearTimeout(id);
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+
+      return await res.json();
+    } catch (error) {
+      console.warn(`Attempt ${i + 1} failed to fetch projects:`, error);
+      if (i === 2) return [];
+      await new Promise(r => setTimeout(r, 1000));
     }
-
-    const data: GitHubProject[] = await res.json();
-    return data;
-  } catch (error) {
-    console.error('Failed to fetch GitHub projects:', error);
-    return [];
   }
+  return [];
 }
