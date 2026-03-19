@@ -237,7 +237,7 @@ export default function TerminalTile() {
       <motion.section
         layoutId="terminal-wrapper"
         onClick={() => setIsExpanded(true)}
-        className={`col-span-full lg:col-span-1 h-[350px] glass-effect rounded-3xl cursor-pointer flex flex-col overflow-hidden group border border-white/5 hover:border-[#00F0FF]/30 transition-colors ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`col-span-full md:col-span-2 lg:col-span-1 h-[350px] glass-effect rounded-3xl cursor-pointer flex flex-col overflow-hidden group border border-white/5 hover:border-[#00F0FF]/30 transition-colors ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <TerminalHeader isExpanded={false} onClose={() => {}} />
         <div className="p-6 font-mono text-xs text-[#A0A0A0] flex-1 flex flex-col justify-end relative">

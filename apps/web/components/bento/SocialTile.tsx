@@ -1,6 +1,6 @@
 export default function SocialTile() {
   return (
-    <aside className="col-span-full lg:col-span-1 glass-effect p-8 rounded-3xl flex flex-col justify-between card-glow h-full min-h-[420px]">
+    <aside className="col-span-full md:col-span-1 lg:col-span-1 glass-effect p-8 rounded-3xl flex flex-col justify-between card-glow h-full min-h-[420px]">
       <div className="space-y-4">
         <a href="https://github.com/mahdi0jafari" target="_blank" rel="noreferrer" className="flex items-center gap-4 group cursor-pointer block">
           <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-brand-accent/20 transition-colors">

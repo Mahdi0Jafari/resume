@@ -5,8 +5,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    pull_policy: if_not_present
+    volumes:
+      - ../apps/api:/app
     env_file:
-      - ../apps/api/.env  # 👈 حالا داکر تمام متغیرها (مثل GITHUB_TOKEN) را از اینجا می‌خواند
+      - ../apps/api/.env
     depends_on:
       postgres:
         condition: service_healthy
@@ -23,9 +26,14 @@ services:
   web:
     build:
       context: ../apps/web
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
+    pull_policy: if_not_present
+    volumes:
+      - ../apps/web:/app
+      - /app/node_modules
+    command: npm run dev
     env_file:
       - ../apps/api/.env # اگر فرانت‌ هم نیاز به متغیر داشت
     environment:
