@@ -35,3 +35,10 @@ docker-compose.override.yml
 # ── Misc ──────────────────────────────────────────────────────
 *.log
 *.tmp
+
+
+# ── Other ─────────────────────────────────────────────────────
+project_context.txt
+project_context.txt*
+dumper.py
+dumper.py*

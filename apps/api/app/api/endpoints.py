@@ -9,12 +9,20 @@ from app.services.github_sync import sync_github_projects
 
 # ── Chat ─────────────────────────────────────────────────────────────────────
 
+from app.services.ai_engine import search_similar_docs, generate_answer
+
 chat_router = APIRouter()
 
-@chat_router.post("/", response_model=ChatResponse)
+@chat_router.post("", response_model=ChatResponse)
 async def chat_with_agent(request: ChatRequest, db: AsyncSession = Depends(get_db)):
-    # TODO: Implement Gemini / LangGraph logic
-    return ChatResponse(response="Agent logic not implemented yet", tokens_used=0)
+    # 1. Retrieve related context (RAG via Cosine similarity / L2 distance)
+    docs = await search_similar_docs(request.message, db)
+    context = "\n".join([d.content for d in docs]) if docs else "No relevant local architectural context found."
+    
+    # 2. Forward to Gemini for synthesis guided by system directives
+    answer = await generate_answer(request.message, context, request.history)
+    
+    return ChatResponse(response=answer, tokens_used=0)
 
 
 # ── GitHub ────────────────────────────────────────────────────────────────────
