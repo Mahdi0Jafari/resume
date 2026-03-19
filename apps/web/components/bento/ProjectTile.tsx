@@ -23,7 +23,7 @@ interface ProjectProps {
         href={url}
         target={url ? "_blank" : undefined}
         rel={url ? "noopener noreferrer" : undefined}
-        className={`col-span-full md:col-span-2 lg:col-span-1 glass-effect p-8 rounded-3xl flex flex-col justify-between card-glow h-[350px] transition-all duration-300 ${url ? 'cursor-pointer hover:-translate-y-2 hover:border-brand-accent/50 group' : ''}`}
+        className={`col-span-full md:col-span-1 lg:col-span-1 glass-effect p-8 rounded-3xl flex flex-col justify-between card-glow h-[350px] transition-all duration-300 ${url ? 'cursor-pointer hover:-translate-y-2 hover:border-brand-accent/50 group' : ''}`}
       >
         <div>
           <div className="flex justify-between items-start mb-6">

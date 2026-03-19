@@ -21,10 +21,7 @@ COPY requirements.txt .
 # ۴. نصب پکیج‌های پایتون با «صندوقچه ذخیره اختصاصی»
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir \
-    -i https://pypi.tuna.tsinghua.edu.cn/simple \
-    --default-timeout=100 \
-    -r requirements.txt
+    pip install --no-cache-dir -r requirements.txt
 
 # ۵. کپی کردن کد پروژه (این بخش مدام عوض می‌شود و باید لایه آخر باشد)
 COPY . .

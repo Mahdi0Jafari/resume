@@ -1,0 +1,24 @@
+FROM node:18-alpine
+
+# ۱. نصب پیش‌نیازهای سیستم‌عاملی (اختیاری ولی توصیه شده برای پکیج‌های نیتیو)
+RUN sed -i 's/dl-cdn.alpinelinux.org/uk.alpinelinux.org/g' /etc/apk/repositories && \
+    apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# ۲. کپی فایل‌های پکیج برای استفاده از حافظه کش داکر
+COPY package*.json ./
+
+# ۳. نصب وابستگی‌ها (در دت برای سرعت بیشتر می‌شه از کش استفاده کرد)
+RUN npm install --legacy-peer-deps
+
+# ۴. کپی بقیه کدها (موقع اجرا با Volume اورراید می‌شه ولی برای بیلد اولیه‌ لازمه)
+COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV development
+
+EXPOSE 3000
+
+# ۵. اجرای پروژه در حالت توسعه
+CMD ["npm", "run", "dev"]
