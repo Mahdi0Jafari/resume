@@ -62,49 +62,56 @@ async def sync_github_projects(db: AsyncSession) -> dict:
                 stat.languages = langs_list
                 stat.last_updated = datetime.utcnow()  # naive UTC
 
-                # ── 2. Upsert RAGDocument from repo description ───────────────────────
-                description = repo.get("description") or ""
-                if description:
-                    rag_content = (
-                        f"Project: {repo['name']}. "
-                        f"Description: {description}. "
-                        f"Stars: {repo['stargazers_count']}. "
-                        f"Languages: {', '.join(langs_list) if langs_list else 'unknown'}."
+                # ── 2. Upsert RAGDocument ─────────────────────────────────────────────
+                description = repo.get("description") or "No description provided."
+                rag_content = (
+                    f"Project: {repo['name']}. "
+                    f"Description: {description}. "
+                    f"Stars: {repo['stargazers_count']}. "
+                    f"Languages: {', '.join(langs_list) if langs_list else 'unknown'}."
+                )
+                
+                logger.debug(f"Syncing RAG for {repo['name']}...")
+                
+                # Check if a RAG doc for this repo already exists
+                # Using astext for robust JSONB querying in Postgres
+                rag_result = await db.execute(
+                    select(RAGDocument).where(
+                        RAGDocument.metadata_json["repo"].astext == repo["name"],
                     )
-                    # Check if a RAG doc for this repo already exists
-                    rag_result = await db.execute(
-                        select(RAGDocument).where(
-                            RAGDocument.metadata_json["source"].as_string() == "github",
-                            RAGDocument.metadata_json["repo"].as_string() == repo["name"],
-                        )
-                    )
-                    rag_doc = rag_result.scalars().first()
+                )
+                rag_doc = rag_result.scalars().first()
 
-                    if not rag_doc:
-                        # Calculate vector embedding from Gemini
-                        try:
-                            embedding_vector = await get_embedding(rag_content)
-                        except Exception as e:
-                            logger.error(f"Failed to generate embedding for {repo['name']}: {e}")
-                            embedding_vector = [0.0] * 3072
-                        
-                        rag_doc = RAGDocument(
-                            content=rag_content,
-                            embedding=embedding_vector,
-                            metadata_json={
-                                "source": "github",
-                                "repo": repo["name"],
-                                "url": repo["html_url"],
-                            },
-                        )
-                        db.add(rag_doc)
-                    else:
+                if not rag_doc:
+                    logger.info(f"Creating new RAG document for {repo['name']}")
+                    # Calculate vector embedding from Gemini
+                    try:
+                        embedding_vector = await get_embedding(rag_content)
+                    except Exception as e:
+                        logger.error(f"Failed to generate embedding for {repo['name']}: {e}")
+                        embedding_vector = [0.0] * 3072
+                    
+                    rag_doc = RAGDocument(
+                        content=rag_content,
+                        embedding=embedding_vector,
+                        metadata_json={
+                            "source": "github",
+                            "repo": repo["name"],
+                            "url": repo["html_url"],
+                        },
+                    )
+                    db.add(rag_doc)
+                else:
+                    if rag_doc.content != rag_content:
+                        logger.info(f"Updating existing RAG document for {repo['name']}")
                         rag_doc.content = rag_content
                         # Update vector if content changes
                         try:
                             rag_doc.embedding = await get_embedding(rag_content)
                         except Exception as e:
                             logger.error(f"Failed to update embedding for {repo['name']}: {e}")
+                    else:
+                        logger.debug(f"RAG document for {repo['name']} is already up to date.")
         except httpx.HTTPStatusError as e:
             logger.error(f"GitHub API error: {e.response.status_code} – {e.response.text}")
             return {"error": f"GitHub API returned {e.response.status_code}"}
