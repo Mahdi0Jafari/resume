@@ -26,7 +26,7 @@ class RAGDocument(Base):
     id = Column(Integer, primary_key=True, index=True)
     content = Column(Text, nullable=False)
     metadata_json = Column(JSON, nullable=True) # E.g., file path, project name
-    embedding = Column(Vector(768)) # Gemini uses 768 dimensions usually by default
+    embedding = Column(Vector(3072)) # Gemini uses 768 dimensions usually by default
 
 class ChatSession(Base):
     __tablename__ = "chat_sessions"

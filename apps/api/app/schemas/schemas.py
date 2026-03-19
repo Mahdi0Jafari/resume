@@ -3,7 +3,7 @@ from datetime import datetime
 
 class ChatRequest(BaseModel):
     message: str
-    session_id: str | None = None # Required to continue a conversation
+    history: list[dict] | None = None # [{"role": "user", "content": "..."}, ...]
 
 class ChatResponse(BaseModel):
     response: str

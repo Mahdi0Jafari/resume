@@ -4,6 +4,8 @@ import { useState, useRef, useEffect, KeyboardEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Send } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface Message {
   id: string
@@ -14,12 +16,16 @@ interface Message {
 
 export default function TerminalTile() {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([
-    { id: '1', text: '$ ./init_agent.sh', sender: 'system' },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [mounted, setMounted] = useState(false)
+
+  // تشخیص هوشمند RTL برای متن‌های فارسی/عربی
+  const isRTL = (text: string) => {
+    const rtlChars = /[\u0600-\u06FF]/;
+    return rtlChars.test(text);
+  }
   
   const scrollRef = useRef<HTMLDivElement>(null)
   const scrollContainerSmall = useRef<HTMLDivElement>(null)
@@ -27,7 +33,23 @@ export default function TerminalTile() {
 
   useEffect(() => {
     setMounted(true)
+    const saved = localStorage.getItem('chat_history')
+    if (saved) {
+      try {
+        setMessages(JSON.parse(saved))
+      } catch (e) {
+        console.error("Failed to load history", e)
+      }
+    } else {
+        setMessages([{ id: '1', text: '$ ./init_agent.sh', sender: 'system' }])
+    }
   }, [])
+
+  useEffect(() => {
+    if (mounted && messages.length > 0) {
+      localStorage.setItem('chat_history', JSON.stringify(messages))
+    }
+  }, [messages, mounted])
 
   // اسکرول هوشمند بدون پریدنِ صفحه
   useEffect(() => {
@@ -79,20 +101,52 @@ export default function TerminalTile() {
     })
   }, [])
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const text = input.trim()
     if (!text) return
     setMessages(prev => [...prev, { id: Date.now().toString(), text, sender: 'user' }])
     setInput('')
     setIsTyping(true)
-    setTimeout(() => {
-      setIsTyping(false)
+    
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      
+      // تهیه تاریخچه برای بک‌أند (فقط پیام‌های کاربر و ایجنت)
+      const history = messages
+        .filter(m => m.sender === 'user' || m.sender === 'agent')
+        .slice(-10) // ۱۰ پیام آخر برای کانتکست
+        .map(m => ({
+          role: m.sender === 'user' ? 'user' : 'assistant',
+          content: m.text
+        }));
+
+      const res = await fetch(`${apiUrl}/api/v1/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          message: text,
+          history: history
+        })
+      });
+      
+      if (!res.ok) throw new Error('Inference API Error');
+      const data = await res.json();
+      
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
-        text: "This is a simulated response. Once the FastAPI backend is deployed, I will analyze your query.",
+        text: data.response || "Neural link corrupted.",
         sender: 'agent',
-      }])
-    }, 1500)
+      }]);
+    } catch (error) {
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        text: "<span class='text-red-500'>Connection to Inference Engine failed. Ensure API is running and keys are valid.</span>",
+        sender: 'system',
+        isHtml: true
+      }]);
+    } finally {
+      setIsTyping(false);
+    }
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -127,12 +181,23 @@ export default function TerminalTile() {
                         {m.sender}
                       </span>
                     )}
-                    <div className={
-                      m.sender === 'system'
-                        ? 'text-[#A0A0A0] w-full'
-                        : `p-3 rounded-xl max-w-[90%] ${m.sender === 'user' ? 'bg-white/10 text-white rounded-tr-none' : 'border border-white/10 text-[#A0A0A0] rounded-tl-none'}`
-                    }>
-                      {m.isHtml ? <div dangerouslySetInnerHTML={{ __html: m.text }} /> : m.text}
+                    <div 
+                      dir={isRTL(m.text) ? 'rtl' : 'ltr'}
+                      className={
+                        m.sender === 'system'
+                          ? 'text-[#A0A0A0] w-full'
+                          : `p-3 rounded-xl max-w-[90%] ${m.sender === 'user' ? 'bg-white/10 text-white rounded-tr-none' : 'border border-white/10 text-[#A0A0A0] rounded-tl-none'}`
+                      }
+                    >
+                      {m.isHtml ? (
+                        <div dangerouslySetInnerHTML={{ __html: m.text }} />
+                      ) : m.sender === 'agent' ? (
+                        <div className="markdown-content">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        m.text
+                      )}
                     </div>
                   </div>
                 ))}
@@ -199,6 +264,14 @@ export default function TerminalTile() {
       <style>{`
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
         .animate-blink { animation: blink 1s step-end infinite; }
+        
+        .markdown-content p { margin-bottom: 0.5rem; }
+        .markdown-content p:last-child { margin-bottom: 0; }
+        .markdown-content ul, .markdown-content ol { margin-left: 1.25rem; margin-bottom: 0.5rem; list-style-type: disc; }
+        .markdown-content li { margin-bottom: 0.25rem; }
+        .markdown-content strong { color: #00F0FF; font-weight: 600; }
+        .markdown-content code { background: rgba(255,255,255,0.1); padding: 0.1rem 0.3rem; rounded: 0.2rem; font-family: monospace; }
+        .markdown-content pre { background: rgba(0,0,0,0.3); padding: 1rem; rounded: 0.5rem; overflow-x: auto; margin-bottom: 0.5rem; border: 1px solid rgba(255,255,255,0.05); }
       `}</style>
     </>
   )

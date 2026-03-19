@@ -8,7 +8,13 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
 
     # CORS
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:3000"]
+    # CORS
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
+        "http://localhost:3000",
+        "http://localhost",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1"
+    ]
 
     # Database — individual parts (used to assemble the URI)
     POSTGRES_SERVER: str = "postgres"
