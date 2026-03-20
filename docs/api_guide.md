@@ -79,14 +79,29 @@ The AI will immediately reflect these changes in its next chat response.
 
 ---
 
-## 4. Health & Monitoring
+## 4. Admin Management Tool (CLI)
+To make it easier to manage your portfolio without raw API calls, use the provided Python script:
 
-### `GET /health`
-Returns the status of the FastAPI engine.
+### Usage:
+1. Set your token: `export ADMIN_TOKEN=your_admin_token`
+2. **View Settings**: `python scripts/admin_tool.py show`
+3. **Change Bio**: `python scripts/admin_tool.py set-bio` (Then paste your text and press Ctrl+D).
 
 ---
 
-## Development & Usage Tips
+## 6. Optimization & Performance
+
+To avoid long "Metadata Loading" delays (common in restrictive network environments), the following optimizations are in place:
+
+1. **Pinned Image Digests**: Dockerfiles use `image@sha256:...` to bypass registry update checks.
+2. **Makefile System**: Use the provided `Makefile` (in the `infrastructure` directory) for the fastest workflow:
+   - `make dev`: Starts the project using cached images without checking for updates (`--pull=never`).
+   - `make down`: Stops all containers.
+   - `make logs`: Follows container output.
+
+---
+
+## 7. Troubleshooting
 
 1. **Authentication**: If you lose your `ADMIN_TOKEN`, check the `.env` file in the `apps/api` directory.
 2. **Context Persistence**: The chat system uses RAG. If you add a new project to GitHub, run the `/github/sync` command to ensure the AI knows how to talk about it.
