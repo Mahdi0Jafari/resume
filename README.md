@@ -12,9 +12,11 @@ The system is architected using a decoupled microservices approach, ensuring sca
 
 * **Frontend (Web):** Next.js 15 (App Router) with Tailwind CSS and Framer Motion for high-fidelity micro-interactions and Bento-style UI.
 * **Backend (API):** FastAPI (Python 3.12) utilizing asynchronous programming (`AsyncSession`) for non-blocking I/O operations.
-* **Intelligence Layer:** LangGraph for agentic reasoning, powered by Google Gemini 1.5 Pro and `text-embedding-004`.
-* **Data Layer:** * **PostgreSQL:** Primary relational store with `pgvector` for high-dimensional vector similarity search.
-    * **Redis:** High-speed caching and rate-limiting (Throttling).
+* **Intelligence Layer:** LangGraph for agentic reasoning, powered by Google **Gemini 3.1 Flash Lite** and **Gemini Embedding 2**.
+* **Data Layer:**
+    * **PostgreSQL:** Primary relational store with `pgvector` for high-dimensional vector similarity search.
+    * **Redis:** High-speed caching, rate-limiting (Throttling), and background task orchestration.
+    * **Arq:** Asynchronous task queue for heavy I/O operations (e.g., GitHub syncing).
 * **Infrastructure:** Fully containerized with Docker, managed via Docker Compose, and orchestrated behind an Nginx Reverse Proxy.
 
 ---
@@ -28,6 +30,7 @@ An intelligent chatbot that doesn't just talk—it reasons. By indexing my GitHu
 A dedicated background service that synchronizes repository metadata (stars, languages, updates) and README content directly from GitHub's REST/GraphQL APIs into the local PostgreSQL instance.
 
 ### ⚡ Optimized Performance
+* **Built-in Throttling**: Integrated `FastAPI-Limiter` to protect AI quotas and prevent system abuse.
 * **GPU-Efficient UI:** Visual effects (like Blur filters) are strategically offloaded to hover states to maintain a high-FPS scrolling experience.
 * **Hybrid Content Strategy:** Critical SEO data is hardcoded for LCP (Largest Contentful Paint) optimization, while dynamic stats are fetched via server-side API calls.
 
@@ -39,9 +42,9 @@ A dedicated background service that synchronizes repository metadata (stars, lan
 | :--- | :--- |
 | **Frontend** | Next.js 15, React, TypeScript, Tailwind CSS, Lucide Icons |
 | **Backend** | FastAPI, SQLAlchemy (Async), Pydantic v2, HTTPX |
-| **AI/ML** | LangGraph, Gemini API, PGVector |
+| **AI/ML** | LangGraph, Gemini 3.1 API, PGVector |
 | **DevOps** | Docker, Nginx, GitHub Actions |
-| **Storage** | PostgreSQL, Redis |
+| **Storage** | PostgreSQL, Redis, Arq Queue |
 
 ---
 
