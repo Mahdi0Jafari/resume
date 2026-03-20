@@ -1,5 +1,4 @@
-# Pinned with digest for instant builds and no metadata probes
-FROM node:18-alpine@sha256:8d6421d663b4c28fd3ebc459868f869e96f884a44f77c24430f8f8ed96317424
+FROM node:18-alpine
 
 # ۱. نصب پیش‌نیازهای سیستم‌عاملی (اختیاری ولی توصیه شده برای پکیج‌های نیتیو)
 RUN sed -i 's/dl-cdn.alpinelinux.org/uk.alpinelinux.org/g' /etc/apk/repositories && \

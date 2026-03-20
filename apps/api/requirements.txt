@@ -2,6 +2,8 @@ annotated-doc==0.0.4
 annotated-types==0.7.0
 anyio==4.12.1
 APScheduler==3.11.2
+alembic==1.15.1
+arq==0.27.0
 certifi==2026.2.25
 cffi==2.0.0
 charset-normalizer==3.4.5

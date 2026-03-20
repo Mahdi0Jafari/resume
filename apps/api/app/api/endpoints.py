@@ -8,6 +8,7 @@ from app.schemas.schemas import ChatRequest, ChatResponse
 from app.models import GitHubStat, SiteSetting
 from app.services.github_sync import sync_github_projects
 from app.services.ai_engine import search_similar_docs, generate_answer
+from arq import create_pool
 
 # ── Security Dependency ───────────────────────────────────────────────────────
 
@@ -81,10 +82,11 @@ async def get_projects(db: AsyncSession = Depends(get_db)):
     return result.scalars().all()
 
 @github_router.post("/sync")
-async def trigger_sync(db: AsyncSession = Depends(get_db)):
+async def trigger_sync():
     """
-    Manually triggers a full GitHub sync.
-    Fetches all public repos, updates GitHubStat, and feeds descriptions
-    into RAGDocument so the AI chatbot knows what each project does.
+    Enqueues a full GitHub sync as a background task.
+    Returns immediately to keep the API responsive.
     """
-    return await sync_github_projects(db)
+    redis = await create_pool(settings.REDIS_SETTINGS)
+    await redis.enqueue_job("sync_github_projects_task")
+    return {"status": "accepted", "message": "Background sync started."}

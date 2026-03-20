@@ -46,6 +46,14 @@ class Settings(BaseSettings):
             f"@{values.get('POSTGRES_SERVER')}/{values.get('POSTGRES_DB')}"
         )
 
+    # Redis / Arq
+    REDIS_HOST: str = "redis"
+    REDIS_PORT: int = 6379
+    @property
+    def REDIS_SETTINGS(self):
+        from arq.connections import RedisSettings
+        return RedisSettings(host=self.REDIS_HOST, port=self.REDIS_PORT)
+
     # External APIs
     GITHUB_TOKEN: str | None = None
     GITHUB_USERNAME: str = "mahdi0jafari"

@@ -97,10 +97,31 @@ async def generate_answer(prompt: str, context: str, history: list[dict] = None,
     )
     
     try:
-        response = await model.generate_content_async(system_prompt)
+        # 1. Use a strict timeout for the generative call
+        import asyncio
+        response = await asyncio.wait_for(
+            model.generate_content_async(system_prompt),
+            timeout=12.0 # Strict limit for responsiveness
+        )
         return response.text
     except Exception as e:
+        logger.error(f"AI Generation failed or timed out: {e}")
+        
+        # ── Graceful Degradation (Offline / Failover Mode) ────────────────────
+        # If API is down or slow, we synthesize a response from the context
+        if context and context != "No relevant local architectural context found.":
+            fallback_msg = (
+                "I'm currently operating in high-performance 'offline' mode. "
+                "Based on my local records: " + context[:300] + "..."
+            )
+            if "سلام" in prompt or "چطوری" in prompt: # Simple Farsi detection
+                fallback_msg = (
+                    "در حال حاضر در وضعیت آفلاین هستم، اما بر اساس اطلاعات محلی من: " +
+                    context[:300] + "..."
+                )
+            return fallback_msg
+            
         if "429" in str(e) or "ResourceExhausted" in str(e):
             return "I'm currently experiencing high traffic and have reached my temporary quota. Please try again in a few moments."
-        logger.error(f"AI Generation failed: {e}")
+            
         return "I encountered a technical glitch while processing your request. Please try again."
