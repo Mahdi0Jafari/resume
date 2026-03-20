@@ -2,3 +2,12 @@
 **/node_modules
 **/.next
 **/.git
+**/__pycache__
+**/.pytest_cache
+**/.vscode
+**/.DS_Store
+**/*.pyc
+**/*.pyo
+**/*.pyd
+Portfolio/
+My/

@@ -6,7 +6,9 @@ services:
     ports:
       - "8000:8000"
     pull_policy: if_not_present
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     volumes:
+
       - ../apps/api:/app
     env_file:
       - ../apps/api/.env

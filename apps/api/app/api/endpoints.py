@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi_limiter.depends import RateLimiter
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -21,8 +23,9 @@ async def verify_admin(x_admin_token: str = Header(None)):
 
 chat_router = APIRouter()
 
-@chat_router.post("", response_model=ChatResponse)
+@chat_router.post("", response_model=ChatResponse, dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 async def chat_with_agent(request: ChatRequest, db: AsyncSession = Depends(get_db)):
+
     # 1. Retrieve related context (RAG)
     docs = await search_similar_docs(request.message, db)
     context = "\n".join([d.content for d in docs]) if docs else "No relevant local architectural context found."

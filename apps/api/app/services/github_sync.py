@@ -88,8 +88,9 @@ async def sync_github_projects(db: AsyncSession) -> dict:
                     try:
                         embedding_vector = await get_embedding(rag_content)
                     except Exception as e:
-                        logger.error(f"Failed to generate embedding for {repo['name']}: {e}")
-                        embedding_vector = [0.0] * 3072
+                        logger.error(f"❌ Skipping RAG for {repo['name']}: Embedding failed: {e}")
+                        continue
+
                     
                     rag_doc = RAGDocument(
                         content=rag_content,
@@ -109,7 +110,8 @@ async def sync_github_projects(db: AsyncSession) -> dict:
                         try:
                             rag_doc.embedding = await get_embedding(rag_content)
                         except Exception as e:
-                            logger.error(f"Failed to update embedding for {repo['name']}: {e}")
+                            logger.error(f"⚠️ Failed to update embedding for {repo['name']} (keeping old): {e}")
+
                     else:
                         logger.debug(f"RAG document for {repo['name']} is already up to date.")
         except httpx.HTTPStatusError as e:
