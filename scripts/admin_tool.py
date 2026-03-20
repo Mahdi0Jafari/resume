@@ -7,15 +7,29 @@ from typing import Dict
 # ── Configuration ────────────────────────────────────────────────────────────
 
 API_URL = "http://localhost:8000/api/v1/admin/settings"
-# Try to load token from environment or ask user
-ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN")
+def load_token_from_env_file():
+    """Tries to find ADMIN_TOKEN in ../apps/api/.env if not in environment."""
+    # 1. Check environment
+    token = os.environ.get("ADMIN_TOKEN")
+    if token:
+        return token
+    
+    # 2. Try to read from ../apps/api/.env
+    env_path = os.path.join(os.path.dirname(__file__), "..", "apps", "api", ".env")
+    if os.path.exists(env_path):
+        with open(env_path, "r") as f:
+            for line in f:
+                if line.startswith("ADMIN_TOKEN="):
+                    return line.split("=")[1].strip()
+    return None
 
 def get_headers():
-    if not ADMIN_TOKEN:
-        print("Error: ADMIN_TOKEN not found in environment.")
-        print("Please run: export ADMIN_TOKEN=your_token")
+    token = load_token_from_env_file()
+    if not token:
+        print("Error: ADMIN_TOKEN not found in environment or apps/api/.env file.")
+        print("Please set ADMIN_TOKEN in your .env or run: export ADMIN_TOKEN=your_token")
         sys.exit(1)
-    return {"X-Admin-Token": ADMIN_TOKEN, "Content-Type": "application/json"}
+    return {"X-Admin-Token": token, "Content-Type": "application/json"}
 
 # ── Actions ──────────────────────────────────────────────────────────────────
 

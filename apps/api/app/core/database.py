@@ -10,18 +10,11 @@ SessionLocal = sessionmaker(class_=AsyncSession, autocommit=False, autoflush=Fal
 Base = declarative_base()
 
 async def init_db():
-    # Attempt to create the pgvector extension if it doesn't exist
-    try:
-        async with engine.begin() as conn:
-            await conn.execute(text('CREATE EXTENSION IF NOT EXISTS vector'))
-    except Exception as e:
-        print(f"Failed to create vector extension. PGVector might not be installed. Error: {e}")
-        pass
+    # Note: Extension creation and Table creation are now handled by Alembic migrations.
+    # We only keep the seeding logic here for the first-run experience.
     
     # Import models package to ensure all ORM classes are registered with Base.metadata
     import app.models  # noqa: F401
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     
     # Seed default settings if empty
     from app.models import SiteSetting

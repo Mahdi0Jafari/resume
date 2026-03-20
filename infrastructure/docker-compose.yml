@@ -23,6 +23,21 @@ services:
     networks:
       - backend
 
+  worker:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    command: arq app.services.worker.WorkerSettings
+    env_file:
+      - ../apps/api/.env
+    depends_on:
+      redis:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - backend
+
   web:
     build:
       context: ../apps/web
