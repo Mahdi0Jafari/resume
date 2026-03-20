@@ -26,6 +26,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # ۵. کپی کردن کد پروژه (این بخش مدام عوض می‌شود و باید لایه آخر باشد)
 COPY . .
 
+# ۶. تنظیم دسترسی برای اسکریپت Entrypoint
+RUN chmod +x /app/scripts/entrypoint.sh
+
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# ۷. استفاده از Entrypoint برای اجرای مایگریشن‌ها قبل از استارت
+ENTRYPOINT ["/app/scripts/entrypoint.sh"]

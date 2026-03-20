@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
+import redis.asyncio as redis
+from fastapi_limiter import FastAPILimiter
+
 
 from app.core.config import settings
 from app.core.database import init_db
@@ -16,7 +19,16 @@ async def lifespan(app: FastAPI):
     # Startup: create all DB tables and extensions
     logger.info("Starting up FastAPI application...")
     await init_db()
+    
+    # Initialize Rate Limiting
+    redis_instance = redis.from_url(
+        settings.REDIS_URL, encoding="utf-8", decode_responses=True
+    )
+    await FastAPILimiter.init(redis_instance)
+    logger.info("Rate limiter initialized.")
+    
     logger.info("Database tables verified/created.")
+
     yield
     # Shutdown
     logger.info("Shutting down FastAPI application...")

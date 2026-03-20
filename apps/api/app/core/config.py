@@ -49,7 +49,13 @@ class Settings(BaseSettings):
     # Redis / Arq
     REDIS_HOST: str = "redis"
     REDIS_PORT: int = 6379
+
     @property
+    def REDIS_URL(self) -> str:
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}"
+
+    @property
+
     def REDIS_SETTINGS(self):
         from arq.connections import RedisSettings
         return RedisSettings(host=self.REDIS_HOST, port=self.REDIS_PORT)
@@ -58,7 +64,11 @@ class Settings(BaseSettings):
     GITHUB_TOKEN: str | None = None
     GITHUB_USERNAME: str = "mahdi0jafari"
     GEMINI_API_KEY: str | None = None
+    GEMINI_MODEL: str = "gemini-3.1-flash-lite"
+    GEMINI_EMBEDDING_MODEL: str = "text-embedding-004"
     ADMIN_TOKEN: str = "change_me_in_production" # Security token for /admin endpoints
+
+
 
     class Config:
         case_sensitive = True

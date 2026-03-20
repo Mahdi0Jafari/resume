@@ -19,7 +19,7 @@ async def get_embedding(text: str) -> list[float]:
         return [0.0] * 3072
         
     result = genai.embed_content(
-        model="models/gemini-embedding-001",
+        model=f"models/{settings.GEMINI_EMBEDDING_MODEL}",
         content=text,
         task_type="retrieval_document"
     )
@@ -66,12 +66,14 @@ async def generate_answer(prompt: str, context: str, history: list[dict] = None,
         except Exception as e:
             print(f"Failed to fetch dynamic bio: {e}")
 
-    model = genai.GenerativeModel('models/gemini-2.0-flash')
+    model = genai.GenerativeModel(f"models/{settings.GEMINI_MODEL}")
+
     
-    # Format history
+    # Format history (Limited to last 5 messages to save quota)
     history_str = ""
     if history:
-        for msg in history:
+        recent_history = history[-5:]
+        for msg in recent_history:
             role = "User" if msg["role"] == "user" else "Agent"
             history_str += f"{role}: {msg['content']}\n"
 
@@ -108,7 +110,12 @@ async def generate_answer(prompt: str, context: str, history: list[dict] = None,
         logger.error(f"AI Generation failed or timed out: {e}")
         
         # ── Graceful Degradation (Offline / Failover Mode) ────────────────────
-        # If API is down or slow, we synthesize a response from the context
+        # First, check for quota issues to give the user better feedback
+        error_str = str(e)
+        if "429" in error_str or "ResourceExhausted" in error_str:
+            return "I'm currently experiencing high traffic (Rate Limit). Please try again in 1 minute, as I'm on the Free Neural Tier."
+            
+        # If API is just down or slow, we synthesize a response from the context
         if context and context != "No relevant local architectural context found.":
             fallback_msg = (
                 "I'm currently operating in high-performance 'offline' mode. "
@@ -116,12 +123,10 @@ async def generate_answer(prompt: str, context: str, history: list[dict] = None,
             )
             if "سلام" in prompt or "چطوری" in prompt: # Simple Farsi detection
                 fallback_msg = (
-                    "در حال حاضر در وضعیت آفلاین هستم، اما بر اساس اطلاعات محلی من: " +
+                    "در حال حاضر در وضعیت آفلاین هستم (محدودیت نرخ پردازش)، اما بر اساس اطلاعات محلی من: " +
                     context[:300] + "..."
                 )
             return fallback_msg
-            
-        if "429" in str(e) or "ResourceExhausted" in str(e):
-            return "I'm currently experiencing high traffic and have reached my temporary quota. Please try again in a few moments."
+
             
         return "I encountered a technical glitch while processing your request. Please try again."
