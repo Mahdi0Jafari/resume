@@ -53,6 +53,9 @@ jobs:
               cd infrastructure
               docker compose up -d --build
               
+              # Restart Nginx to clear DNS cache (fixes 502 Bad Gateway)
+              docker compose restart nginx
+              
               # 6. Clean up old unused images to save disk space
               docker image prune -f
               
