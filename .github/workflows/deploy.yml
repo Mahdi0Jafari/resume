@@ -1,0 +1,62 @@
+name: Deploy Portfolio to Production
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute Remote SSH Commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash -c '
+              # 1. Create project directory on server
+              mkdir -p /root/portfolio
+              cd /root/portfolio
+              
+              # 2. Clone or Update repository
+              if [ -d ".git" ]; then
+                git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+                git fetch origin main
+                git reset --hard origin/main
+              else
+                git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git .
+              fi
+              
+              # 3. Inject Secrets into apps/api/.env
+              mkdir -p apps/api
+              cat << "EOF_ENV" > apps/api/.env
+              POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+              DATABASE_URL=postgresql+asyncpg://postgres:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/mahdi_node
+              GITHUB_TOKEN=${{ secrets.GH_PAT }}
+              GITHUB_USERNAME=${{ secrets.GH_USERNAME }}
+              GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+              GEMINI_MODEL=${{ secrets.GEMINI_MODEL }}
+              GEMINI_EMBEDDING_MODEL=${{ secrets.GEMINI_EMBEDDING_MODEL }}
+              ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }}
+              EOF_ENV
+              
+              # 4. Handle DB clear flag
+              COMMIT_MSG="${{ github.event.head_commit.message }}"
+              if [[ "$COMMIT_MSG" == *"[clear-db]"* ]]; then
+                echo "Clear DB signal received! Stopping containers and wiping database volume..."
+                cd infrastructure
+                docker compose down -v || true
+                cd ..
+              fi
+              
+              # 5. Build and start containers
+              cd infrastructure
+              docker compose up -d --build
+              
+              # 6. Clean up old unused images to save disk space
+              docker image prune -f
+              
+              docker compose ps
+            '

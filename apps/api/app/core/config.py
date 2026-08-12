@@ -1,5 +1,6 @@
 from typing import List, Any
-from pydantic import AnyHttpUrl, validator
+from pydantic import field_validator
+from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings
 
 
@@ -9,11 +10,15 @@ class Settings(BaseSettings):
 
     # CORS
     # CORS
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
+    BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost",
         "http://127.0.0.1:3000",
-        "http://127.0.0.1"
+        "http://127.0.0.1",
+        "https://mahdijafari.ir",
+        "https://www.mahdijafari.ir",
+        "http://mahdijafari.ir",
+        "http://www.mahdijafari.ir"
     ]
 
     # Database — individual parts (used to assemble the URI)
@@ -30,35 +35,24 @@ class Settings(BaseSettings):
     # or taken directly from DATABASE_URL if that is set.
     SQLALCHEMY_DATABASE_URI: str | None = None
 
-    @validator("SQLALCHEMY_DATABASE_URI", pre=True, always=True)
-    def assemble_db_connection(cls, v: str | None, values: dict[str, Any]) -> Any:
+    @field_validator("SQLALCHEMY_DATABASE_URI", mode="before")
+    @classmethod
+    def assemble_db_connection(cls, v: Any, info: ValidationInfo) -> Any:
         # 1. Explicit SQLALCHEMY_DATABASE_URI wins
         if isinstance(v, str) and v:
             return v
         # 2. DATABASE_URL from .env is the next choice
-        db_url = values.get("DATABASE_URL")
+        db_url = info.data.get("DATABASE_URL")
         if isinstance(db_url, str) and db_url:
             return db_url
         # 3. Assemble from individual POSTGRES_* vars
         return (
             f"postgresql+asyncpg://"
-            f"{values.get('POSTGRES_USER')}:{values.get('POSTGRES_PASSWORD')}"
-            f"@{values.get('POSTGRES_SERVER')}/{values.get('POSTGRES_DB')}"
+            f"{info.data.get('POSTGRES_USER')}:{info.data.get('POSTGRES_PASSWORD')}"
+            f"@{info.data.get('POSTGRES_SERVER')}/{info.data.get('POSTGRES_DB')}"
         )
 
-    # Redis / Arq
-    REDIS_HOST: str = "redis"
-    REDIS_PORT: int = 6379
 
-    @property
-    def REDIS_URL(self) -> str:
-        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}"
-
-    @property
-
-    def REDIS_SETTINGS(self):
-        from arq.connections import RedisSettings
-        return RedisSettings(host=self.REDIS_HOST, port=self.REDIS_PORT)
 
     # External APIs
     GITHUB_TOKEN: str | None = None
