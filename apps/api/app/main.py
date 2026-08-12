@@ -19,9 +19,26 @@ async def lifespan(app: FastAPI):
     await init_db()
     
 
-    
     logger.info("Database tables verified/created.")
-
+    
+    # --- Auto-Sync on Startup ---
+    from app.core.database import SessionLocal
+    from sqlalchemy import select
+    from app.models.github import GitHubStat
+    from app.services.github_sync import sync_github_projects
+    
+    async with SessionLocal() as db:
+        try:
+            result = await db.execute(select(GitHubStat).limit(1))
+            if not result.scalars().first():
+                logger.info("Database is empty! Starting auto-sync from GitHub...")
+                sync_result = await sync_github_projects(db)
+                logger.info(f"Auto-sync finished: {sync_result}")
+            else:
+                logger.info("Database already populated. Skipping auto-sync.")
+        except Exception as e:
+            logger.error(f"Failed to auto-sync on startup: {e}")
+            
     yield
     # Shutdown
     logger.info("Shutting down FastAPI application...")
