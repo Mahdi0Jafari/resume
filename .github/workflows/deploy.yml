@@ -40,7 +40,7 @@ jobs:
               GEMINI_MODEL=${{ secrets.GEMINI_MODEL }}
               GEMINI_EMBEDDING_MODEL=${{ secrets.GEMINI_EMBEDDING_MODEL }}
               ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }}
-              EOF_ENV
+EOF_ENV
               
               # 4. Handle DB clear flag
               COMMIT_MSG="${{ github.event.head_commit.message }}"
