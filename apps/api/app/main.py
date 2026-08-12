@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     # --- Auto-Sync on Startup ---
     from app.core.database import SessionLocal
     from sqlalchemy import select
-    from app.models.github import GitHubStat
+    from app.models import GitHubStat
     from app.services.github_sync import sync_github_projects
     
     async with SessionLocal() as db:
