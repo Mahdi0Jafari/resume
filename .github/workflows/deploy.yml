@@ -31,16 +31,14 @@ jobs:
               
               # 3. Inject Secrets into apps/api/.env
               mkdir -p apps/api
-              cat << "EOF_ENV" > apps/api/.env
-              POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-              DATABASE_URL=postgresql+asyncpg://postgres:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/mahdi_node
-              GITHUB_TOKEN=${{ secrets.GH_PAT }}
-              GITHUB_USERNAME=${{ secrets.GH_USERNAME }}
-              GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
-              GEMINI_MODEL=${{ secrets.GEMINI_MODEL }}
-              GEMINI_EMBEDDING_MODEL=${{ secrets.GEMINI_EMBEDDING_MODEL }}
-              ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }}
-EOF_ENV
+              echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" > apps/api/.env
+              echo "DATABASE_URL=postgresql+asyncpg://postgres:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/mahdi_node" >> apps/api/.env
+              echo "GITHUB_TOKEN=${{ secrets.GH_PAT }}" >> apps/api/.env
+              echo "GITHUB_USERNAME=${{ secrets.GH_USERNAME }}" >> apps/api/.env
+              echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> apps/api/.env
+              echo "GEMINI_MODEL=${{ secrets.GEMINI_MODEL }}" >> apps/api/.env
+              echo "GEMINI_EMBEDDING_MODEL=${{ secrets.GEMINI_EMBEDDING_MODEL }}" >> apps/api/.env
+              echo "ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }}" >> apps/api/.env
               
               # 4. Handle DB clear flag
               COMMIT_MSG="${{ github.event.head_commit.message }}"
