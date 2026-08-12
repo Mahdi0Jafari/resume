@@ -1,5 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
-from fastapi_limiter.depends import RateLimiter
+from fastapi import APIRouter, Depends, HTTPException, Header, Request, BackgroundTasks
+import time
+from collections import defaultdict
+
+request_history = defaultdict(list)
+
+async def rate_limiter(request: Request):
+    ip = request.headers.get("X-Forwarded-For") or (request.client.host if request.client else "127.0.0.1")
+    now = time.time()
+    request_history[ip] = [t for t in request_history[ip] if now - t < 60]
+    if len(request_history[ip]) >= 5:
+        raise HTTPException(status_code=429, detail="Too Many Requests")
+    request_history[ip].append(now)
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -10,7 +21,6 @@ from app.schemas.schemas import ChatRequest, ChatResponse
 from app.models import GitHubStat, SiteSetting
 from app.services.github_sync import sync_github_projects
 from app.services.ai_engine import search_similar_docs, generate_answer
-from arq import create_pool
 
 # ── Security Dependency ───────────────────────────────────────────────────────
 
@@ -23,15 +33,15 @@ async def verify_admin(x_admin_token: str = Header(None)):
 
 chat_router = APIRouter()
 
-@chat_router.post("", response_model=ChatResponse, dependencies=[Depends(RateLimiter(times=5, seconds=60))])
+@chat_router.post("", response_model=ChatResponse, dependencies=[Depends(rate_limiter)])
 async def chat_with_agent(request: ChatRequest, db: AsyncSession = Depends(get_db)):
 
     # 1. Retrieve related context (RAG)
     docs = await search_similar_docs(request.message, db)
-    context = "\n".join([d.content for d in docs]) if docs else "No relevant local architectural context found."
+    context = "\n".join([str(d.content) for d in docs]) if docs else "No relevant local architectural context found."
     
     # 2. Forward to Gemini for synthesis with dynamic bio retrieval
-    answer = await generate_answer(request.message, context, request.history, db=db)
+    answer = await generate_answer(request.message, context, request.history or [], db=db)
     
     return ChatResponse(response=answer, tokens_used=0)
 
@@ -85,11 +95,22 @@ async def get_projects(db: AsyncSession = Depends(get_db)):
     return result.scalars().all()
 
 @github_router.post("/sync")
-async def trigger_sync():
+async def trigger_sync(background_tasks: BackgroundTasks):
     """
     Enqueues a full GitHub sync as a background task.
     Returns immediately to keep the API responsive.
     """
-    redis = await create_pool(settings.REDIS_SETTINGS)
-    await redis.enqueue_job("sync_github_projects_task")
+    async def background_sync_task():
+        from app.core.database import SessionLocal
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info("Starting background GitHub sync task...")
+        async with SessionLocal() as db:
+            try:
+                result = await sync_github_projects(db)
+                logger.info(f"Background sync finished: {result}")
+            except Exception as e:
+                logger.error(f"Background sync failed: {e}")
+
+    background_tasks.add_task(background_sync_task)
     return {"status": "accepted", "message": "Background sync started."}

@@ -2,8 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
-import redis.asyncio as redis
-from fastapi_limiter import FastAPILimiter
 
 
 from app.core.config import settings
@@ -20,12 +18,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting up FastAPI application...")
     await init_db()
     
-    # Initialize Rate Limiting
-    redis_instance = redis.from_url(
-        settings.REDIS_URL, encoding="utf-8", decode_responses=True
-    )
-    await FastAPILimiter.init(redis_instance)
-    logger.info("Rate limiter initialized.")
+
     
     logger.info("Database tables verified/created.")
 
@@ -43,7 +36,7 @@ app = FastAPI(
 # Set up CORS for the Next.js frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(origin).rstrip("/") for origin in settings.BACKEND_CORS_ORIGINS],
+    allow_origins=[origin.rstrip("/") for origin in settings.BACKEND_CORS_ORIGINS],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
