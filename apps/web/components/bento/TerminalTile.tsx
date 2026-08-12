@@ -109,7 +109,8 @@ export default function TerminalTile() {
     setIsTyping(true)
     
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      // Use relative path for client-side fetches to avoid localhost:8000 in production
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
       
       // تهیه تاریخچه برای بک‌أند (فقط پیام‌های کاربر و ایجنت)
       const history = messages
@@ -120,7 +121,9 @@ export default function TerminalTile() {
           content: m.text
         }));
 
-      const res = await fetch(`${apiUrl}/api/v1/chat`, {
+      // Remove duplicate /api/v1 if apiUrl already includes it, or just use it directly
+      const fetchUrl = apiUrl.endsWith('/api/v1') ? `${apiUrl}/chat` : `${apiUrl}/api/v1/chat`;
+      const res = await fetch(fetchUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
