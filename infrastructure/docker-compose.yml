@@ -26,12 +26,8 @@ services:
   web:
     build:
       context: ../apps/web
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     pull_policy: if_not_present
-    volumes:
-      - ../apps/web:/app
-      - /app/node_modules
-    command: npm run dev
     env_file:
       - ../apps/api/.env # اگر فرانت‌ هم نیاز به متغیر داشت
     environment:
