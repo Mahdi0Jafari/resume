@@ -19,6 +19,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
+        display: ['var(--font-space-grotesk)', 'sans-serif'],
       },
       borderRadius: {
         '3xl': '24px',

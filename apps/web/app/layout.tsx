@@ -1,5 +1,5 @@
 import './globals.css'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
 
@@ -12,6 +12,12 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains',
+  display: 'swap',
+})
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
   display: 'swap',
 })
 
@@ -152,6 +158,7 @@ export default function RootLayout({
       <body className={clsx(
         inter.variable, 
         jetbrainsMono.variable,
+        spaceGrotesk.variable,
         "antialiased selection:bg-brand-accent selection:text-brand-background px-4 py-6 md:px-12 md:py-12 max-w-[1400px] mx-auto font-sans"
       )}>
         <script
