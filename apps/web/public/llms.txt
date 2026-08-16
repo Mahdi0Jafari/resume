@@ -1,0 +1,21 @@
+# Mahdi Jafari (@mahdi0jafari)
+
+> AI-Native Systems Architect & Software Engineer specializing in distributed infrastructure and autonomous agent orchestration.
+
+## Profile Summary
+- **Name:** Mahdi Jafari (مهدی جعفری)
+- **Role:** AI-Native Systems Architect & Software Engineer
+- **Official Website:** https://mahdijafari.ir
+- **GitHub:** https://github.com/mahdi0jafari
+- **LinkedIn:** https://www.linkedin.com/in/mahdi0jafari/
+- **X (Twitter):** https://x.com/mahdi0jafari
+- **Telegram:** https://t.me/mahdi0jafari
+
+## Core Architecture & Technical Expertise
+- **Distributed Systems & Microservices:** High-throughput async architectures, resilient microservices, distributed workflows.
+- **Autonomous AI & Agentic Workflows:** Multi-agent orchestration, LLM tooling, RAG engines, self-healing background automation.
+- **Web & Backend Engineering:** Next.js (App Router, Server Components), TypeScript, Python (FastAPI, AsyncIO), PostgreSQL, Redis, Docker.
+
+## Contact & Work Inquiries
+- **Email:** hello@mahdijafari.ir
+- **Availability:** Open for systems architecture design invitations, high-load backend consulting, and AI-native system deployments.
