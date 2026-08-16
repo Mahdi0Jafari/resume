@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   keywords: [
     'Mahdi Jafari',
     'مهدی جعفری',
+    'محمدمهدی جعفری',
+    'Mohammad Mahdi Jafari',
     'mahdi0jafari',
     'Systems Architect',
     'Distributed Systems',
@@ -81,7 +83,15 @@ export default function RootLayout({
         "@type": "Person",
         "@id": "https://mahdijafari.ir/#person",
         "name": "Mahdi Jafari",
-        "alternateName": "مهدی جعفری",
+        "legalName": "Mohammad Mahdi Jafari",
+        "alternateName": [
+          "مهدی جعفری",
+          "محمدمهدی جعفری",
+          "Mohammad Mahdi Jafari",
+          "Mohammadmahdi Jafari",
+          "mahdi0jafari",
+          "جفری"
+        ],
         "url": "https://mahdijafari.ir",
         "image": "https://mahdijafari.ir/profile.jpg",
         "jobTitle": "AI-Native Systems Architect & Software Engineer",
