@@ -8,12 +8,12 @@ export default function HeroTile() {
       <div className="relative z-10">
         <div className="flex items-center gap-6 mb-8">
           <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)] bg-gradient-to-br from-brand-accent/20 to-transparent flex items-center justify-center">
-            {/* Fallback initial if image totally fails to load */}
+            {/* Fallback initial if image fails to load */}
             <span className="absolute text-5xl font-bold text-brand-accent/30 pointer-events-none">M</span>
             
             <Image 
               src="/profile.jpg" 
-              alt="Mahdi Jafari"
+              alt="Mahdi Jafari - مهدی جعفری"
               fill
               className="object-cover relative z-10"
               priority
@@ -23,7 +23,9 @@ export default function HeroTile() {
             <span className="inline-block px-3 py-1 rounded-full bg-brand-accent/10 text-brand-accent text-xs font-mono border border-brand-accent/20">
               SYSTEMS_ARCHITECT_V3.0
             </span>
-            <span className="text-brand-secondary text-sm font-mono">Based in Iran | Global Operator</span>
+            <span className="text-brand-secondary text-sm font-mono">
+              Mahdi Jafari (مهدی جعفری) | Systems Engineer
+            </span>
           </div>
         </div>
 

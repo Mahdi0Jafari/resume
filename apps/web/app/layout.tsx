@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import clsx from 'clsx'
+import type { Metadata } from 'next'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -14,29 +15,46 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL('https://mahdijafari.ir'),
   title: {
-    default: 'mahdi0jafari | AI-Native Systems Architect',
-    template: '%s | mahdi0jafari'
+    default: 'Mahdi Jafari | AI-Native Systems Architect & Software Engineer',
+    template: '%s | Mahdi Jafari'
   },
-  description: 'Specializing in distributed systems and autonomous agent orchestration. Explore my projects and AI capabilities.',
-  keywords: ['Systems Architect', 'Software Engineer', 'Mahdi Jafari', 'AI', 'Next.js', 'FastAPI', 'Agentic Workflow'],
+  description: 'Specializing in distributed systems, high-performance architecture, and autonomous agent orchestration. Explore open-source projects, architecture designs, and AI capabilities.',
+  keywords: [
+    'Mahdi Jafari',
+    'مهدی جعفری',
+    'mahdi0jafari',
+    'Systems Architect',
+    'Distributed Systems',
+    'Software Engineer',
+    'AI Agents',
+    'Agentic Workflow',
+    'FastAPI',
+    'Next.js',
+    'Autonomous Systems'
+  ],
+  alternates: {
+    canonical: 'https://mahdijafari.ir',
+  },
   authors: [{ name: 'Mahdi Jafari', url: 'https://mahdijafari.ir' }],
   creator: 'Mahdi Jafari',
   publisher: 'Mahdi Jafari',
   openGraph: {
-    title: 'mahdi0jafari | AI-Native Systems Architect',
+    title: 'Mahdi Jafari | AI-Native Systems Architect',
     description: 'Specializing in distributed systems and autonomous agent orchestration.',
     url: 'https://mahdijafari.ir',
-    siteName: 'mahdi0jafari',
+    siteName: 'Mahdi Jafari Portfolio',
     locale: 'en_US',
-    type: 'website',
+    type: 'profile',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'mahdi0jafari | AI-Native Systems Architect',
+    title: 'Mahdi Jafari | AI-Native Systems Architect',
     description: 'Specializing in distributed systems and autonomous agent orchestration.',
+    creator: '@mahdi0jafari',
+    site: '@mahdi0jafari',
   },
   robots: {
     index: true,
@@ -49,9 +67,6 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-site-verification-code',
-  },
 }
 
 export default function RootLayout({
@@ -59,6 +74,47 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://mahdijafari.ir/#person",
+        "name": "Mahdi Jafari",
+        "alternateName": "مهدی جعفری",
+        "url": "https://mahdijafari.ir",
+        "image": "https://mahdijafari.ir/profile.jpg",
+        "jobTitle": "AI-Native Systems Architect & Software Engineer",
+        "description": "Specializing in distributed systems, autonomous agents orchestration, and scalable architectures.",
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q141102823",
+          "https://github.com/mahdi0jafari",
+          "https://www.linkedin.com/in/mahdi0jafari/",
+          "https://x.com/mahdi0jafari",
+          "https://t.me/mahdi0jafari"
+        ],
+        "knowsAbout": [
+          "Distributed Systems",
+          "Autonomous AI Agents",
+          "System Architecture",
+          "Next.js",
+          "FastAPI",
+          "Python",
+          "TypeScript",
+          "Cloud Computing"
+        ]
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://mahdijafari.ir/#webpage",
+        "url": "https://mahdijafari.ir",
+        "name": "Mahdi Jafari Portfolio & Systems Hub",
+        "about": { "@id": "https://mahdijafari.ir/#person" },
+        "mainEntity": { "@id": "https://mahdijafari.ir/#person" }
+      }
+    ]
+  }
+
   return (
     <html lang="en" className="scroll-smooth">
       <body className={clsx(
@@ -69,16 +125,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Mahdi Jafari",
-              url: "https://mahdijafari.ir",
-              jobTitle: "Systems Architect & Software Engineer",
-              sameAs: [
-                "https://github.com/mahdi0jafari"
-              ]
-            })
+            __html: JSON.stringify(jsonLd)
           }}
         />
         {children}
