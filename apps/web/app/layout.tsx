@@ -85,7 +85,7 @@ export default function RootLayout({
         "url": "https://mahdijafari.ir",
         "image": "https://mahdijafari.ir/profile.jpg",
         "jobTitle": "AI-Native Systems Architect & Software Engineer",
-        "description": "Specializing in distributed systems, autonomous agents orchestration, and scalable architectures.",
+        "description": "Specializing in distributed systems, autonomous agent orchestration, and scalable cloud architectures.",
         "sameAs": [
           "https://www.wikidata.org/wiki/Q141102823",
           "https://github.com/mahdi0jafari",
@@ -94,14 +94,36 @@ export default function RootLayout({
           "https://t.me/mahdi0jafari"
         ],
         "knowsAbout": [
-          "Distributed Systems",
-          "Autonomous AI Agents",
-          "System Architecture",
-          "Next.js",
-          "FastAPI",
-          "Python",
-          "TypeScript",
-          "Cloud Computing"
+          {
+            "@type": "DefinedTerm",
+            "name": "Distributed computing",
+            "sameAs": "https://www.wikidata.org/wiki/Q180634"
+          },
+          {
+            "@type": "DefinedTerm",
+            "name": "Artificial intelligence",
+            "sameAs": "https://www.wikidata.org/wiki/Q11660"
+          },
+          {
+            "@type": "DefinedTerm",
+            "name": "Software architecture",
+            "sameAs": "https://www.wikidata.org/wiki/Q858547"
+          },
+          {
+            "@type": "DefinedTerm",
+            "name": "Next.js",
+            "sameAs": "https://www.wikidata.org/wiki/Q104841924"
+          },
+          {
+            "@type": "DefinedTerm",
+            "name": "FastAPI",
+            "sameAs": "https://www.wikidata.org/wiki/Q108605051"
+          },
+          {
+            "@type": "DefinedTerm",
+            "name": "Python",
+            "sameAs": "https://www.wikidata.org/wiki/Q28865"
+          }
         ]
       },
       {
