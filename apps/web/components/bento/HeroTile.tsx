@@ -27,7 +27,7 @@ export default function HeroTile() {
           </div>
         </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
+        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight md:tracking-[-0.035em] leading-[1.08] mb-4">
           Engineering Autonomous Systems <br className="hidden md:block"/>
           <span className="text-brand-secondary">@ Speed of AI</span>
         </h1>
