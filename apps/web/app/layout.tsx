@@ -103,7 +103,6 @@ export default function RootLayout({
         "jobTitle": "AI-Native Systems Architect & Software Engineer",
         "description": "Specializing in distributed systems, autonomous agent orchestration, and scalable cloud architectures.",
         "sameAs": [
-          "https://www.wikidata.org/wiki/Q141102823",
           "https://github.com/mahdi0jafari",
           "https://www.linkedin.com/in/mahdi0jafari/",
           "https://x.com/mahdi0jafari",
