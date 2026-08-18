@@ -27,9 +27,11 @@ export default function HeroTile() {
           </div>
         </div>
 
-        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight md:tracking-[-0.035em] leading-[1.12] md:leading-[1.08] mb-3 md:mb-4">
-          Engineering Autonomous Systems <br className="hidden sm:block"/>
-          <span className="text-brand-secondary block sm:inline">@ Speed of AI</span>
+        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight md:tracking-[-0.035em] leading-[1.15] md:leading-[1.1] mb-4">
+          <span className="block">Engineering Autonomous Systems</span>
+          <span className="text-brand-secondary block mt-1.5 sm:mt-2 md:mt-2.5">
+            @ Speed of AI
+          </span>
         </h1>
         <p className="text-brand-secondary max-w-xl text-base sm:text-lg leading-relaxed">
           Orchestrating scalable infrastructure with deterministic precision.
