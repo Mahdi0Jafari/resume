@@ -21,7 +21,8 @@ export default function EcosystemShowcase() {
   }
 
   return (
-    <section id="projects" className="col-span-full flex flex-col gap-4 my-2">
+    <section id="projects" aria-label="Live Production Ecosystem" className="col-span-full flex flex-col gap-4 my-2">
+      <h2 className="sr-only">Live Production Ecosystem (8 Authentic Products)</h2>
       {/* Control Bar: Category Filters */}
       <div className="control-bar">
         <div className="filter-tabs">
@@ -69,7 +70,7 @@ export default function EcosystemShowcase() {
         {/*  Exact Top Header from Lyraz Landing  */}
         <div className="lyraz-header">
           <div className="lyraz-brand-mark">
-            <img src="/logos/lyraz.svg" alt="Lyraz Favicon Logo" className="lyraz-brand-logo" />
+            <img src="/logos/lyraz.svg" alt="Lyraz Favicon Logo" className="lyraz-brand-logo" width="24" height="24" loading="lazy" decoding="async" />
             <span className="lyraz-wordmark">lyraz</span>
           </div>
 
@@ -89,9 +90,9 @@ export default function EcosystemShowcase() {
         </div>
 
         {/*  Exact Gigantic Headline from Lyraz Landing  */}
-        <h2 className="lyraz-hero-headline">
+        <h3 className="lyraz-hero-headline">
           TURN YOUR WORDS TO <br /><span>SYMPHONY</span>
-        </h2>
+        </h3>
 
         {/*  Exact Satellite Chips from Lyraz Landing  */}
         <div className="lyraz-satellite-row">
@@ -141,7 +142,7 @@ export default function EcosystemShowcase() {
         <div className="najva-header">
           <div className="najva-brand-group">
             <div className="najva-icon-box-glass">
-              <img src="/logos/najva.svg" alt="Najva Logo" className="najva-brand-logo" />
+              <img src="/logos/najva.svg" alt="Najva Logo" className="najva-brand-logo" width="24" height="24" loading="lazy" decoding="async" />
             </div>
             <div className="najva-brand-text">
               <span className="najva-brand-title">Najvagram</span>
@@ -233,7 +234,7 @@ export default function EcosystemShowcase() {
               <span className="t-dot green"></span>
             </div>
             <div className="khonshu-logo-box">
-              <img src="/logos/khonshu.svg" alt="Khonshu Logo" className="khonshu-logo-img" />
+              <img src="/logos/khonshu.svg" alt="Khonshu Logo" className="khonshu-logo-img" width="20" height="20" loading="lazy" decoding="async" />
             </div>
             <div className="khonshu-brand-text">
               <span className="khonshu-brand-title">Khonshu</span>
@@ -329,7 +330,7 @@ export default function EcosystemShowcase() {
         <div className="donespace-header">
           <div className="donespace-brand-left">
             <div className="donespace-logo-box">
-              <img src="/logos/donespace.svg" alt="DoneSpace Logo" className="donespace-logo-img" />
+              <img src="/logos/donespace.svg" alt="DoneSpace Logo" className="donespace-logo-img" width="24" height="24" loading="lazy" decoding="async" />
             </div>
             <div className="donespace-brand-text">
               <span className="donespace-brand-title">DoneSpace</span>
@@ -344,10 +345,10 @@ export default function EcosystemShowcase() {
 
         {/*  DoneSpace Hero Headline & Playfair Serif (from landing.html)  */}
         <div className="donespace-hero-block">
-          <h2 className="donespace-hero-headline">
+          <h3 className="donespace-hero-headline">
             Smart Chore Tracker & <br />
             <span className="donespace-serif-italic">Shared Household Manager</span>
-          </h2>
+          </h3>
           <p className="donespace-hero-desc">
             Shared living platform designed to eliminate chore friction, plan weekly meals, and sync seamlessly with Google Calendar.
           </p>
@@ -446,10 +447,10 @@ export default function EcosystemShowcase() {
 
         {/*  Hero Headline & Subtitle  */}
         <div className="m0j-hero-block">
-          <h2 className="m0j-hero-headline">
+          <h3 className="m0j-hero-headline">
             ARCHITECT LEVEL 14 & <br />
             <span className="m0j-neon-title">IDENTITY CAPITAL CODEX</span>
-          </h2>
+          </h3>
           <p className="m0j-hero-desc">
             Systemic self-actualization engine scaffolding 8 foundational life domains into actionable epic quests and identity capital.
           </p>
@@ -532,7 +533,7 @@ export default function EcosystemShowcase() {
         <div className="ankisynth-header">
           <div className="ankisynth-brand-left">
             <div className="ankisynth-logo-box">
-              <img src="/logos/ankisynth.svg" alt="AnkiSynth Logo" className="ankisynth-logo-img" />
+              <img src="/logos/ankisynth.svg" alt="AnkiSynth Logo" className="ankisynth-logo-img" width="24" height="24" loading="lazy" decoding="async" />
             </div>
             <div className="ankisynth-brand-text">
               <span className="ankisynth-brand-title">AnkiSynth AI</span>
@@ -547,10 +548,10 @@ export default function EcosystemShowcase() {
 
         {/*  Hero Headline & Subtitle  */}
         <div className="ankisynth-hero-block">
-          <h2 className="ankisynth-hero-headline">
+          <h3 className="ankisynth-hero-headline">
             AI KNOWLEDGE FORGE & <br />
             <span className="ankisynth-neon-title">SPACED REPETITION ENGINE</span>
-          </h2>
+          </h3>
           <p className="ankisynth-hero-desc">
             Transform research papers and lecture notes into atomic, high-retention Anki decks with multi-turn AI synthesis and cloze generation.
           </p>
@@ -620,10 +621,10 @@ export default function EcosystemShowcase() {
 
         {/*  Hero Headline & Subtitle matching live site  */}
         <div className="fanus-hero-block">
-          <h2 className="fanus-hero-headline">
+          <h3 className="fanus-hero-headline">
             روزها و شب‌هایی که گذشت... • <br />
             <span className="fanus-amber-title">EMOTIONAL DIGITAL SANCTUARY</span>
-          </h2>
+          </h3>
           <p className="fanus-rule-creed">
             «بخوان، مرور کن... آرشیو دل‌نوشته‌های فانوس در دل شب.»
           </p>
@@ -681,7 +682,7 @@ export default function EcosystemShowcase() {
         <div className="cowork-header">
           <div className="cowork-brand-left">
             <div className="cowork-logo-box">
-              <img src="/logos/bluewhite_official.png" alt="آبی سفید BlueWhite Logo" />
+              <img src="/logos/bluewhite_official.png" alt="آبی سفید BlueWhite Logo" width="22" height="22" loading="lazy" decoding="async" />
             </div>
             <div className="cowork-brand-text">
               <span className="cowork-brand-title">CoWorkMap × آبی‌سفید</span>
@@ -696,10 +697,10 @@ export default function EcosystemShowcase() {
 
         {/*  Hero Headline & Subtitle  */}
         <div className="cowork-hero-block">
-          <h2 className="cowork-hero-headline">
+          <h3 className="cowork-hero-headline">
             نقشه تعاملی و رزرواسیون فضاهای کار اشتراکی <br />
             <span className="cowork-blue-title">IRAN COWORKING HUBS & BLUE-WHITE</span>
-          </h2>
+          </h3>
           <p className="cowork-hero-desc">
             کاوشگر جغرافیایی و دایرکتوری زنده بیش از ۳۴۰ فضای کار در ایران، با امکان مسیریابی نشان، مقایسه امکانات و رزرو مستقیم شعب آبی‌سفید.
           </p>

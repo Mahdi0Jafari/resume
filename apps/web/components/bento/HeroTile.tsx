@@ -13,8 +13,9 @@ export default function HeroTile() {
             
             <Image 
               src="/profile.jpg" 
-              alt="Mahdi Jafari"
+              alt="Mahdi Jafari (مهدی جعفری) - AI-Native Systems Architect"
               fill
+              sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 112px"
               className="object-cover relative z-10"
               priority
             />

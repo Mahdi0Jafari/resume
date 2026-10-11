@@ -25,10 +25,10 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL('https://mahdijafari.ir'),
   title: {
-    default: 'Mahdi Jafari | AI-Native Systems Architect & Software Engineer',
+    default: 'Mahdi Jafari | AI-Native Systems Architect',
     template: '%s | Mahdi Jafari'
   },
-  description: 'Specializing in distributed systems, high-performance architecture, and autonomous agent orchestration. Explore open-source projects, architecture designs, and AI capabilities.',
+  description: 'AI-Native Systems Architect specializing in distributed systems, multi-agent orchestration, and high-performance production ecosystems.',
   keywords: [
     'Mahdi Jafari',
     'مهدی جعفری',
@@ -41,7 +41,11 @@ export const metadata: Metadata = {
     'AI Agents',
     'Agentic Workflow',
     'FastAPI',
-    'Next.js',
+    'Next.js 15',
+    'LangGraph',
+    'Khonshu',
+    'Najvagram',
+    'Lyraz',
     'Autonomous Systems'
   ],
   alternates: {
@@ -52,18 +56,27 @@ export const metadata: Metadata = {
   publisher: 'Mahdi Jafari',
   openGraph: {
     title: 'Mahdi Jafari | AI-Native Systems Architect',
-    description: 'Specializing in distributed systems and autonomous agent orchestration.',
+    description: 'AI-Native Systems Architect specializing in distributed systems and autonomous agent orchestration.',
     url: 'https://mahdijafari.ir',
-    siteName: 'Mahdi Jafari Portfolio',
+    siteName: 'Mahdi Jafari',
     locale: 'en_US',
     type: 'profile',
+    images: [
+      {
+        url: 'https://mahdijafari.ir/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Mahdi Jafari | AI-Native Systems Architect & Software Engineer'
+      }
+    ]
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mahdi Jafari | AI-Native Systems Architect',
-    description: 'Specializing in distributed systems and autonomous agent orchestration.',
+    description: 'AI-Native Systems Architect specializing in distributed systems and autonomous agent orchestration.',
     creator: '@mahdi0jafari',
     site: '@mahdi0jafari',
+    images: ['https://mahdijafari.ir/opengraph-image']
   },
   robots: {
     index: true,
@@ -96,13 +109,12 @@ export default function RootLayout({
           "محمدمهدی جعفری",
           "Mohammad Mahdi Jafari",
           "Mohammadmahdi Jafari",
-          "mahdi0jafari",
-          "جفری"
+          "mahdi0jafari"
         ],
         "url": "https://mahdijafari.ir",
         "image": "https://mahdijafari.ir/profile.jpg",
         "jobTitle": "AI-Native Systems Architect & Software Engineer",
-        "description": "Specializing in distributed systems, autonomous agent orchestration, and scalable cloud architectures.",
+        "description": "Specializing in distributed systems, autonomous agent orchestration, and scalable high-performance production ecosystems.",
         "sameAs": [
           "https://github.com/mahdi0jafari",
           "https://www.linkedin.com/in/mahdi0jafari/",
@@ -143,12 +155,133 @@ export default function RootLayout({
         ]
       },
       {
+        "@type": "WebSite",
+        "@id": "https://mahdijafari.ir/#website",
+        "url": "https://mahdijafari.ir",
+        "name": "Mahdi Jafari | AI-Native Systems Architect",
+        "description": "Official engineering hub and production ecosystem of Mahdi Jafari.",
+        "publisher": { "@id": "https://mahdijafari.ir/#person" }
+      },
+      {
         "@type": "ProfilePage",
         "@id": "https://mahdijafari.ir/#webpage",
         "url": "https://mahdijafari.ir",
         "name": "Mahdi Jafari Portfolio & Systems Hub",
+        "isPartOf": { "@id": "https://mahdijafari.ir/#website" },
         "about": { "@id": "https://mahdijafari.ir/#person" },
         "mainEntity": { "@id": "https://mahdijafari.ir/#person" }
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://mahdijafari.ir/#ecosystem",
+        "name": "Live Production Ecosystem",
+        "description": "Engineered live production products designed and built by Mahdi Jafari.",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "Khonshu",
+              "operatingSystem": "Web",
+              "applicationCategory": "FinanceApplication",
+              "url": "https://khonshu.ir/",
+              "description": "Real-time algorithmic quantitative trading terminal with sub-20ms WebSocket streaming and automated risk execution.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "Najvagram",
+              "operatingSystem": "Web",
+              "applicationCategory": "CommunicationApplication",
+              "url": "https://najvagram.ir/",
+              "description": "E2EE anonymous messaging platform with train-compartment metaphor and ephemeral access keys.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "Lyraz",
+              "operatingSystem": "Web",
+              "applicationCategory": "MultimediaApplication",
+              "url": "https://lyraz.ir/landing",
+              "description": "Collaborative sound grid with real-time live lyrics synchronization and Telegram bot integration.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "DoneSpace",
+              "operatingSystem": "Web",
+              "applicationCategory": "ProductivityApplication",
+              "url": "https://donespace.ir/",
+              "description": "Shared household management and chore-tracking OS with Google Calendar synchronization.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "m0j",
+              "operatingSystem": "Web",
+              "applicationCategory": "UtilitiesApplication",
+              "url": "https://m0j.ir/",
+              "description": "8-domain systemic life architecture and identity progression matrix.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "AnkiSynth AI",
+              "operatingSystem": "Web",
+              "applicationCategory": "EducationalApplication",
+              "url": "https://mahdi0jafari.github.io/AnkiSynth/",
+              "description": "AI knowledge forge transforming research papers into atomic spaced-repetition Anki decks.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "Fanus",
+              "operatingSystem": "Web",
+              "applicationCategory": "SocialNetworkingApplication",
+              "url": "https://fanus-space.ir/",
+              "description": "Emotional digital sanctuary and night-time thought archive with candlelight aesthetic.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "CoWorkMap",
+              "operatingSystem": "Web",
+              "applicationCategory": "TravelApplication",
+              "url": "http://coworkmap.ir/",
+              "description": "Interactive geospatial directory and reservation system for 340+ coworking hubs in Iran.",
+              "creator": { "@id": "https://mahdijafari.ir/#person" }
+            }
+          }
+        ]
       }
     ]
   }

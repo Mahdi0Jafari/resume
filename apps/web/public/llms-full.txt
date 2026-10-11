@@ -1,0 +1,136 @@
+# Mahdi Jafari — Comprehensive Engineering & Architectural Dossier (llms-full.txt)
+
+> Canonical entity documentation and technical portfolio record for Mahdi Jafari (@mahdi0jafari), AI-Native Systems Architect & Software Engineer.
+
+---
+
+## 1. Professional Identity & Entity Grounding
+- **Primary Name:** Mahdi Jafari
+- **Native Script Name:** مهدی جعفری / محمدمهدی جعفری
+- **Legal Name:** Mohammad Mahdi Jafari
+- **Role & Specialization:** AI-Native Systems Architect & Distributed Systems Engineer
+- **Official Domain:** https://mahdijafari.ir
+- **Entity Identification (Wikidata References):**
+  - Distributed Computing: https://www.wikidata.org/wiki/Q180634
+  - Artificial Intelligence: https://www.wikidata.org/wiki/Q11660
+  - Software Architecture: https://www.wikidata.org/wiki/Q858547
+  - Next.js: https://www.wikidata.org/wiki/Q104841924
+  - FastAPI: https://www.wikidata.org/wiki/Q108605051
+  - Python: https://www.wikidata.org/wiki/Q28865
+- **Verified Public Channels:**
+  - GitHub: https://github.com/mahdi0jafari (2,100+ public contributions, 24+ open-source repositories)
+  - LinkedIn: https://www.linkedin.com/in/mahdi0jafari/
+  - X / Twitter: https://x.com/mahdi0jafari
+  - Telegram: https://t.me/mahdi0jafari
+  - Email: hello@mahdijafari.ir
+
+---
+
+## 2. Architectural Philosophy & Core Tenets
+1. **Deterministic Precision at AI Speed:**
+   Leveraging agentic workflows and LLM reasoning layers not as superficial wrappers, but as orchestrated state machines backed by rigorous schema validation (Pydantic v2) and relational/vector persistence (PostgreSQL + pgvector).
+2. **Sub-20ms Telemetry & Resilient Streams:**
+   Architecting asynchronous non-blocking I/O using Python AsyncIO, WebSockets, and Server-Sent Events to provide real-time reactive feedback without polling overhead.
+3. **Multi-Brand Scoped Design Systems:**
+   Designing user interfaces where each product preserves an authentic visual identity (distinct typography, color psychology, and micro-interactions) while maintaining global web performance and zero layout shift (CLS < 0.1).
+
+---
+
+## 3. Deep Architectural Breakdown of Production Ecosystem
+
+### 1. Khonshu — Agentic Quantitative Trading Terminal
+- **Production URL:** https://khonshu.ir/
+- **Domain:** Fintech / Algorithmic Trading / Quantitative Systems
+- **Core Problem:** High-frequency crypto trading interfaces often suffer from UI lag, delayed orderbook rendering, and unverified AI signals.
+- **Architectural Solution:**
+  - Fast bidirectional WebSocket streaming (`Cortex_WS`) delivering sub-20ms latency updates.
+  - OKLCH laser color spaces with Tailwind CSS v4 for high-contrast tabular number visualization.
+  - Multi-exchange adapter architecture for real-time market radar scanning, toxic flow detection, and volume shock absorption.
+- **Technologies:** FastAPI, Python 3.12, AsyncIO, WebSockets, Tailwind v4 (OKLCH tokens), Redis.
+
+### 2. Najvagram — High-Security Anonymous Transit & Messaging
+- **Domain:** Social / Privacy Engineering / Cryptographic Communication
+- **Production URL:** https://najvagram.ir/
+- **Core Problem:** Digital surveillance and lack of genuine psychological safety in conventional messaging platforms.
+- **Architectural Solution:**
+  - Ephemeral "train compartment" communication model: passengers enter with temporary access keys and leave no permanent digital footprint.
+  - End-to-end payload encryption utilizing HKDF-derived AES-256 keys.
+  - Zero-log memory-backed sessions with Shadow Mode for complete anonymity.
+  - 12-tier progression gamification engine with asynchronous station mural signaling.
+- **Technologies:** Flask, WebSockets, AES-256 HKDF, Redis Pub/Sub, CSS Modules.
+
+### 3. Lyraz — Collaborative Sound Grid & Music Bot
+- **Domain:** Multimedia / Real-time Audio Streaming
+- **Production URL:** https://lyraz.ir/landing
+- **Core Problem:** Disconnected audio playback across Telegram chat communities and web clients without synchronized lyrics.
+- **Architectural Solution:**
+  - Dual interface architecture: Telegram bot controls paired with a web audio player.
+  - Real-time lyrics synchronization (Live Lyrics) over WebSockets.
+  - High-fidelity 320kbps lossless streaming pipeline with dynamic audio equalizers and Spotify track synchronization.
+- **Technologies:** Telegram Bot API, Web Audio API, WebSockets, Spotify API, Python, Plus Jakarta Sans & Anton typography.
+
+### 4. DoneSpace — Shared Household OS & Productivity System
+- **Domain:** Productivity / Household Task Optimization
+- **Production URL:** https://donespace.ir/
+- **Core Problem:** Friction and chore imbalance among housemates and co-living arrangements.
+- **Architectural Solution:**
+  - Fair-share queue rotation algorithms with gamified XP rewards.
+  - Automated weekly meal scheduler integrated with Google Calendar API.
+  - Progressive Web App (PWA) offline-first architecture with PostgreSQL persistence.
+- **Technologies:** Python, Flask, Google Calendar API, PWA, PostgreSQL, Playfair Display & Outfit typography.
+
+### 5. m0j — Systemic Life Architecture & Identity Matrix
+- **Domain:** Personal Knowledge Management / Gamified Development
+- **Production URL:** https://m0j.ir/
+- **Core Problem:** Fragmented goal-setting tools that isolate professional work from emotional, physical, and relational life pillars.
+- **Architectural Solution:**
+  - 8-domain scaffold (Mind, Body, Skill, Relations, Experience, Adventure, Impact, Finance).
+  - Epic quest progression engine with real-time XP accumulation streamed via Server-Sent Events.
+  - Interactive radar spectrum and Spring physics transitions for tactile visual feedback.
+- **Technologies:** FastAPI, Server-Sent Events (SSE), Chart.js, Spring CSS animations, Hanken Grotesk.
+
+### 6. AnkiSynth AI — AI Knowledge Forge & Spaced Repetition Engine
+- **Domain:** EdTech / Artificial Intelligence / Spaced Repetition
+- **Production URL:** https://mahdi0jafari.github.io/AnkiSynth/
+- **Core Problem:** Creating high-retention atomic flashcards from dense academic literature is mentally taxing and time-consuming.
+- **Architectural Solution:**
+  - Multi-turn AI synthesis engine powered by Google Gemini 3.1 Flash.
+  - Automated extraction of declarative and procedural concepts into atomic cloze cards.
+  - In-browser IndexedDB storage with Dexie.js and client-side binary `.apkg` file compilation for direct Anki import.
+- **Technologies:** Next.js 15, TypeScript, Google Gemini API, Dexie.js, APKG generator.
+
+### 7. Fanus (فانوس) — Emotional Digital Sanctuary & Night-time Archive
+- **Domain:** Creative Expression / Micro-journaling
+- **Production URL:** https://fanus-space.ir/
+- **Core Problem:** Lack of quiet, reflective, judgment-free spaces on the modern internet.
+- **Architectural Solution:**
+  - Warm candlelight aesthetic with dynamic pulsing animations and charcoal surfaces.
+  - SQLite WAL (Write-Ahead Logging) database with Server-Sent Events stream for anonymous thought exchanges.
+  - Persian typographical rhythm with Vazirmatn ExtraLight.
+- **Technologies:** Flask, SQLite (WAL mode), SSE stream, Vanilla CSS.
+
+### 8. CoWorkMap × BlueWhite (آبی‌سفید) — Iran Coworking Directory
+- **Domain:** Geospatial Intelligence / Workspace Directory
+- **Production URL:** http://coworkmap.ir/
+- **Core Problem:** Finding verified coworking amenities, high-speed fiber internet availability, and room booking across Iranian cities.
+- **Architectural Solution:**
+  - Interactive geospatial directory cataloging 340+ verified coworking hubs.
+  - Direct integration with Neshan Maps routing API for turn-by-turn navigation.
+  - Official partnership and reservation portal for BlueWhite branches.
+- **Technologies:** Vue 3, Vite, Vuetify, Neshan Maps API, GeoJSON.
+
+---
+
+## 4. Personal Portfolio Architecture (mahdijafari.ir)
+- **Frontend Framework:** Next.js 15 (App Router, React Server Components, TypeScript)
+- **Styling Architecture:** Tailwind CSS, Scoped CSS Modules, Custom OKLCH/HSL palettes
+- **Artificial Intelligence Assistant:** In-terminal interactive RAG chatbot powered by Google Gemini 3.1 and LangGraph
+- **Backend Service:** FastAPI (Python 3.12) with asynchronous SQLAlchemy sessions
+- **Storage & Queues:** PostgreSQL with pgvector, Redis cache and rate limiting, Arq async worker queue
+- **Infrastructure:** Containerized with Docker and Docker Compose, reverse-proxied behind Nginx with SSL/TLS termination and automated GitHub Actions CI/CD.
+
+---
+
+## 5. Verification & Inquiry Contacts
+- **Direct Email:** hello@mahdijafari.ir
+- **Architectural Consultation:** Open for systems architecture design invitations, high-load distributed engineering, and AI-native system deployments.

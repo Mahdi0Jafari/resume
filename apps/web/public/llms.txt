@@ -1,21 +1,71 @@
 # Mahdi Jafari (@mahdi0jafari)
 
-> AI-Native Systems Architect & Software Engineer specializing in distributed infrastructure and autonomous agent orchestration.
+> AI-Native Systems Architect & Software Engineer specializing in distributed infrastructure, multi-agent orchestration, and high-performance production systems.
 
-## Profile Summary
-- **Name:** Mahdi Jafari (مهدی جعفری)
+## Identity & Professional Profile
+- **Name:** Mahdi Jafari (مهدی جعفری / محمدمهدی جعفری)
 - **Role:** AI-Native Systems Architect & Software Engineer
-- **Official Website:** https://mahdijafari.ir
-- **GitHub:** https://github.com/mahdi0jafari
-- **LinkedIn:** https://www.linkedin.com/in/mahdi0jafari/
-- **X (Twitter):** https://x.com/mahdi0jafari
-- **Telegram:** https://t.me/mahdi0jafari
+- **Official Hub:** https://mahdijafari.ir
+- **Canonical Bio:** Systems Architect engineering autonomous AI workflows, low-latency financial systems, and resilient distributed microservices.
+- **Profiles:**
+  - GitHub: https://github.com/mahdi0jafari
+  - LinkedIn: https://www.linkedin.com/in/mahdi0jafari/
+  - X (Twitter): https://x.com/mahdi0jafari
+  - Telegram: https://t.me/mahdi0jafari
 
-## Core Architecture & Technical Expertise
-- **Distributed Systems & Microservices:** High-throughput async architectures, resilient microservices, distributed workflows.
-- **Autonomous AI & Agentic Workflows:** Multi-agent orchestration, LLM tooling, RAG engines, self-healing background automation.
-- **Web & Backend Engineering:** Next.js (App Router, Server Components), TypeScript, Python (FastAPI, AsyncIO), PostgreSQL, Redis, Docker.
+---
 
-## Contact & Work Inquiries
-- **Email:** hello@mahdijafari.ir
-- **Availability:** Open for systems architecture design invitations, high-load backend consulting, and AI-native system deployments.
+## Live Production Ecosystem (8 Flagship Products)
+
+### 1. Khonshu — Agentic Quant Trading Terminal
+- **Domain:** https://khonshu.ir/
+- **Description:** Real-time crypto quantitative trading engine with low-latency Cortex WebSocket feeds, sub-20ms telemetry, algorithmic risk controls, and automated execution.
+- **Tech Stack:** FastAPI, AsyncIO, WebSockets, Tailwind v4 (OKLCH color system), Python 3.12.
+
+### 2. Najvagram — E2EE Anonymous Messaging Platform
+- **Domain:** https://najvagram.ir/
+- **Description:** High-security anonymous communication platform utilizing a train-compartment metaphor, zero-log policies, ephemeral access keys, and 12-tier progression gamification.
+- **Tech Stack:** Flask, WebSockets, HKDF-derived AES-256 encryption, Redis pub/sub.
+
+### 3. Lyraz — Collaborative Sound Grid & Music Bot
+- **Domain:** https://lyraz.ir/landing
+- **Description:** Multi-screen music streaming and room synchronization platform paired with Telegram bot integration, live synchronized lyrics, and 320kbps lossless audio.
+- **Tech Stack:** Telegram Bot API, Web Audio API, WebSockets, Spotify API, Python.
+
+### 4. DoneSpace — Household OS & Smart Chore Tracker
+- **Domain:** https://donespace.ir/
+- **Description:** Shared living productivity platform eliminating household chore friction through automated assignment queues, meal planning, and Google Calendar sync.
+- **Tech Stack:** Python, Flask, Google Calendar API, PWA, PostgreSQL.
+
+### 5. m0j (Life Architecture) — 8-Domain Identity Codex
+- **Domain:** https://m0j.ir/
+- **Description:** Self-actualization system scaffolding 8 human identity domains (Mind, Body, Skill, Relations, Experience, Adventure, Impact, Finance) into gamified quests.
+- **Tech Stack:** FastAPI, SSE (Server-Sent Events), Chart.js, Spring Physics CSS.
+
+### 6. AnkiSynth AI — Knowledge Forge & Flashcard Synthesizer
+- **Domain:** https://mahdi0jafari.github.io/AnkiSynth/
+- **Description:** Multi-turn AI knowledge distiller converting academic literature and lecture notes into atomic, high-retention spaced-repetition Anki decks.
+- **Tech Stack:** Next.js 15, Google Gemini 3.1 API, Dexie.js (IndexedDB), APKG binary generator.
+
+### 7. Fanus — Emotional Digital Sanctuary
+- **Domain:** https://fanus-space.ir/
+- **Description:** Night-time digital wall of thoughts and anonymous whispers featuring a nostalgic candlelight aesthetic and interactive community interactions.
+- **Tech Stack:** Flask, SQLite WAL mode, Server-Sent Events, Vanilla CSS.
+
+### 8. CoWorkMap × BlueWhite — Iran Coworking Directory
+- **Domain:** http://coworkmap.ir/
+- **Description:** Geospatial directory and booking system for over 340 coworking hubs across Iran with interactive Neshan navigation integration and direct reservation.
+- **Tech Stack:** Vue 3, Vite, Vuetify, Neshan Maps API, GeoJSON.
+
+---
+
+## Technical Stack & Architecture Competencies
+- **Backend & Cloud:** Python 3.12, FastAPI, AsyncIO, SQLAlchemy, PostgreSQL, pgvector, Redis, Docker, Nginx.
+- **Frontend & Design:** Next.js 15 (App Router, Server Components), React, TypeScript, Tailwind CSS, Framer Motion.
+- **Artificial Intelligence:** LangGraph, Google Gemini 3.1, Retrieval-Augmented Generation (RAG), Vector Embeddings.
+
+---
+
+## Detailed Documentation
+For the full architectural dossier, benchmarks, and entity records, fetch:
+- https://mahdijafari.ir/llms-full.txt
