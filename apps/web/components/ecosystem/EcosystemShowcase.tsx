@@ -21,18 +21,7 @@ export default function EcosystemShowcase() {
   }
 
   return (
-    <section id="projects" className="col-span-full flex flex-col gap-6 my-4">
-      {/* Hero Title Section */}
-      <div className="hero-banner">
-        <div className="pill-eyebrow">
-          <span>&gt; DEPLOYED_ECOSYSTEM // AUTHENTIC_SLICES</span>
-        </div>
-        <h2 className="hero-title">Live Production Projects</h2>
-        <p className="hero-desc">
-          8 engineered production products. Each card is an authentic slice of that live application — preserving its exact typography, iconography, interactive widgets, and brand aesthetics.
-        </p>
-      </div>
-
+    <section id="projects" className="col-span-full flex flex-col gap-4 my-2">
       {/* Control Bar: Category Filters */}
       <div className="control-bar">
         <div className="filter-tabs">
