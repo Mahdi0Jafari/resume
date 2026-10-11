@@ -21,6 +21,8 @@ export default async function Home() {
         <HeroTile />
         <SocialTile />
         
+        <EcosystemShowcase />
+
         {topProjects.length > 0 ? (
           topProjects.map((project) => (
             <ProjectTile 
@@ -37,8 +39,6 @@ export default async function Home() {
             Syncing agent databanks... 
           </div>
         )}
-
-        <EcosystemShowcase />
 
         <TerminalTile />
 
