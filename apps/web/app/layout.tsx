@@ -1,4 +1,5 @@
 import './globals.css'
+import './ecosystem-cards.css'
 import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
@@ -154,6 +155,12 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Lalezar&family=Outfit:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
+      </head>
       <body className={clsx(
         inter.variable, 
         jetbrainsMono.variable,

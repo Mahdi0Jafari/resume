@@ -1,0 +1,4024 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Mahdi Jafari • Live Production Ecosystem</title>
+  
+  <!-- Curated Product Design System Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Lalezar&family=Outfit:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+
+  <style>
+    /* ==========================================================
+       Portfolio Base Layout & Canvas Tokens
+       ========================================================== */
+    :root {
+      --canvas-bg: #030306;
+      --canvas-border: rgba(255, 255, 255, 0.08);
+      --canvas-text: #ffffff;
+      --canvas-muted: #94a3b8;
+      --portfolio-accent: #00F0FF;
+      --global-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--canvas-bg);
+      color: var(--canvas-text);
+      font-family: var(--global-font);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 24px 16px 80px 16px;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.04) 0%, transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(140, 82, 255, 0.03) 0%, transparent 50%);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Portfolio Navigation Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--canvas-border);
+      border-radius: 14px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 24px;
+    }
+
+    .brand-id {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-avatar {
+      width: 24px;
+      height: 24px;
+      background: var(--portfolio-accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: 800;
+      font-size: 11px;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    .brand-handle {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-items {
+      display: flex;
+      gap: 18px;
+      font-size: 0.82rem;
+      color: var(--canvas-muted);
+      font-weight: 500;
+    }
+
+    .nav-items a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-items a:hover {
+      color: var(--portfolio-accent);
+    }
+
+    /* Hero Section Banner */
+    .hero-banner {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 0 12px;
+    }
+
+    .pill-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 3px 12px;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--portfolio-accent);
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 60%, #64748b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--canvas-muted);
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: 0.88rem;
+    }
+
+    /* Control Bar: Filters */
+    .control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--canvas-border);
+    }
+
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-tab {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--canvas-border);
+      color: var(--canvas-muted);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .filter-tab:hover, .filter-tab.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .total-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--canvas-muted);
+    }
+
+    /* ==========================================================
+       SHOWCASE GRID (2-Column Balanced Responsive Architecture)
+       ========================================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      width: 100%;
+    }
+
+    @media (max-width: 860px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+
+    /* =========================================================================
+       1. LYRAZ — DIRECT SLICE OF https://lyraz.ir/landing
+       ========================================================================= */
+    .card-lyraz-authentic {
+      background: radial-gradient(circle at 50% 25%, #ffffff 0%, #f1f2f4 60%, #e2e5ea 100%);
+      color: #111215;
+      border: 2px solid #84cc16;
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18), 0 0 20px rgba(132, 204, 22, 0.15);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .card-lyraz-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(132, 204, 22, 0.3), 0 0 30px rgba(132, 204, 22, 0.3);
+      border-color: #76e500;
+    }
+
+    .lyraz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .lyraz-brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lyraz-brand-logo {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .lyraz-wordmark {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.03em;
+      color: #111215;
+      text-transform: lowercase;
+    }
+
+    .lyraz-center-emblem {
+      opacity: 0.65;
+    }
+
+    .lyraz-bot-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #111215;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 3px 8px;
+      border-radius: 9999px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      letter-spacing: 0.02em;
+    }
+
+    .lyraz-hero-headline {
+      font-family: 'Anton', sans-serif;
+      color: #84cc16;
+      font-size: clamp(1.8rem, 3.2vw, 2.3rem);
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .lyraz-hero-headline span {
+      color: #111215;
+    }
+
+    .lyraz-satellite-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .lyraz-satellite-chip {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      padding: 3px 9px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #111215;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .lyraz-satellite-chip:hover {
+      transform: scale(1.05);
+      border-color: rgba(132, 204, 22, 0.5);
+    }
+
+    .lyraz-eq-box {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2.5px;
+      height: 14px;
+    }
+
+    @keyframes lyraz-eq-pulse {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+
+    .lyraz-bar-1 { width: 3px; background: #84cc16; border-radius: 1px; animation: lyraz-eq-pulse 1.1s ease-in-out infinite; }
+    .lyraz-bar-2 { width: 3px; background: #84cc16; border-radius: 1px; animation: lyraz-eq-pulse 0.8s ease-in-out infinite 0.2s; }
+    .lyraz-bar-3 { width: 3px; background: #84cc16; border-radius: 1px; animation: lyraz-eq-pulse 1.4s ease-in-out infinite 0.4s; }
+    .lyraz-bar-4 { width: 3px; background: #84cc16; border-radius: 1px; animation: lyraz-eq-pulse 0.9s ease-in-out infinite 0.1s; }
+
+    .lyraz-desc-text {
+      font-size: 0.8rem;
+      color: #4b5563;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .lyraz-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      padding-top: 10px;
+      flex-wrap: nowrap;
+    }
+
+    .lyraz-btn-lime {
+      background-color: #84cc16;
+      color: #0d1004;
+      font-weight: 800;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 14px rgba(132, 204, 22, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-lyraz-authentic:hover .lyraz-btn-lime {
+      background-color: #76e500;
+      transform: scale(1.04);
+      box-shadow: 0 8px 24px rgba(118, 229, 0, 0.55);
+    }
+
+    .lyraz-tech-tags {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.64rem;
+      color: #6b7280;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+
+    /* =========================================================================
+       2. NAJVAGRAM — DIRECT 1:1 SLICE OF NAJVAGRAM CODEBASE (najvagram.ir)
+          Exact Tokens: #fb51fb, #0a0a0c, #16161a, btn-entry, icon-box-glass, Station Radar
+       ========================================================================= */
+    .card-najva-authentic {
+      background: linear-gradient(180deg, #190e2a 0%, #0d0816 45%, #0a0a0c 100%);
+      color: #ffffff;
+      border: 1px solid rgba(251, 81, 251, 0.45);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 13px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(251, 81, 251, 0.18);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .card-najva-authentic::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(251, 81, 251, 0.15);
+      filter: blur(40px);
+      pointer-events: none;
+      animation: najva-pulse-glow 3.5s infinite ease-in-out;
+    }
+
+    .card-najva-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(251, 81, 251, 0.35), 0 0 35px rgba(251, 81, 251, 0.35);
+      border-color: #fb51fb;
+    }
+
+    @keyframes najva-pulse-glow {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.15); }
+    }
+
+    /* Najva Exact Header */
+    .najva-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .najva-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .najva-icon-box-glass {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(251, 81, 251, 0.45);
+      background: rgba(251, 81, 251, 0.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(251, 81, 251, 0.25);
+      flex-shrink: 0;
+      padding: 7px;
+    }
+
+    .najva-brand-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(251, 81, 251, 0.6));
+    }
+
+    .najva-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .najva-brand-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .najva-brand-sub {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .najva-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: rgba(251, 81, 251, 0.12);
+      border: 1px solid rgba(251, 81, 251, 0.35);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #fb51fb;
+      font-family: 'Vazirmatn', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    /* Najva Hero Narrative with Lalezar & Space Grotesk Dual Title */
+    .najva-hero-block {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .najva-hero-title-group {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .najva-hero-title-fa {
+      font-family: 'Lalezar', cursive, sans-serif;
+      font-size: 1.45rem;
+      line-height: 1.15;
+      text-shadow: 0 0 12px rgba(251, 81, 251, 0.3);
+    }
+
+    .najva-txt-white {
+      background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.85) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .najva-txt-pink {
+      background: linear-gradient(135deg, #fb51fb 0%, #ff7afb 50%, #d946d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .najva-hero-title-en {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .najva-quote-desc {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.74);
+      line-height: 1.45;
+      font-weight: 400;
+      border-left: 2px solid rgba(251, 81, 251, 0.65);
+      padding-left: 12px;
+      margin-top: 2px;
+      background: rgba(0, 0, 0, 0.2);
+      padding-top: 5px;
+      padding-bottom: 5px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .najva-highlight {
+      color: #ffffff;
+      font-weight: 600;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Najva Exact .btn-entry UI Component Slice */
+    .najva-btn-entry-slice {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      background: rgba(22, 22, 26, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(251, 81, 251, 0.45);
+      padding: 9px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 0 20px rgba(251, 81, 251, 0.18);
+      transition: all 0.25s ease;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .najva-shimmer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
+
+    .card-najva-authentic:hover .najva-shimmer {
+      animation: najva-shimmer-anim 1.6s infinite;
+    }
+
+    @keyframes najva-shimmer-anim {
+      100% { transform: translateX(100%); }
+    }
+
+    .card-najva-authentic:hover .najva-btn-entry-slice {
+      border-color: #fb51fb;
+      box-shadow: 0 0 25px rgba(251, 81, 251, 0.45);
+      background: rgba(26, 16, 32, 0.85);
+    }
+
+    .najva-entry-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .najva-key-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(251, 81, 251, 0.2);
+      border: 1px solid rgba(251, 81, 251, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.95rem;
+      box-shadow: 0 0 10px rgba(251, 81, 251, 0.4);
+    }
+
+    .najva-entry-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .najva-entry-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .najva-entry-sub {
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.55);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .najva-entry-arrow {
+      color: #fb51fb;
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .card-najva-authentic:hover .najva-entry-arrow {
+      transform: translateX(4px);
+    }
+
+    /* Najva Authentic Central Station Live Radar Slice */
+    .najva-station-slice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(22, 22, 26, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: all 0.25s ease;
+      z-index: 2;
+    }
+
+    .card-najva-authentic:hover .najva-station-slice {
+      border-color: rgba(251, 81, 251, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .najva-station-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .najva-radar-avatar {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(37, 99, 235, 0.15));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22d3ee;
+      font-size: 0.9rem;
+      text-shadow: 0 0 6px rgba(34, 211, 238, 0.6);
+    }
+
+    .najva-radar-dot-wrap {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      display: flex;
+      width: 8px;
+      height: 8px;
+    }
+
+    .najva-ping {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #4ade80;
+      opacity: 0.75;
+      animation: najva-ping-anim 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    .najva-dot {
+      position: relative;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+    }
+
+    @keyframes najva-ping-anim {
+      75%, 100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    .najva-station-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .najva-station-title {
+      font-family: 'Vazirmatn', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .najva-station-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.66rem;
+      color: rgba(74, 222, 128, 0.85);
+      font-weight: 500;
+      font-family: 'Vazirmatn', sans-serif;
+      animation: najva-green-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes najva-green-pulse {
+      0%, 100% { text-shadow: 0 0 4px rgba(74, 222, 128, 0.5); opacity: 1; }
+      50% { text-shadow: 0 0 12px rgba(74, 222, 128, 0.8); opacity: 0.8; }
+    }
+
+    .najva-station-sub-en {
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.45);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Najva Footer Row */
+    .najva-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+      flex-wrap: nowrap;
+      z-index: 2;
+    }
+
+    .najva-tech-tags {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.64rem;
+      font-family: 'JetBrains Mono', monospace;
+      flex-wrap: nowrap;
+    }
+
+    .najva-tag {
+      background: rgba(251, 81, 251, 0.1);
+      color: #f472b6;
+      border: 1px solid rgba(251, 81, 251, 0.25);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .najva-launch-action {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fb51fb;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-najva-authentic:hover .najva-launch-action {
+      color: #ff7afb;
+      text-shadow: 0 0 10px rgba(251, 81, 251, 0.6);
+    }
+
+
+    /* =========================================================================
+       STANDARD CARDS (CARDS 3 TO 8)
+       ========================================================================= */
+    .project-card {
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      min-height: 250px;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo-frame {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .logo-frame img, .logo-frame svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .project-card:hover .logo-frame {
+      transform: scale(1.08);
+    }
+
+    .title-box {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .p-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .p-domain {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      opacity: 0.65;
+    }
+
+    .top-badge-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .status-badge {
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .launch-circle-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .project-card:hover .launch-circle-btn {
+      transform: translate(2px, -2px);
+    }
+
+    .p-summary {
+      font-size: 0.82rem;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .native-ui-slice {
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.76rem;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .tech-stack-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .tech-chip {
+      font-size: 0.65rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .action-prompt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+
+    /* =========================================================================
+       3. KHONSHU — DIRECT 1:1 QUANT TERMINAL SLICE (khonshu.ir)
+          Exact Tokens: #5560EE, #090C15, #00E5A3, #FF5A8F, Tailwind v4 OKLCH, ActiveOperations
+       ========================================================================= */
+    .card-khonshu-authentic {
+      background: radial-gradient(ellipse at 35% 15%, #161B2E 0%, #0C1019 45%, #06080F 100%);
+      color: #e2e8f0;
+      border: 1px solid rgba(85, 96, 238, 0.4);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 13px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(85, 96, 238, 0.15);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    .card-khonshu-authentic::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(85, 96, 238, 0.12);
+      filter: blur(50px);
+      pointer-events: none;
+    }
+
+    .card-khonshu-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(85, 96, 238, 0.3), 0 0 35px rgba(85, 96, 238, 0.25);
+      border-color: #5560EE;
+    }
+
+    /* Khonshu macOS Window Top Header */
+    .khonshu-window-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .khonshu-brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .khonshu-traffic-lights {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-right: 4px;
+    }
+
+    .khonshu-traffic-lights .t-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .t-dot.red { background: #ff5f56; }
+    .t-dot.yellow { background: #ffbd2e; }
+    .t-dot.green { background: #27c93f; }
+
+    .khonshu-logo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(85, 96, 238, 0.12);
+      border: 1px solid rgba(85, 96, 238, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 0 12px rgba(85, 96, 238, 0.2);
+    }
+
+    .khonshu-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .khonshu-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .khonshu-brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .khonshu-brand-sub {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .khonshu-latency-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      background: rgba(0, 229, 163, 0.08);
+      border: 1px solid rgba(0, 229, 163, 0.25);
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: #00E5A3;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.03em;
+    }
+
+    /* Khonshu Balance & Quick Tabs Row (from Header.tsx) */
+    .khonshu-balance-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      background: rgba(22, 28, 45, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 10px 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .khonshu-balance-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .khonshu-balance-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .khonshu-balance-val-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .khonshu-balance-val {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .khonshu-pnl-chip {
+      background: rgba(0, 229, 163, 0.12);
+      color: #00E5A3;
+      border: 1px solid rgba(0, 229, 163, 0.3);
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .khonshu-tab-pill-group {
+      display: flex;
+      gap: 3px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 2px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .khonshu-tab-pill {
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.64rem;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .khonshu-tab-pill.active {
+      background: rgba(85, 96, 238, 0.35);
+      color: #ffffff;
+      border: 1px solid rgba(85, 96, 238, 0.4);
+    }
+    .khonshu-tab-pill.inactive {
+      color: #64748b;
+    }
+
+    /* Khonshu Active Position / Orderbook Execution Slice (from ActiveOperations.tsx) */
+    .khonshu-position-slice {
+      background: rgba(15, 20, 35, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.25s ease;
+    }
+
+    .card-khonshu-authentic:hover .khonshu-position-slice {
+      border-color: rgba(85, 96, 238, 0.35);
+      background: rgba(20, 26, 46, 0.85);
+    }
+
+    .khonshu-pos-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .khonshu-pair-side {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .khonshu-pair-name {
+      font-weight: 800;
+      color: #ffffff;
+      font-size: 0.84rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .khonshu-side-badge {
+      background: rgba(0, 229, 163, 0.12);
+      color: #00E5A3;
+      border: 1px solid rgba(0, 229, 163, 0.3);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .khonshu-systemic-chips {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .khonshu-badge-in-trade {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(0, 229, 163, 0.1);
+      border: 1px solid rgba(0, 229, 163, 0.3);
+      color: #00E5A3;
+      font-size: 0.6rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .khonshu-badge-vol-shock {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      color: #22d3ee;
+      font-size: 0.6rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .khonshu-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .khonshu-metric-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .khonshu-metric-lbl {
+      font-size: 0.58rem;
+      color: #64748b;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .khonshu-metric-val {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .khonshu-metric-val.green {
+      color: #00E5A3;
+    }
+
+    .khonshu-cortex-signal-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.64rem;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      padding-top: 2px;
+    }
+
+    .khonshu-cortex-signal-line .signal-tag {
+      color: #818cf8;
+      font-weight: 700;
+    }
+
+    /* Khonshu Footer Row */
+    .khonshu-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .khonshu-tech-tags {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.64rem;
+      font-family: 'JetBrains Mono', monospace;
+      flex-wrap: nowrap;
+    }
+
+    .khonshu-tag {
+      background: rgba(85, 96, 238, 0.12);
+      color: #818cf8;
+      border: 1px solid rgba(85, 96, 238, 0.25);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .khonshu-btn-indigo {
+      background: #5560EE;
+      color: #ffffff;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      padding: 5px 12px;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(85, 96, 238, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-khonshu-authentic:hover .khonshu-btn-indigo {
+      background: #636ff6;
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(85, 96, 238, 0.6);
+    }
+
+    /* =========================================================================
+       4. DONESPACE — DIRECT 1:1 SLICE OF DONESPACE (donespace.ir)
+          Exact Tokens: #8c52ff, #fde047, #1a1025, Playfair Display italic, Bento Chores & Meals
+       ========================================================================= */
+    .card-donespace-authentic {
+      background: radial-gradient(circle at 10% 10%, #ffffff 0%, #f7f3fb 55%, #ece4f8 100%);
+      color: #1a1025;
+      border: 2px solid #8c52ff;
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 13px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), 0 0 20px rgba(140, 82, 255, 0.15);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .card-donespace-authentic::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(140, 82, 255, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-donespace-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(140, 82, 255, 0.28), 0 0 30px rgba(140, 82, 255, 0.25);
+      border-color: #7b3aff;
+    }
+
+    /* DoneSpace Top Header */
+    .donespace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .donespace-brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .donespace-logo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(140, 82, 255, 0.1);
+      border: 1px solid rgba(140, 82, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(140, 82, 255, 0.12);
+    }
+
+    .donespace-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .donespace-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .donespace-brand-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #1a1025;
+      line-height: 1.1;
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    .donespace-brand-sub {
+      font-size: 0.68rem;
+      color: #6b5e7a;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .donespace-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: rgba(140, 82, 255, 0.1);
+      border: 1px solid rgba(140, 82, 255, 0.25);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #8c52ff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* DoneSpace Hero Headline & Playfair Serif */
+    .donespace-hero-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .donespace-hero-headline {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a1025;
+      line-height: 1.25;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .donespace-serif-italic {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: #8c52ff;
+      font-weight: 700;
+    }
+
+    .donespace-hero-desc {
+      font-size: 0.78rem;
+      color: #6b5e7a;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    /* DoneSpace Bento Slice (Queue + XP + Meal) */
+    .donespace-bento-slice {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(140, 82, 255, 0.2);
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 6px 20px rgba(140, 82, 255, 0.08);
+      position: relative;
+      z-index: 2;
+      transition: all 0.25s ease;
+    }
+
+    .card-donespace-authentic:hover .donespace-bento-slice {
+      border-color: rgba(140, 82, 255, 0.4);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 24px rgba(140, 82, 255, 0.15);
+    }
+
+    .donespace-queue-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .donespace-queue-title {
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: #8c52ff;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .donespace-task-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #1a1025;
+    }
+
+    .donespace-check-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      flex-shrink: 0;
+    }
+
+    .donespace-check-box.done {
+      background: #8c52ff;
+      color: #ffffff;
+    }
+
+    .donespace-check-box.pending {
+      border: 1.5px solid rgba(140, 82, 255, 0.4);
+      background: rgba(140, 82, 255, 0.05);
+    }
+
+    .donespace-task-text.done {
+      text-decoration: line-through;
+      color: #8c8c9a;
+      font-weight: 500;
+    }
+
+    .donespace-avatar-chip {
+      margin-left: auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(140, 82, 255, 0.12);
+      color: #8c52ff;
+      font-size: 0.58rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .donespace-avatar-chip.yellow {
+      background: rgba(253, 224, 71, 0.35);
+      color: #854d0e;
+    }
+
+    .donespace-side-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      justify-content: space-between;
+    }
+
+    .donespace-xp-card {
+      background: rgba(140, 82, 255, 0.06);
+      border: 1px solid rgba(140, 82, 255, 0.15);
+      border-radius: 8px;
+      padding: 5px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .donespace-xp-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #6b5e7a;
+    }
+
+    .donespace-xp-val {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: #8c52ff;
+      line-height: 1;
+    }
+
+    .donespace-prog-bar {
+      height: 4px;
+      background: rgba(140, 82, 255, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+
+    .donespace-prog-fill {
+      width: 75%;
+      height: 100%;
+      background: #8c52ff;
+    }
+
+    .donespace-meal-card {
+      background: rgba(253, 224, 71, 0.15);
+      border: 1px solid rgba(253, 224, 71, 0.4);
+      border-radius: 8px;
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .donespace-meal-emoji {
+      font-size: 0.95rem;
+    }
+
+    .donespace-meal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .donespace-meal-name {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #1a1025;
+      line-height: 1.1;
+    }
+
+    .donespace-meal-sub {
+      font-size: 0.58rem;
+      color: #713f12;
+    }
+
+    /* DoneSpace Footer Row */
+    .donespace-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid rgba(140, 82, 255, 0.15);
+      padding-top: 10px;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .donespace-tech-tags {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.64rem;
+      font-family: 'JetBrains Mono', monospace;
+      flex-wrap: nowrap;
+    }
+
+    .donespace-tag {
+      background: rgba(140, 82, 255, 0.08);
+      color: #7c3aed;
+      border: 1px solid rgba(140, 82, 255, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .donespace-btn-yellow {
+      background: #fde047;
+      color: #1a1025;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.02em;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 14px rgba(253, 224, 71, 0.45);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-donespace-authentic:hover .donespace-btn-yellow {
+      transform: scale(1.04);
+      box-shadow: 0 6px 20px rgba(253, 224, 71, 0.6);
+      background: #facc15;
+    }
+
+    /* =========================================================================
+       5. M0J (LIFE ARCHITECTURE) — DIRECT 1:1 SLICE OF JANUS-CORE / LIFE_ARCH
+          Exact Tokens: #b084f5, #3b4dce, 8 Domain Matrix Spectrum, Epic Quests
+       ========================================================================= */
+    .card-m0j-authentic {
+      background: radial-gradient(ellipse at 85% 15%, rgba(176, 132, 245, 0.16) 0%, #140d24 50%, #080510 100%);
+      color: #ffffff;
+      border: 1px solid rgba(176, 132, 245, 0.4);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 13px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(176, 132, 245, 0.15);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+    }
+
+    .card-m0j-authentic::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: rgba(176, 132, 245, 0.15);
+      filter: blur(45px);
+      pointer-events: none;
+    }
+
+    .card-m0j-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(176, 132, 245, 0.35), 0 0 35px rgba(176, 132, 245, 0.28);
+      border-color: #b084f5;
+    }
+
+    /* m0j Top Header */
+    .m0j-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .m0j-brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .m0j-logo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(176, 132, 245, 0.12);
+      border: 1px solid rgba(176, 132, 245, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 0 12px rgba(176, 132, 245, 0.25);
+    }
+
+    .m0j-logo-box svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .m0j-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .m0j-brand-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      font-family: 'Hanken Grotesk', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .m0j-brand-sub {
+      font-size: 0.68rem;
+      color: #c4b5fd;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .m0j-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: rgba(176, 132, 245, 0.12);
+      border: 1px solid rgba(176, 132, 245, 0.35);
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: #b084f5;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.03em;
+    }
+
+    /* m0j Hero Headline & Subtitle */
+    .m0j-hero-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .m0j-hero-headline {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.25;
+      font-family: 'Hanken Grotesk', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .m0j-neon-title {
+      background: linear-gradient(90deg, #b084f5, #d8b4fe, #b084f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .m0j-hero-desc {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    /* m0j 8-Domain Matrix UI Slice (from life_index.html & base.css) */
+    .m0j-matrix-slice {
+      background: rgba(22, 14, 38, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(176, 132, 245, 0.25);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.25s ease;
+    }
+
+    .card-m0j-authentic:hover .m0j-matrix-slice {
+      border-color: rgba(176, 132, 245, 0.45);
+      background: rgba(28, 18, 48, 0.9);
+      box-shadow: 0 0 20px rgba(176, 132, 245, 0.2);
+    }
+
+    .m0j-matrix-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+    }
+
+    .m0j-level-badge {
+      color: #ffffff;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .m0j-level-badge i {
+      color: #b084f5;
+    }
+
+    .m0j-xp-counter {
+      color: #d8b4fe;
+      font-weight: 800;
+    }
+
+    /* 8-Domain Colorful Spheres Row */
+    .m0j-domains-spectrum {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .m0j-domain-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .m0j-domain-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .m0j-domain-lbl {
+      font-size: 0.54rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+    }
+
+    .m0j-quest-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'JetBrains Mono', monospace;
+      padding-top: 2px;
+    }
+
+    .m0j-quest-tag {
+      color: #b084f5;
+      font-weight: 700;
+    }
+
+    /* m0j Footer Row */
+    .m0j-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .m0j-tech-tags {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.64rem;
+      font-family: 'JetBrains Mono', monospace;
+      flex-wrap: nowrap;
+    }
+
+    .m0j-tag {
+      background: rgba(176, 132, 245, 0.1);
+      color: #d8b4fe;
+      border: 1px solid rgba(176, 132, 245, 0.25);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .m0j-btn-lavender {
+      background: #b084f5;
+      color: #050508;
+      font-weight: 800;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      padding: 5px 12px;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(176, 132, 245, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-m0j-authentic:hover .m0j-btn-lavender {
+      background: #c49eff;
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(176, 132, 245, 0.6);
+    }
+
+    /* =========================================================================
+       6. ANKISYNTH AI — DIRECT 1:1 SLICE OF ANKISYNTH / ANKIFORGE
+          Exact Tokens: #fb51fb, #83fc8e, #ffd16c, #0e0e10, Space Grotesk, AI Flashcard Forge
+       ========================================================================= */
+    .card-ankisynth-authentic {
+      background: radial-gradient(ellipse at 85% 15%, rgba(251, 81, 251, 0.16) 0%, #150d18 50%, #0a060c 100%);
+      color: #f9f5f8;
+      border: 1px solid rgba(251, 81, 251, 0.4);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 13px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(251, 81, 251, 0.15);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .card-ankisynth-authentic::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: rgba(251, 81, 251, 0.15);
+      filter: blur(45px);
+      pointer-events: none;
+    }
+
+    .card-ankisynth-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(251, 81, 251, 0.35), 0 0 35px rgba(251, 81, 251, 0.3);
+      border-color: #fb51fb;
+    }
+
+    /* AnkiSynth Top Header */
+    .ankisynth-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ankisynth-brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ankisynth-logo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(251, 81, 251, 0.12);
+      border: 1px solid rgba(251, 81, 251, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 0 12px rgba(251, 81, 251, 0.25);
+    }
+
+    .ankisynth-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .ankisynth-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .ankisynth-brand-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .ankisynth-brand-sub {
+      font-size: 0.68rem;
+      color: #adaaad;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .ankisynth-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: rgba(251, 81, 251, 0.12);
+      border: 1px solid rgba(251, 81, 251, 0.35);
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: #fb51fb;
+      font-family: 'Roboto Mono', monospace;
+      letter-spacing: 0.03em;
+    }
+
+    /* AnkiSynth Hero Headline */
+    .ankisynth-hero-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ankisynth-hero-headline {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.25;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .ankisynth-neon-title {
+      background: linear-gradient(90deg, #fb51fb, #f472b6, #fb51fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ankisynth-hero-desc {
+      font-size: 0.78rem;
+      color: rgba(249, 245, 248, 0.75);
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    /* AnkiSynth Ingestion & Forged Card UI Slice (from SourcePanel.tsx & Workbench.tsx) */
+    .ankisynth-forge-slice {
+      background: rgba(19, 19, 21, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(251, 81, 251, 0.25);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.25s ease;
+    }
+
+    .card-ankisynth-authentic:hover .ankisynth-forge-slice {
+      border-color: rgba(251, 81, 251, 0.45);
+      background: rgba(24, 18, 28, 0.9);
+      box-shadow: 0 0 20px rgba(251, 81, 251, 0.2);
+    }
+
+    .ankisynth-forge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.65rem;
+    }
+
+    .ankisynth-mode-tag {
+      background: rgba(251, 81, 251, 0.15);
+      color: #fb51fb;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .ankisynth-ai-engine {
+      color: #ffd16c;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .ankisynth-card-preview {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 7px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 0.72rem;
+    }
+
+    .ankisynth-card-front {
+      color: #ffffff;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .ankisynth-card-back {
+      color: #83fc8e;
+      font-size: 0.68rem;
+      line-height: 1.3;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .ankisynth-forge-footer-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.62rem;
+      font-family: 'Roboto Mono', monospace;
+      color: #adaaad;
+      padding-top: 1px;
+    }
+
+    .ankisynth-tag-chip {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #ffd16c;
+    }
+
+    /* AnkiSynth Footer Row */
+    .ankisynth-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ankisynth-tech-tags {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.64rem;
+      font-family: 'Roboto Mono', monospace;
+      flex-wrap: nowrap;
+    }
+
+    .ankisynth-tag {
+      background: rgba(251, 81, 251, 0.1);
+      color: #f472b6;
+      border: 1px solid rgba(251, 81, 251, 0.25);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .ankisynth-btn-rose {
+      background: #fb51fb;
+      color: #000000;
+      font-weight: 800;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      padding: 5px 12px;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(251, 81, 251, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-ankisynth-authentic:hover .ankisynth-btn-rose {
+      background: #ff7afb;
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(251, 81, 251, 0.6);
+    }
+
+    /* =========================================================================
+       7. FANUS (فانوس • جایی برای نوشته‌هامون) — 100% DIRECT LIVE SITE SLICE
+          Source: fanus-space.ir (divar_del.db + live archive styling)
+          Exact Tokens: #F5B54D (Candle Amber), #E1D3B0 (Gold), #1a1a1a (Sanctuary Void)
+       ========================================================================= */
+    .card-fanus-authentic {
+      background: radial-gradient(ellipse at 85% 15%, rgba(245, 181, 77, 0.22) 0%, #1c1122 45%, #0c0712 100%);
+      color: #ffffff;
+      border: 1px solid rgba(245, 181, 77, 0.45);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 13px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 181, 77, 0.16);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Vazirmatn', -apple-system, sans-serif;
+    }
+
+    .card-fanus-authentic::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: rgba(245, 181, 77, 0.18);
+      filter: blur(45px);
+      pointer-events: none;
+    }
+
+    .card-fanus-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(245, 181, 77, 0.4), 0 0 35px rgba(245, 181, 77, 0.3);
+      border-color: #F5B54D;
+    }
+
+    /* Fanus Header */
+    .fanus-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .fanus-brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fanus-logo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(245, 181, 77, 0.14);
+      border: 1px solid rgba(245, 181, 77, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      box-shadow: 0 0 14px rgba(245, 181, 77, 0.28);
+    }
+
+    .fanus-logo-box svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 6px rgba(245, 181, 77, 0.7));
+      animation: fanus-flame-flicker 2.5s infinite ease-in-out;
+    }
+
+    @keyframes fanus-flame-flicker {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px #F5B54D); }
+      50% { transform: scale(0.93); filter: drop-shadow(0 0 14px #F5B54D); }
+    }
+
+    .fanus-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .fanus-brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fef3c7;
+      line-height: 1.1;
+      font-family: 'Vazirmatn', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .fanus-brand-sub {
+      font-size: 0.68rem;
+      color: #fde68a;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.05em;
+      opacity: 0.9;
+    }
+
+    .fanus-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 181, 77, 0.14);
+      border: 1px solid rgba(245, 181, 77, 0.4);
+      border-radius: 9999px;
+      padding: 4px 10px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #F5B54D;
+      font-family: 'Vazirmatn', sans-serif;
+      box-shadow: 0 0 10px rgba(245, 181, 77, 0.2);
+    }
+
+    .fanus-status-badge i {
+      font-size: 0.78rem;
+      animation: fanus-flame-flicker 2s infinite ease-in-out;
+    }
+
+    /* Fanus Hero Title & Rule */
+    .fanus-hero-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .fanus-hero-headline {
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 1.16rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      direction: rtl;
+    }
+
+    .fanus-amber-title {
+      color: #F5B54D;
+      text-shadow: 0 0 14px rgba(245, 181, 77, 0.4);
+    }
+
+    .fanus-rule-creed {
+      font-size: 0.78rem;
+      color: #fde68a;
+      font-style: italic;
+      line-height: 1.4;
+      opacity: 0.9;
+      direction: rtl;
+    }
+
+    /* Fanus Dual Slices: Archive Container & Wall Post Slice */
+    .fanus-double-slice {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 1. Archive Container Slice (Direct from fanus-space.ir .archive-container) */
+    .fanus-archive-slice {
+      background: rgba(26, 18, 33, 0.85);
+      border: 1px solid rgba(245, 181, 77, 0.3);
+      border-top: 3px solid #F5B54D;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
+      direction: rtl;
+    }
+
+    .card-fanus-authentic:hover .fanus-archive-slice {
+      border-color: rgba(245, 181, 77, 0.6);
+      background: rgba(32, 22, 42, 0.95);
+      box-shadow: 0 0 15px rgba(245, 181, 77, 0.15);
+    }
+
+    .fanus-archive-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #F5B54D;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .fanus-archive-text {
+      font-size: 0.75rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+      opacity: 0.9;
+    }
+
+    /* 2. Authentic Wall of Flames Post Slice */
+    .fanus-post-slice {
+      background: rgba(36, 26, 46, 0.9);
+      border: 1px solid rgba(245, 181, 77, 0.3);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      direction: rtl;
+      transition: all 0.2s ease;
+    }
+
+    .card-fanus-authentic:hover .fanus-post-slice {
+      border-color: #F5B54D;
+      transform: translateY(-1px);
+    }
+
+    .fanus-post-text {
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #fef3c7;
+    }
+
+    .fanus-post-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.64rem;
+      color: #c4b5fd;
+      font-family: 'JetBrains Mono', monospace;
+      padding-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .fanus-candle-reaction {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #F5B54D;
+      font-weight: 700;
+    }
+
+    /* Fanus Footer */
+    .fanus-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding-top: 6px;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .fanus-tags-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    .fanus-chip {
+      background: rgba(245, 181, 77, 0.1);
+      border: 1px solid rgba(245, 181, 77, 0.28);
+      color: #fde68a;
+      font-size: 0.64rem;
+      padding: 2.5px 7px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .fanus-btn-amber {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #F5B54D;
+      color: #1a0f05;
+      padding: 6px 13px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      font-family: 'Vazirmatn', sans-serif;
+      box-shadow: 0 4px 14px rgba(245, 181, 77, 0.4);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-fanus-authentic:hover .fanus-btn-amber {
+      background: #ffc46a;
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(245, 181, 77, 0.6);
+    }
+
+    /* =========================================================================
+       8. COWORKMAP & BLUEWHITE — 100% DIRECT CODEBASE SLICE
+          Source: coworkmap / Vue 3 + Vuetify + Neshan Maps API + blue-white.co
+          Exact Tokens: #0089B0 (BlueWhite Cyan), #1976d2 (Primary Blue), #FFBB00 (Amber Accent)
+       ========================================================================= */
+    .card-cowork-authentic {
+      background: radial-gradient(ellipse at 85% 15%, rgba(0, 137, 176, 0.25) 0%, #0c1c33 50%, #030a16 100%);
+      color: #ffffff;
+      border: 1px solid rgba(0, 137, 176, 0.45);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 13px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 137, 176, 0.15);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Vazirmatn', 'Space Grotesk', sans-serif;
+    }
+
+    .card-cowork-authentic::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: rgba(0, 137, 176, 0.18);
+      filter: blur(45px);
+      pointer-events: none;
+    }
+
+    .card-cowork-authentic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(0, 137, 176, 0.4), 0 0 35px rgba(96, 165, 250, 0.3);
+      border-color: #0089B0;
+    }
+
+    /* CoWorkMap Header */
+    .cowork-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cowork-brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cowork-logo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1px solid rgba(0, 137, 176, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      box-shadow: 0 0 14px rgba(0, 137, 176, 0.3);
+    }
+
+    .cowork-logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .cowork-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .cowork-brand-title {
+      font-size: 1.24rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      font-family: 'Vazirmatn', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .cowork-brand-sub {
+      font-size: 0.68rem;
+      color: #7dd3fc;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+
+    .cowork-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 137, 176, 0.18);
+      border: 1px solid rgba(0, 137, 176, 0.45);
+      border-radius: 9999px;
+      padding: 4px 10px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #38bdf8;
+      font-family: 'Vazirmatn', sans-serif;
+      box-shadow: 0 0 10px rgba(0, 137, 176, 0.2);
+    }
+
+    /* CoWorkMap Hero Title */
+    .cowork-hero-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cowork-hero-headline {
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 1.16rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      direction: rtl;
+    }
+
+    .cowork-blue-title {
+      color: #38bdf8;
+      text-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+    }
+
+    .cowork-hero-desc {
+      font-size: 0.8rem;
+      color: #bae6fd;
+      line-height: 1.45;
+      opacity: 0.9;
+      direction: rtl;
+    }
+
+    /* CoWorkMap Hub UI Slice */
+    .cowork-hub-slice {
+      background: rgba(10, 25, 48, 0.9);
+      border: 1px solid rgba(0, 137, 176, 0.35);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 0 20px rgba(0, 137, 176, 0.2);
+      position: relative;
+      z-index: 2;
+      transition: all 0.2s ease;
+      direction: rtl;
+    }
+
+    .card-cowork-authentic:hover .cowork-hub-slice {
+      border-color: #0089B0;
+      background: rgba(14, 34, 64, 0.95);
+    }
+
+    .cowork-space-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cowork-space-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      color: #ffffff;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    .cowork-space-name i {
+      color: #38bdf8;
+      font-size: 0.95rem;
+    }
+
+    .cowork-rating-tag {
+      background: rgba(255, 187, 0, 0.16);
+      border: 1px solid rgba(255, 187, 0, 0.45);
+      color: #fbbf24;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cowork-amenities-row {
+      display: flex;
+      gap: 5px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cowork-amenities-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cowork-amenity-pill {
+      background: rgba(0, 137, 176, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #e0f2fe;
+      font-size: 0.63rem;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: 'Vazirmatn', sans-serif;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .cowork-space-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding-top: 4px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    }
+
+    .cowork-status-live {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #4ade80;
+      font-weight: 600;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    .cowork-routing-hint {
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    /* CoWorkMap Footer */
+    .cowork-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding-top: 6px;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cowork-tags-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    .cowork-chip {
+      background: rgba(0, 137, 176, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #7dd3fc;
+      font-size: 0.64rem;
+      padding: 2.5px 7px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .cowork-btn-blue {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #0089B0;
+      color: #ffffff;
+      padding: 6px 13px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      font-family: 'Vazirmatn', sans-serif;
+      box-shadow: 0 4px 14px rgba(0, 137, 176, 0.45);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-cowork-authentic:hover .cowork-btn-blue {
+      background: #0284c7;
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.65);
+    }
+
+    /* Bottom CLI Tile */
+    .cli-footer {
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--canvas-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin-top: 24px;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+    .cli-footer:hover {
+      border-color: var(--portfolio-accent);
+      color: #fff;
+      background: rgba(0, 240, 255, 0.025);
+    }
+
+    /* =========================================================================
+       COMPREHENSIVE RESPONSIVE DESIGN SYSTEM (Desktop, Tablet, Mobile)
+       ========================================================================= */
+
+    /* Tablet & Medium Screens (<= 860px) */
+    @media (max-width: 860px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .container {
+        padding: 0 4px;
+      }
+    }
+
+    /* Mobile Screens (<= 640px) */
+    @media (max-width: 640px) {
+      body {
+        padding: 12px 10px 60px 10px;
+      }
+
+      /* Compact Header */
+      .top-header {
+        padding: 10px 14px;
+        margin-bottom: 16px;
+      }
+      .brand-handle {
+        font-size: 0.78rem;
+      }
+      .nav-items {
+        gap: 12px;
+        font-size: 0.76rem;
+      }
+
+      /* Hero Section */
+      .hero-banner {
+        margin-bottom: 18px;
+        padding: 0 4px;
+      }
+      .hero-title {
+        font-size: 1.45rem;
+      }
+      .hero-desc {
+        font-size: 0.78rem;
+        line-height: 1.45;
+      }
+
+      /* Filter Control Bar */
+      .control-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .filter-tabs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+      .filter-tab {
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 0.7rem;
+      }
+      .total-counter {
+        font-size: 0.68rem;
+      }
+
+      /* All 8 Cards Mobile Optimization */
+      .card-lyraz-authentic,
+      .card-najva-authentic,
+      .card-khonshu-authentic,
+      .card-donespace-authentic,
+      .card-m0j-authentic,
+      .card-ankisynth-authentic,
+      .card-fanus-authentic,
+      .card-cowork-authentic {
+        padding: 16px 14px;
+        border-radius: 16px;
+        gap: 12px;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      /* Brand Headers */
+      .lyraz-wordmark,
+      .najva-brand-title,
+      .khonshu-brand-title,
+      .donespace-brand-title,
+      .m0j-brand-title,
+      .ankisynth-brand-title,
+      .fanus-brand-title,
+      .cowork-brand-title {
+        font-size: 1.05rem;
+      }
+
+      /* Hero Headlines inside cards */
+      .lyraz-hero-headline,
+      .najva-hero-title-group,
+      .donespace-hero-headline,
+      .m0j-hero-headline,
+      .ankisynth-hero-headline,
+      .fanus-hero-headline,
+      .cowork-hero-headline {
+        font-size: 1.02rem;
+        line-height: 1.35;
+      }
+
+      /* ALL CARD FOOTERS ON MOBILE: STACKED FULL-WIDTH & CLEAN */
+      .lyraz-footer,
+      .najva-footer,
+      .khonshu-footer,
+      .donespace-footer,
+      .m0j-footer,
+      .ankisynth-footer,
+      .fanus-footer,
+      .cowork-footer {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding-top: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      /* TAGS ROW ON MOBILE: Wrap neatly without clipping */
+      .lyraz-tech-tags,
+      .najva-tech-tags,
+      .khonshu-tech-tags,
+      .donespace-tech-tags,
+      .m0j-tech-tags,
+      .ankisynth-tech-tags,
+      .fanus-tags-row,
+      .cowork-tags-row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+        width: 100% !important;
+        justify-content: flex-start !important;
+      }
+
+      /* CTA BUTTONS ON MOBILE: Full-width, Prominent, Thumb-friendly, 0% Overflow */
+      .lyraz-btn-lime,
+      .najva-launch-action,
+      .khonshu-btn-indigo,
+      .donespace-btn-yellow,
+      .m0j-btn-lavender,
+      .ankisynth-btn-rose,
+      .fanus-btn-amber,
+      .cowork-btn-blue {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 9px 16px !important;
+        font-size: 0.78rem !important;
+        border-radius: 10px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        white-space: nowrap !important;
+      }
+
+      /* Inner Slices Mobile Tweaks */
+      .cowork-amenities-row {
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+      }
+
+      .cowork-space-header {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+      }
+
+      .cowork-space-footer-row {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+      }
+
+      .donespace-bento-slice {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+
+      .m0j-domains-spectrum {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 6px !important;
+        padding: 8px !important;
+      }
+
+      .khonshu-balance-bar {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+      }
+
+      .khonshu-cortex-signal-line {
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+      }
+
+      .fanus-double-slice {
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+
+      /* Bottom CLI explorer */
+      .cli-footer {
+        padding: 12px 14px;
+        font-size: 0.72rem;
+      }
+    }
+
+    /* Small Mobile Phones (<= 400px) */
+    @media (max-width: 400px) {
+      .card-lyraz-authentic,
+      .card-najva-authentic,
+      .card-khonshu-authentic,
+      .card-donespace-authentic,
+      .card-m0j-authentic,
+      .card-ankisynth-authentic,
+      .card-fanus-authentic,
+      .card-cowork-authentic {
+        padding: 14px 12px;
+      }
+
+      .lyraz-tech-tags,
+      .najva-tech-tags,
+      .khonshu-tech-tags,
+      .donespace-tech-tags,
+      .m0j-tech-tags,
+      .ankisynth-tech-tags,
+      .fanus-tags-row,
+      .cowork-tags-row {
+        gap: 4px;
+        font-size: 0.62rem;
+      }
+
+      .lyraz-btn-lime,
+      .najva-launch-action,
+      .khonshu-btn-indigo,
+      .donespace-btn-yellow,
+      .m0j-btn-lavender,
+      .ankisynth-btn-rose,
+      .fanus-btn-amber,
+      .cowork-btn-blue {
+        padding: 8px 12px !important;
+        font-size: 0.74rem !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Portfolio Navigation Header -->
+    <header class="top-header">
+      <div class="brand-id">
+        <div class="brand-avatar">M</div>
+        <span class="brand-handle">mahdi0jafari</span>
+      </div>
+      <nav class="nav-items">
+        <a href="#projects" style="color:var(--portfolio-accent)">Projects</a>
+        <a href="#stack">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- Hero Title Section -->
+    <section class="hero-banner">
+      <div class="pill-eyebrow">
+        <span>&gt; DEPLOYED_ECOSYSTEM // AUTHENTIC_SLICES</span>
+      </div>
+      <h1 class="hero-title">Live Production Projects</h1>
+      <p class="hero-desc">
+        8 engineered production products. Each card is an authentic slice of that live application — preserving its exact typography, iconography, interactive widgets, and brand aesthetics.
+      </p>
+    </section>
+
+    <!-- Control Bar: Category Filters -->
+    <div class="control-bar">
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterProjects('all')">All Products (8)</button>
+        <button class="filter-tab" onclick="filterProjects('ai')">AI & Quant</button>
+        <button class="filter-tab" onclick="filterProjects('social')">Social & Comms</button>
+        <button class="filter-tab" onclick="filterProjects('tools')">Tools & OS</button>
+      </div>
+
+      <div class="total-counter">
+        <span>8 Production Microcosms</span>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         2-COLUMN BALANCED RESPONSIVE GRID
+         ========================================================================= -->
+    <div class="projects-grid" id="projects-container">
+
+      <!-- =====================================================================
+           1. LYRAZ — 100% DIRECT SLICE OF https://lyraz.ir/landing
+           ===================================================================== -->
+      <a href="https://lyraz.ir/landing" target="_blank" rel="noopener noreferrer" class="card-lyraz-authentic" data-category="tools">
+        
+        <!-- Exact Top Header from Lyraz Landing -->
+        <div class="lyraz-header">
+          <div class="lyraz-brand-mark">
+            <img src="./assets/logos/lyraz.svg" alt="Lyraz Favicon Logo" class="lyraz-brand-logo" />
+            <span class="lyraz-wordmark">lyraz</span>
+          </div>
+
+          <!-- Exact Geometric Double-Loop Emblem from Lyraz Landing -->
+          <div class="lyraz-center-emblem">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111215" stroke-width="1.4">
+              <rect x="3.5" y="9.5" width="17" height="5" rx="2.5" transform="rotate(45 12 12)" />
+              <rect x="3.5" y="9.5" width="17" height="5" rx="2.5" transform="rotate(-45 12 12)" />
+            </svg>
+          </div>
+
+          <!-- Telegram Bot Badge -->
+          <div class="lyraz-bot-badge">
+            <i class="ri-telegram-fill" style="color:#2AABEE;"></i>
+            <span>@LyrazBot</span>
+          </div>
+        </div>
+
+        <!-- Exact Gigantic Headline from Lyraz Landing -->
+        <h2 class="lyraz-hero-headline">
+          TURN YOUR WORDS TO <br><span>SYMPHONY</span>
+        </h2>
+
+        <!-- Exact Satellite Chips from Lyraz Landing -->
+        <div class="lyraz-satellite-row">
+          <div class="lyraz-satellite-chip">
+            <i class="ri-disc-line" style="color:#84cc16;"></i>
+            <span>Lossless 320K</span>
+          </div>
+          <div class="lyraz-satellite-chip">
+            <i class="ri-mic-line" style="color:#9333ea;"></i>
+            <span>Live Lyrics</span>
+          </div>
+          <div class="lyraz-satellite-chip">
+            <div class="lyraz-eq-box">
+              <span class="lyraz-bar-1"></span>
+              <span class="lyraz-bar-2"></span>
+              <span class="lyraz-bar-3"></span>
+              <span class="lyraz-bar-4"></span>
+            </div>
+            <span>Live Audio</span>
+          </div>
+        </div>
+
+        <!-- Exact Narrative from Lyraz Landing -->
+        <p class="lyraz-desc-text">
+          Turn prompts, Spotify tracks, and room requests into synchronized 320kbps lossless audio with real-time live lyrics on any screen.
+        </p>
+
+        <!-- Exact CTA Button & Tech Meta from Lyraz Landing -->
+        <div class="lyraz-footer">
+          <div class="lyraz-tech-tags">
+            <span>Web Audio API</span> &bull; <span>WebSockets</span> &bull; <span>Spotify Sync</span>
+          </div>
+          <span class="lyraz-btn-lime">
+            <span>OPEN WEB PLAYER</span>
+            <i class="ri-arrow-right-up-line"></i>
+          </span>
+        </div>
+
+      </a>
+
+      <!-- =====================================================================
+           2. NAJVAGRAM — 100% DIRECT SLICE OF NAJVAGRAM (najvagram.ir)
+           ===================================================================== -->
+      <a href="https://najvagram.ir/" target="_blank" rel="noopener noreferrer" class="card-najva-authentic" data-category="social">
+        
+        <!-- Najvagram Exact Header -->
+        <div class="najva-header">
+          <div class="najva-brand-group">
+            <div class="najva-icon-box-glass">
+              <img src="./assets/logos/najva.svg" alt="Najva Logo" class="najva-brand-logo">
+            </div>
+            <div class="najva-brand-text">
+              <span class="najva-brand-title">Najvagram</span>
+              <span class="najva-brand-sub">najvagram.ir</span>
+            </div>
+          </div>
+          <div class="najva-status-pill">
+            <i class="ri-subway-fill"></i>
+            <span>قطار غریبه‌ها</span>
+          </div>
+        </div>
+
+        <!-- Najvagram Dual Headline & Narrative Block -->
+        <div class="najva-hero-block">
+          <div class="najva-hero-title-group">
+            <div class="najva-hero-title-fa">
+              <span class="najva-txt-white">ما اینجا همه</span> <span class="najva-txt-pink">غریبه‌ایم.</span>
+            </div>
+            <div class="najva-hero-title-en">HERE, WE ARE ALL STRANGERS.</div>
+          </div>
+          <p class="najva-quote-desc">
+            درست مثل دو مسافر در یک کوپه قطار. بدون نام، بدون فردا. <span class="najva-highlight">رازی بگو، سبک شو و پیاده شو.</span> اینجا قضاوت جا می‌ماند.
+          </p>
+        </div>
+
+        <!-- Najvagram Exact .btn-entry UI Component Slice -->
+        <div class="najva-btn-entry-slice">
+          <div class="najva-shimmer"></div>
+          <div class="najva-entry-left">
+            <div class="najva-key-circle">
+              <i class="ri-key-2-fill"></i>
+            </div>
+            <div class="najva-entry-text-group">
+              <span class="najva-entry-title">ورود به کوپه / Enter Compartment</span>
+              <span class="najva-entry-sub">با کلید عبور (Access Key) • HKDF-AES256</span>
+            </div>
+          </div>
+          <i class="ri-arrow-right-line najva-entry-arrow"></i>
+        </div>
+
+        <!-- Najvagram Exact Central Station Radar Slice (from landing.html) -->
+        <div class="najva-station-slice">
+          <div class="najva-station-left">
+            <div class="najva-radar-avatar">
+              <i class="ri-global-line"></i>
+              <div class="najva-radar-dot-wrap">
+                <span class="najva-ping"></span>
+                <span class="najva-dot"></span>
+              </div>
+            </div>
+            <div class="najva-station-info">
+              <span class="najva-station-title">ایستگاه مرکزی</span>
+              <span class="najva-station-meta">
+                <i class="ri-eye-off-line"></i>
+                <span>ناشناس مطلق • Live Transit</span>
+              </span>
+            </div>
+          </div>
+          <span class="najva-station-sub-en">ZERO-LOG // E2EE</span>
+        </div>
+
+        <!-- Najvagram Footer & Tech Meta -->
+        <div class="najva-footer">
+          <div class="najva-tech-tags">
+            <span class="najva-tag">Flask</span>
+            <span class="najva-tag">AES-256</span>
+            <span class="najva-tag">WebSockets</span>
+            <span class="najva-tag">Shadow Mode</span>
+          </div>
+          <span class="najva-launch-action">
+            <span>BOARD TRANSIT</span>
+            <i class="ri-arrow-right-up-line"></i>
+          </span>
+        </div>
+
+      </a>
+
+      <!-- =====================================================================
+           3. KHONSHU — 100% DIRECT SLICE OF QUANT TERMINAL (khonshu.ir)
+           ===================================================================== -->
+      <a href="https://khonshu.ir/" target="_blank" rel="noopener noreferrer" class="card-khonshu-authentic" data-category="ai">
+        
+        <!-- Top macOS Window Header with Traffic Lights & Logo -->
+        <div class="khonshu-window-header">
+          <div class="khonshu-brand-left">
+            <div class="khonshu-traffic-lights">
+              <span class="t-dot red"></span>
+              <span class="t-dot yellow"></span>
+              <span class="t-dot green"></span>
+            </div>
+            <div class="khonshu-logo-box">
+              <img src="./assets/logos/khonshu.svg" alt="Khonshu Logo" class="khonshu-logo-img">
+            </div>
+            <div class="khonshu-brand-text">
+              <span class="khonshu-brand-title">Khonshu</span>
+              <span class="khonshu-brand-sub">khonshu.ir // QUANT TERMINAL</span>
+            </div>
+          </div>
+          <div class="khonshu-latency-badge">
+            <i class="ri-pulse-line"></i>
+            <span>14ms • CORTEX_WS</span>
+          </div>
+        </div>
+
+        <!-- Total Portfolio Balance Header Slice (from Header.tsx) -->
+        <div class="khonshu-balance-bar">
+          <div class="khonshu-balance-left">
+            <span class="khonshu-balance-label">Total Portfolio Balance</span>
+            <div class="khonshu-balance-val-row">
+              <span class="khonshu-balance-val">$128,450.00</span>
+              <span class="khonshu-pnl-chip">
+                <i class="ri-arrow-up-line"></i>
+                <span>+24.80%</span>
+              </span>
+            </div>
+          </div>
+          <div class="khonshu-tab-pill-group">
+            <span class="khonshu-tab-pill active">Overview</span>
+            <span class="khonshu-tab-pill inactive">Positions</span>
+          </div>
+        </div>
+
+        <!-- Live Active Position & Orderbook Execution Slice (from ActiveOperations.tsx) -->
+        <div class="khonshu-position-slice">
+          <div class="khonshu-pos-top-row">
+            <div class="khonshu-pair-side">
+              <span class="khonshu-pair-name">BTC/USDT</span>
+              <span class="khonshu-side-badge">LONG 10x</span>
+            </div>
+            <div class="khonshu-systemic-chips">
+              <span class="khonshu-badge-in-trade">
+                <i class="ri-crosshair-2-line"></i>
+                <span>IN TRADE</span>
+              </span>
+              <span class="khonshu-badge-vol-shock">
+                <i class="ri-sound-module-line"></i>
+                <span>VOL SHOCK</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="khonshu-metrics-grid">
+            <div class="khonshu-metric-cell">
+              <span class="khonshu-metric-lbl">Entry Price</span>
+              <span class="khonshu-metric-val">$64,280.00</span>
+            </div>
+            <div class="khonshu-metric-cell">
+              <span class="khonshu-metric-lbl">Mark Price</span>
+              <span class="khonshu-metric-val">$67,420.50</span>
+            </div>
+            <div class="khonshu-metric-cell">
+              <span class="khonshu-metric-lbl">Floating PnL</span>
+              <span class="khonshu-metric-val green">+$3,140.50</span>
+            </div>
+          </div>
+
+          <div class="khonshu-cortex-signal-line">
+            <span><span class="signal-tag">[CORTEX AI]</span> Bullish Divergence</span>
+            <span>TOXIC FLOW: 0.02%</span>
+          </div>
+        </div>
+
+        <!-- Khonshu Footer & Tech Meta -->
+        <div class="khonshu-footer">
+          <div class="khonshu-tech-tags">
+            <span class="khonshu-tag">FastAPI</span>
+            <span class="khonshu-tag">WebSocket</span>
+            <span class="khonshu-tag">Tailwind v4</span>
+            <span class="khonshu-tag">OKLCH</span>
+          </div>
+          <span class="khonshu-btn-indigo">
+            <span>OPEN TERMINAL</span>
+            <i class="ri-arrow-right-up-line"></i>
+          </span>
+        </div>
+
+      </a>
+
+      <!-- =====================================================================
+           4. DONESPACE — 100% DIRECT SLICE OF DONESPACE (donespace.ir)
+           ===================================================================== -->
+      <a href="https://donespace.ir/" target="_blank" rel="noopener noreferrer" class="card-donespace-authentic" data-category="tools">
+        
+        <!-- DoneSpace Top Header -->
+        <div class="donespace-header">
+          <div class="donespace-brand-left">
+            <div class="donespace-logo-box">
+              <img src="./assets/logos/donespace.svg" alt="DoneSpace Logo" class="donespace-logo-img">
+            </div>
+            <div class="donespace-brand-text">
+              <span class="donespace-brand-title">DoneSpace</span>
+              <span class="donespace-brand-sub">donespace.ir</span>
+            </div>
+          </div>
+          <div class="donespace-status-badge">
+            <i class="ri-home-smile-line"></i>
+            <span>Household OS</span>
+          </div>
+        </div>
+
+        <!-- DoneSpace Hero Headline & Playfair Serif (from landing.html) -->
+        <div class="donespace-hero-block">
+          <h2 class="donespace-hero-headline">
+            Smart Chore Tracker &amp; <br>
+            <span class="donespace-serif-italic">Shared Household Manager</span>
+          </h2>
+          <p class="donespace-hero-desc">
+            Shared living platform designed to eliminate chore friction, plan weekly meals, and sync seamlessly with Google Calendar.
+          </p>
+        </div>
+
+        <!-- DoneSpace Bento Slice (Queue + XP + Meal from landing.html) -->
+        <div class="donespace-bento-slice">
+          <!-- Active Queue Col -->
+          <div class="donespace-queue-col">
+            <span class="donespace-queue-title">
+              <i class="ri-checkbox-circle-line"></i>
+              <span>Active Queue</span>
+            </span>
+            <div class="donespace-task-item">
+              <span class="donespace-check-box done"><i class="ri-check-line"></i></span>
+              <span class="donespace-task-text done">Vacuum living room</span>
+              <span class="donespace-avatar-chip">J</span>
+            </div>
+            <div class="donespace-task-item">
+              <span class="donespace-check-box done"><i class="ri-check-line"></i></span>
+              <span class="donespace-task-text done">Load dishwasher</span>
+              <span class="donespace-avatar-chip yellow">A</span>
+            </div>
+            <div class="donespace-task-item">
+              <span class="donespace-check-box pending"></span>
+              <span class="donespace-task-text">Take out recycling</span>
+              <span class="donespace-avatar-chip">R</span>
+            </div>
+          </div>
+
+          <!-- Side Widgets: XP Progress + Dinner -->
+          <div class="donespace-side-col">
+            <div class="donespace-xp-card">
+              <div class="donespace-xp-header">
+                <span>Weekly Goal</span>
+                <span style="color:#8c52ff;">75%</span>
+              </div>
+              <span class="donespace-xp-val">3,240 XP</span>
+              <div class="donespace-prog-bar">
+                <div class="donespace-prog-fill"></div>
+              </div>
+            </div>
+
+            <div class="donespace-meal-card">
+              <span class="donespace-meal-emoji">🍜</span>
+              <div class="donespace-meal-info">
+                <span class="donespace-meal-name">Miso Ramen</span>
+                <span class="donespace-meal-sub">Tonight, 7:30 PM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DoneSpace Footer & Tech Meta -->
+        <div class="donespace-footer">
+          <div class="donespace-tech-tags">
+            <span class="donespace-tag">Flask</span>
+            <span class="donespace-tag">GCal API</span>
+            <span class="donespace-tag">PWA</span>
+            <span class="donespace-tag">PostgreSQL</span>
+          </div>
+          <span class="donespace-btn-yellow">
+            <span>OPEN DASHBOARD</span>
+            <i class="ri-arrow-right-up-line"></i>
+          </span>
+        </div>
+
+      </a>
+
+      <!-- =====================================================================
+           5. M0J (LIFE ARCHITECTURE) — 100% DIRECT SLICE OF JANUS-CORE / LIFE_ARCH
+           ===================================================================== -->
+      <a href="https://m0j.ir/" target="_blank" rel="noopener noreferrer" class="card-m0j-authentic" data-category="tools">
+        
+        <!-- Top Header with Geometric Vector Logo and Status Badge -->
+        <div class="m0j-header">
+          <div class="m0j-brand-left">
+            <div class="m0j-logo-box">
+              <svg viewBox="0 0 32 32">
+                <circle cx="16" cy="16" r="14" fill="none" stroke="#b084f5" stroke-width="2.5"/>
+                <rect x="11" y="11" width="10" height="10" fill="#b084f5" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="30" stroke="#b084f5" stroke-width="0.5" stroke-dasharray="2,2"/>
+                <line x1="2" y1="16" x2="30" y2="16" stroke="#b084f5" stroke-width="0.5" stroke-dasharray="2,2"/>
+              </svg>
+            </div>
+            <div class="m0j-brand-text">
+              <span class="m0j-brand-title">Life Architecture</span>
+              <span class="m0j-brand-sub">m0j.ir // IDENTITY MATRIX</span>
+            </div>
+          </div>
+          <div class="m0j-status-badge">
+            <i class="ri-compass-3-line"></i>
+            <span>8-DOMAIN SCAFFOLD</span>
+          </div>
+        </div>
+
+        <!-- Hero Headline & Subtitle -->
+        <div class="m0j-hero-block">
+          <h2 class="m0j-hero-headline">
+            ARCHITECT LEVEL 14 &amp; <br>
+            <span class="m0j-neon-title">IDENTITY CAPITAL CODEX</span>
+          </h2>
+          <p class="m0j-hero-desc">
+            Systemic self-actualization engine scaffolding 8 foundational life domains into actionable epic quests and identity capital.
+          </p>
+        </div>
+
+        <!-- 8-Domain Matrix UI Slice (from life_index.html) -->
+        <div class="m0j-matrix-slice">
+          <div class="m0j-matrix-top-row">
+            <span class="m0j-level-badge">
+              <i class="ri-shield-star-line"></i>
+              <span>ARCHITECT RANK // TIER 4</span>
+            </span>
+            <span class="m0j-xp-counter">3,420 XP • 84.6% BASELINE</span>
+          </div>
+
+          <!-- 8 Domain Glowing Spectrum -->
+          <div class="m0j-domains-spectrum">
+            <div class="m0j-domain-item" title="Mind: Deep Growth">
+              <span class="m0j-domain-dot" style="color:#6D7CFF;background:#6D7CFF;"></span>
+              <span class="m0j-domain-lbl">MIND</span>
+            </div>
+            <div class="m0j-domain-item" title="Body: Vitality">
+              <span class="m0j-domain-dot" style="color:#FF7A7A;background:#FF7A7A;"></span>
+              <span class="m0j-domain-lbl">BODY</span>
+            </div>
+            <div class="m0j-domain-item" title="Skills: Competence">
+              <span class="m0j-domain-dot" style="color:#8AD66D;background:#8AD66D;"></span>
+              <span class="m0j-domain-lbl">SKILL</span>
+            </div>
+            <div class="m0j-domain-item" title="Relations: Connection">
+              <span class="m0j-domain-dot" style="color:#FFB454;background:#FFB454;"></span>
+              <span class="m0j-domain-lbl">REL</span>
+            </div>
+            <div class="m0j-domain-item" title="Experience: Perspective">
+              <span class="m0j-domain-dot" style="color:#67D9E8;background:#67D9E8;"></span>
+              <span class="m0j-domain-lbl">EXP</span>
+            </div>
+            <div class="m0j-domain-item" title="Adventure: Novelty">
+              <span class="m0j-domain-dot" style="color:#6AA8FF;background:#6AA8FF;"></span>
+              <span class="m0j-domain-lbl">ADV</span>
+            </div>
+            <div class="m0j-domain-item" title="Impact: Legacy">
+              <span class="m0j-domain-dot" style="color:#B084F5;background:#B084F5;"></span>
+              <span class="m0j-domain-lbl">IMP</span>
+            </div>
+            <div class="m0j-domain-item" title="Finance: Sovereignty">
+              <span class="m0j-domain-dot" style="color:#F6C453;background:#F6C453;"></span>
+              <span class="m0j-domain-lbl">FIN</span>
+            </div>
+          </div>
+
+          <div class="m0j-quest-bar">
+            <span><span class="m0j-quest-tag">⚔️ EPIC QUEST:</span> Deep Work Routine &amp; Architecture</span>
+            <span style="color:#b084f5;">ACTIVE</span>
+          </div>
+        </div>
+
+        <!-- m0j Footer & Tech Meta -->
+        <div class="m0j-footer">
+          <div class="m0j-tech-tags">
+            <span class="m0j-tag">Flask</span>
+            <span class="m0j-tag">SSE Live</span>
+            <span class="m0j-tag">Chart.js</span>
+            <span class="m0j-tag">Spring UI</span>
+          </div>
+          <span class="m0j-btn-lavender">
+            <span>ENTER MATRIX</span>
+            <i class="ri-arrow-right-up-line"></i>
+          </span>
+        </div>
+
+      </a>
+
+      <!-- =====================================================================
+           6. ANKISYNTH AI — 100% DIRECT SLICE OF ANKISYNTH (github.io/AnkiSynth)
+           ===================================================================== -->
+      <a href="https://mahdi0jafari.github.io/AnkiSynth/" target="_blank" rel="noopener noreferrer" class="card-ankisynth-authentic" data-category="ai">
+        
+        <!-- Top Header with SVG Logo and Gemini Badge -->
+        <div class="ankisynth-header">
+          <div class="ankisynth-brand-left">
+            <div class="ankisynth-logo-box">
+              <img src="./assets/logos/ankisynth.svg" alt="AnkiSynth Logo" class="ankisynth-logo-img">
+            </div>
+            <div class="ankisynth-brand-text">
+              <span class="ankisynth-brand-title">AnkiSynth AI</span>
+              <span class="ankisynth-brand-sub">github.io/AnkiSynth</span>
+            </div>
+          </div>
+          <div class="ankisynth-status-badge">
+            <i class="ri-sparkling-2-line"></i>
+            <span>Gemini 3.1 Flash // FORGE</span>
+          </div>
+        </div>
+
+        <!-- Hero Headline & Subtitle -->
+        <div class="ankisynth-hero-block">
+          <h2 class="ankisynth-hero-headline">
+            AI KNOWLEDGE FORGE &amp; <br>
+            <span class="ankisynth-neon-title">SPACED REPETITION ENGINE</span>
+          </h2>
+          <p class="ankisynth-hero-desc">
+            Transform research papers and lecture notes into atomic, high-retention Anki decks with multi-turn AI synthesis and cloze generation.
+          </p>
+        </div>
+
+        <!-- Ingestion & Forged Card UI Slice (from SourcePanel.tsx & Workbench.tsx) -->
+        <div class="ankisynth-forge-slice">
+          <div class="ankisynth-forge-header">
+            <span class="ankisynth-mode-tag">FORGE MODE: ACTIVE</span>
+            <span class="ankisynth-ai-engine">
+              <i class="ri-brain-line"></i>
+              <span>Ingesting Source Text</span>
+            </span>
+          </div>
+
+          <div class="ankisynth-card-preview">
+            <span class="ankisynth-card-front">Q: What is the primary role of the VTA-to-Accumbens mesolimbic pathway?</span>
+            <span class="ankisynth-card-back">A: Reinforces behavioral motivation and long-term synaptic consolidation.</span>
+          </div>
+
+          <div class="ankisynth-forge-footer-meta">
+            <span><span>🧠 Neuroscience</span> • <span style="color:#83fc8e;">+42 Cards Ready</span></span>
+            <span class="ankisynth-tag-chip">📦 APKG Export</span>
+          </div>
+        </div>
+
+        <!-- AnkiSynth Footer & Tech Meta -->
+        <div class="ankisynth-footer">
+          <div class="ankisynth-tech-tags">
+            <span class="ankisynth-tag">Next.js 15</span>
+            <span class="ankisynth-tag">Gemini API</span>
+            <span class="ankisynth-tag">Dexie.js</span>
+            <span class="ankisynth-tag">APKG Gen</span>
+          </div>
+          <span class="ankisynth-btn-rose">
+            <span>⌘ + ↵ FORGE DECK</span>
+            <i class="ri-arrow-right-up-line"></i>
+          </span>
+        </div>
+
+      </a>
+
+      <!-- =====================================================================
+           7. FANUS (جایی برای نوشته‌هامون) — 100% DIRECT SLICE OF LIVE FANUS-SPACE.IR
+           ===================================================================== -->
+      <a href="https://fanus-space.ir/" target="_blank" rel="noopener noreferrer" class="card-fanus-authentic" data-category="social">
+        
+        <!-- Top Header with Original Fanus SVG Vector Logo and Archive Badge -->
+        <div class="fanus-header">
+          <div class="fanus-brand-left">
+            <div class="fanus-logo-box">
+              <svg viewBox="0 0 358 598" fill="none">
+                <path d="M35.3281 596.6C33.3281 594.1 34.5281 590.6 38.0281 589.1C43.0281 586.9 43.8281 583.5 43.5281 567.6C43.4281 559.9 43.7281 551.2 44.3281 548.2C45.8281 539.9 50.0281 531.5 54.9281 527C57.3281 524.8 59.3281 522.5 59.3281 522.1C59.3281 521.6 56.7281 520.6 53.6281 520C23.6281 514.2 3.82806 494.6 0.428056 467.3C-0.571944 459.5 0.228056 445.3 2.32806 432.5C4.02806 422 5.12806 414.1 9.32806 382C9.82806 377.9 10.9281 369.6 11.8281 363.5C12.6281 357.5 14.0281 347.1 14.8281 340.5C15.7281 333.9 17.4281 320.6 18.8281 311C21.1281 294.6 23.6281 275.9 28.4281 240.5C34.0281 198.3 35.4281 192.2 41.4281 182.9C48.1281 172.4 59.0281 165.4 74.7281 161.6C79.6281 160.3 84.0281 158.7 84.4281 157.9C84.8281 157.1 86.2281 154.4 87.4281 151.8C92.0281 142 104.728 132.6 119.428 128C125.628 126.2 141.228 123.3 148.328 122.8C151.628 122.5 151.828 122.2 152.128 118.8C152.428 115.2 152.328 115.1 145.428 111.5C133.228 105.1 124.028 94 119.728 80.5C112.528 57.7 118.228 33.6 134.628 17.6C146.828 5.69996 159.828 0.599962 177.828 0.799962C206.528 0.999962 226.728 14.5 235.928 39.7C238.528 46.7 238.828 48.7 238.828 60C238.828 70.3 238.428 73.7 236.628 79.2C232.028 92.7 221.628 106.2 210.928 112.5C206.928 114.9 206.328 115.6 206.328 118.6C206.328 122.5 205.528 122.2 222.228 124.5C228.428 125.4 237.028 127.2 241.228 128.5C256.228 133.3 268.928 143.3 271.328 152.1C273.128 158.9 273.528 159.3 279.928 160.6C294.728 163.6 306.928 170.7 314.028 180.4C322.128 191.4 324.228 198.6 328.328 230.9C330.028 243.9 332.028 259 332.828 264.5C333.628 270 334.928 279.9 335.728 286.5C336.628 293.1 339.328 313.4 341.828 331.5C346.328 364 347.628 374.3 350.828 399C351.728 405.9 352.828 414.4 353.328 418C357.228 445.2 357.528 449.7 357.128 461.3C356.728 470.9 356.028 474.9 354.128 480.2C348.828 494.3 339.128 504.9 324.928 511.9C317.128 515.8 303.528 520 298.628 520C295.328 520 295.828 522.1 299.928 525.3C305.028 529.4 308.928 535.3 311.028 541.8C312.428 546.5 312.728 550.5 312.528 564.8C312.228 584 312.928 587 318.528 588.9C321.928 590.1 322.928 592.3 321.528 595.6L320.328 598H178.428C55.9281 598 36.4281 597.8 35.3281 596.6Z" fill="#E1D3B0"/>
+                <path d="M147.828 425.9C147.428 425.3 149.128 423.2 151.428 421.2C170.428 405.2 181.528 390.4 188.428 372C190.928 365.1 191.628 361.6 192.028 353.5C192.428 344.7 192.228 343.1 190.428 340.2C187.828 336.2 186.028 335.5 174.528 334.1C154.728 331.7 142.728 323.8 135.728 308.6C132.628 301.9 131.128 288.9 132.528 280.5C135.428 262.1 149.428 245.1 166.228 239.5C193.028 230.7 219.128 243.2 232.028 270.8C236.728 280.9 238.528 290.2 238.528 304.5C238.428 355.1 205.728 403.2 157.328 423.5C148.028 427.5 148.628 427.3 147.828 425.9Z" fill="#F5B54D"/>
+              </svg>
+            </div>
+            <div class="fanus-brand-text">
+              <span class="fanus-brand-title">فانوس • Fanus</span>
+              <span class="fanus-brand-sub">fanus-space.ir // جایی برای نوشته‌هامون</span>
+            </div>
+          </div>
+          <div class="fanus-status-badge">
+            <i class="ri-candle-fill"></i>
+            <span>گوشه دنج خاطرات</span>
+          </div>
+        </div>
+
+        <!-- Hero Headline & Subtitle matching live site -->
+        <div class="fanus-hero-block">
+          <h2 class="fanus-hero-headline">
+            روزها و شب‌هایی که گذشت... &bull; <br>
+            <span class="fanus-amber-title">EMOTIONAL DIGITAL SANCTUARY</span>
+          </h2>
+          <p class="fanus-rule-creed">
+            «بخوان، مرور کن... آرشیو دل‌نوشته‌های فانوس در دل شب.»
+          </p>
+        </div>
+
+        <!-- Authentic Dual Slices from Live Site -->
+        <div class="fanus-double-slice">
+          
+          <!-- 1. Live Archive Memorial Box Slice (.archive-container) -->
+          <div class="fanus-archive-slice">
+            <span class="fanus-archive-badge">
+              <i class="ri-history-line"></i>
+              <span>پناهگاه کلمات در دل شب</span>
+            </span>
+            <p class="fanus-archive-text">
+              فانوس پناهگاهی امن بود برای نوشتن حس‌هایی که جای دیگری برای شنیده‌شدن نداشتند؛ بغض‌هایی در سکوت و کلماتی که بی‌نام و بدون قضاوت ماندند.
+            </p>
+          </div>
+
+          <!-- 2. Authentic Wall of Flames Post Slice (Direct from Database) -->
+          <div class="fanus-post-slice">
+            <p class="fanus-post-text">«من با ماه امشب یاد تو افتادم...»</p>
+            <div class="fanus-post-meta">
+              <span>۰۰:۲۱ بامداد • دیوار شعله‌ها</span>
+              <span class="fanus-candle-reaction">
+                <i class="ri-fire-fill"></i>
+                <span>شمع روشن شد</span>
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Fanus Footer & Tech Meta -->
+        <div class="fanus-footer">
+          <div class="fanus-tags-row">
+            <span class="fanus-chip">Flask</span>
+            <span class="fanus-chip">SQLite WAL</span>
+            <span class="fanus-chip">SSE Stream</span>
+          </div>
+          <span class="fanus-btn-amber">
+            <span>ورود به فانوس</span>
+            <i class="ri-arrow-right-up-line"></i>
+          </span>
+        </div>
+
+      </a>
+
+      <!-- =====================================================================
+           8. COWORKMAP & BLUEWHITE — 100% DIRECT CODEBASE SLICE
+           ===================================================================== -->
+      <a href="http://coworkmap.ir/" target="_blank" rel="noopener noreferrer" class="card-cowork-authentic" data-category="tools">
+        
+        <!-- Top Header with BlueWhite Official Logo and Neshan Status Badge -->
+        <div class="cowork-header">
+          <div class="cowork-brand-left">
+            <div class="cowork-logo-box">
+              <img src="./assets/logos/bluewhite_official.png" alt="آبی سفید BlueWhite Logo" />
+            </div>
+            <div class="cowork-brand-text">
+              <span class="cowork-brand-title">CoWorkMap × آبی‌سفید</span>
+              <span class="cowork-brand-sub">coworkmap.ir // blue-white.co</span>
+            </div>
+          </div>
+          <div class="cowork-status-badge">
+            <i class="ri-map-pin-2-fill"></i>
+            <span>۳۴۰+ فضا • نشان API</span>
+          </div>
+        </div>
+
+        <!-- Hero Headline & Subtitle -->
+        <div class="cowork-hero-block">
+          <h2 class="cowork-hero-headline">
+            نقشه تعاملی و رزرواسیون فضاهای کار اشتراکی <br>
+            <span class="cowork-blue-title">IRAN COWORKING HUBS &amp; BLUE-WHITE</span>
+          </h2>
+          <p class="cowork-hero-desc">
+            کاوشگر جغرافیایی و دایرکتوری زنده بیش از ۳۴۰ فضای کار در ایران، با امکان مسیریابی نشان، مقایسه امکانات و رزرو مستقیم شعب آبی‌سفید.
+          </p>
+        </div>
+
+        <!-- Genuine Hub Space Preview Slice (from CoworkDetailsContent.vue & coworks.json) -->
+        <div class="cowork-hub-slice">
+          <div class="cowork-space-header">
+            <span class="cowork-space-name">
+              <img src="./assets/logos/bluewhite_official.png" alt="BlueWhite" style="width:18px;height:18px;border-radius:4px;vertical-align:middle;object-fit:contain;background:#fff;padding:1px;" />
+              <span>آبی سفید فناپ • اصفهان</span>
+            </span>
+            <span class="cowork-rating-tag">
+              <i class="ri-star-fill"></i>
+              <span>۴.۹ (۱۴۲ نظر)</span>
+            </span>
+          </div>
+
+          <!-- Address snippet -->
+          <div style="font-size:0.72rem;color:#94a3b8;display:flex;align-items:center;gap:4px;">
+            <i class="ri-map-pin-line" style="color:#0089B0;"></i>
+            <span>اصفهان، خ آمادگاه، روبروی هتل عباسی</span>
+          </div>
+
+          <!-- Amenities Pills from Database -->
+          <div class="cowork-amenities-row">
+            <span class="cowork-amenity-pill">⚡ فیبر نوری</span>
+            <span class="cowork-amenity-pill">☕ کافه بار</span>
+            <span class="cowork-amenity-pill">🤝 اتاق جلسات</span>
+            <span class="cowork-amenity-pill">📅 رزرو آنلاین</span>
+          </div>
+
+          <!-- Bottom Routing Meta -->
+          <div class="cowork-space-footer-row">
+            <span class="cowork-status-live">
+              <i class="ri-checkbox-circle-fill"></i>
+              <span>پذیرش و رزرواسیون فعال</span>
+            </span>
+            <span class="cowork-routing-hint">
+              <span>مسیریابی با نشان</span>
+              <i class="ri-navigation-fill"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- CoWorkMap Footer & Tech Meta -->
+        <div class="cowork-footer">
+          <div class="cowork-tags-row">
+            <span class="cowork-chip">Vue 3</span>
+            <span class="cowork-chip">Vuetify</span>
+            <span class="cowork-chip">Neshan API</span>
+            <span class="cowork-chip">GeoJSON</span>
+          </div>
+          <span class="cowork-btn-blue">
+            <span>رزرو و نقشه // EXPLORE ↗</span>
+          </span>
+        </div>
+
+      </a>
+
+    </div>
+
+    <!-- Bottom CLI Explorer Tile -->
+    <a href="https://github.com/mahdi0jafari?tab=repositories" target="_blank" rel="noopener noreferrer" class="cli-footer">
+      <span style="color:var(--portfolio-accent)">&gt; cd ./archive &amp;&amp; ls -la</span>
+      <span style="opacity:0.35">|</span>
+      <span>Explore all 24+ open-source GitHub repositories &rarr;</span>
+    </a>
+
+  </div>
+
+  <script>
+    function filterProjects(category) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const cards = document.querySelectorAll(
+        '.card-lyraz-authentic, .card-najva-authentic, .card-khonshu-authentic, .card-donespace-authentic, .card-m0j-authentic, .card-ankisynth-authentic, .card-fanus-authentic, .card-cowork-authentic'
+      );
+      cards.forEach(c => {
+        if (category === 'all' || c.getAttribute('data-category') === category) {
+          c.style.display = 'flex';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

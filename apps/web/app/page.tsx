@@ -1,7 +1,7 @@
 import HeaderTile from '@/components/bento/HeaderTile'
 import HeroTile from '@/components/bento/HeroTile'
 import SocialTile from '@/components/bento/SocialTile'
-import ProjectTile from '@/components/bento/ProjectTile'
+import EcosystemShowcase from '@/components/ecosystem/EcosystemShowcase'
 import TerminalTile from '@/components/bento/TerminalTile'
 import FloatingContact from '@/components/FloatingContact'
 import { getGitHubProjects } from '@/lib/api'
@@ -10,7 +10,6 @@ export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const projects = await getGitHubProjects();
-  const topProjects = projects.slice(0, 3); // Take the top 3 projects sorted by stars
 
   return (
     <>
@@ -20,22 +19,7 @@ export default async function Home() {
         <HeroTile />
         <SocialTile />
         
-        {topProjects.length > 0 ? (
-          topProjects.map((project) => (
-            <ProjectTile 
-              key={project.id}
-              title={project.repo_name}
-              description={project.description || "No description provided."}
-              status="Production"
-              url={project.url}
-              tags={[...(project.languages && project.languages.length > 0 ? project.languages : ["Code"]), `⭐ ${project.stars}`]}
-            />
-          ))
-        ) : (
-          <div className="col-span-full md:col-span-2 lg:col-span-1 glass-effect p-8 rounded-3xl flex items-center justify-center card-glow h-[350px] text-brand-secondary">
-            Syncing agent databanks... 
-          </div>
-        )}
+        <EcosystemShowcase />
 
         <TerminalTile />
 

@@ -18,16 +18,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
     networks:
       - backend
-
-
 
   web:
     build:
       context: ../apps/web
       dockerfile: Dockerfile
     pull_policy: if_not_present
+    restart: unless-stopped
     env_file:
       - ../apps/api/.env # اگر فرانت‌ هم نیاز به متغیر داشت
     environment:
@@ -39,6 +39,7 @@ services:
 
   postgres:
     image: ankane/pgvector:latest
+    restart: unless-stopped
     env_file:
       - ../apps/api/.env
     environment:
@@ -55,8 +56,6 @@ services:
       - backend
     # پورت ۵۴۳۲ برای امنیت بسته ماند. فقط داخل شبکه داکر در دسترس است.
 
-
-
   nginx:
     image: nginx:alpine
     ports:
@@ -68,7 +67,7 @@ services:
         condition: service_started
       api:
         condition: service_healthy
-    restart: always
+    restart: unless-stopped
     networks:
       - frontend
       - backend

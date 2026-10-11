@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahdi Jafari • Live Production Showcase</title>
+  
+  <!-- Curated Product Design System Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+
+  <style>
+    /* ==========================================================
+       Portfolio Base Layout & Canvas Tokens
+       ========================================================== */
+    :root {
+      --canvas-bg: #050508;
+      --canvas-border: rgba(255, 255, 255, 0.08);
+      --canvas-text: #ffffff;
+      --canvas-muted: #94a3b8;
+      --portfolio-accent: #00F0FF;
+      --global-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--canvas-bg);
+      color: var(--canvas-text);
+      font-family: var(--global-font);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 24px 16px 80px 16px;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.04) 0%, transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(140, 82, 255, 0.03) 0%, transparent 50%);
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Portfolio Navigation Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--canvas-border);
+      border-radius: 14px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 24px;
+    }
+
+    .brand-id {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-avatar {
+      width: 24px;
+      height: 24px;
+      background: var(--portfolio-accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: 800;
+      font-size: 11px;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    .brand-handle {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-items {
+      display: flex;
+      gap: 18px;
+      font-size: 0.82rem;
+      color: var(--canvas-muted);
+      font-weight: 500;
+    }
+
+    .nav-items a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-items a:hover {
+      color: var(--portfolio-accent);
+    }
+
+    /* Hero Section Banner */
+    .hero-banner {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 0 12px;
+    }
+
+    .pill-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 3px 12px;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--portfolio-accent);
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 60%, #64748b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--canvas-muted);
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: 0.88rem;
+    }
+
+    /* Control Bar: Filters */
+    .control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--canvas-border);
+    }
+
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-tab {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--canvas-border);
+      color: var(--canvas-muted);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .filter-tab:hover, .filter-tab.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .total-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--canvas-muted);
+    }
+
+    /* ==========================================================
+       SHOWCASE GRID (Perfect 2-Column Responsive Layout)
+       ========================================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    @media (max-width: 780px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    /* Base Product Card */
+    .project-card {
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      min-height: 200px;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+    }
+
+    /* Top Row: Logo, Brand Info, Badge, Action Arrow */
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo-container {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .logo-container img, .logo-container svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .project-card:hover .logo-container {
+      transform: scale(1.08);
+    }
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .project-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .project-domain {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      opacity: 0.65;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .badge-chip {
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .arrow-icon-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .project-card:hover .arrow-icon-btn {
+      transform: translate(2px, -2px);
+    }
+
+    /* Middle Row: Product Narrative */
+    .card-description {
+      font-size: 0.82rem;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Embedded Signature Native Micro-Widget */
+    .native-micro-widget {
+      padding: 8px 12px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.74rem;
+      font-family: 'JetBrains Mono', monospace;
+      flex-wrap: wrap;
+    }
+
+    /* Bottom Row: Tech Stack Pills */
+    .card-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+
+    .tech-pills {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .tech-tag {
+      font-size: 0.65rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .launch-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      opacity: 0.85;
+    }
+
+
+    /* =========================================================================
+       1. LYRAZ — Audio Brutalism (https://lyraz.ir/landing)
+       ========================================================================= */
+    .card-lyraz {
+      --lz-lime: #76e500;
+      background: radial-gradient(ellipse at 95% 15%, rgba(118, 229, 0, 0.16) 0%, #0e1406 50%, #060803 100%);
+      border: 1px solid rgba(118, 229, 0, 0.35);
+    }
+    .card-lyraz:hover {
+      border-color: var(--lz-lime);
+      box-shadow: 0 8px 30px rgba(118, 229, 0, 0.22);
+    }
+    .card-lyraz .logo-container {
+      background: #141c08;
+      border: 1px solid rgba(118, 229, 0, 0.45);
+    }
+    .card-lyraz .project-title {
+      font-family: 'Anton', sans-serif;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+    }
+    .card-lyraz .badge-chip {
+      background: rgba(118, 229, 0, 0.15);
+      color: var(--lz-lime);
+      border: 1px solid rgba(118, 229, 0, 0.4);
+    }
+    .card-lyraz .arrow-icon-btn {
+      background: var(--lz-lime);
+      color: #000;
+      box-shadow: 0 0 10px rgba(118, 229, 0, 0.4);
+    }
+    .card-lyraz .card-description {
+      color: #bef264;
+      opacity: 0.85;
+    }
+    .card-lyraz .native-micro-widget {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(118, 229, 0, 0.25);
+      color: #d9f99d;
+    }
+    .card-lyraz .tech-tag {
+      background: rgba(118, 229, 0, 0.1);
+      color: #bef264;
+      border: 1px solid rgba(118, 229, 0, 0.25);
+    }
+    .card-lyraz .launch-text {
+      color: var(--lz-lime);
+    }
+
+    /* Lyraz Equalizer Bars */
+    .lz-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 14px;
+    }
+    .lz-bar {
+      width: 3px;
+      background: var(--lz-lime);
+      border-radius: 1px;
+      animation: lzEq 1.1s infinite ease-in-out alternate;
+    }
+    .lz-bar:nth-child(2) { animation-delay: 0.2s; }
+    .lz-bar:nth-child(3) { animation-delay: 0.5s; }
+    .lz-bar:nth-child(4) { animation-delay: 0.15s; }
+    .lz-bar:nth-child(5) { animation-delay: 0.4s; }
+    @keyframes lzEq {
+      0% { height: 3px; }
+      100% { height: 13px; }
+    }
+
+
+    /* =========================================================================
+       2. NAJVAGRAM — Cyber-Noir Encrypted Transit (https://najvagram.ir/)
+       ========================================================================= */
+    .card-najva {
+      --nj-pink: #fb51fb;
+      background: radial-gradient(ellipse at 95% 15%, rgba(251, 81, 251, 0.16) 0%, #160a1c 50%, #09050d 100%);
+      border: 1px solid rgba(251, 81, 251, 0.35);
+    }
+    .card-najva:hover {
+      border-color: var(--nj-pink);
+      box-shadow: 0 8px 30px rgba(251, 81, 251, 0.22);
+    }
+    .card-najva .logo-container {
+      background: #200e29;
+      border: 1px solid rgba(251, 81, 251, 0.45);
+    }
+    .card-najva .project-title {
+      font-family: 'Space Grotesk', sans-serif;
+      color: #ffffff;
+    }
+    .card-najva .badge-chip {
+      background: rgba(251, 81, 251, 0.15);
+      color: var(--nj-pink);
+      border: 1px solid rgba(251, 81, 251, 0.4);
+    }
+    .card-najva .arrow-icon-btn {
+      background: rgba(251, 81, 251, 0.2);
+      color: var(--nj-pink);
+      border: 1px solid rgba(251, 81, 251, 0.45);
+    }
+    .card-najva:hover .arrow-icon-btn {
+      background: var(--nj-pink);
+      color: #000;
+      box-shadow: 0 0 10px rgba(251, 81, 251, 0.5);
+    }
+    .card-najva .card-description {
+      color: #f472b6;
+      opacity: 0.85;
+    }
+    .card-najva .native-micro-widget {
+      background: rgba(18, 10, 24, 0.7);
+      border: 1px solid rgba(251, 81, 251, 0.3);
+      color: #f472b6;
+    }
+    .card-najva .tech-tag {
+      background: rgba(251, 81, 251, 0.1);
+      color: #f472b6;
+      border: 1px solid rgba(251, 81, 251, 0.25);
+    }
+    .card-najva .launch-text {
+      color: var(--nj-pink);
+    }
+
+
+    /* =========================================================================
+       3. KHONSHU — Ultra-Precision Quant Terminal (https://khonshu.ir/)
+       ========================================================================= */
+    .card-khonshu {
+      --kh-cyan: #38bdf8;
+      background: radial-gradient(ellipse at 95% 15%, rgba(56, 189, 248, 0.14) 0%, #07101c 50%, #02050b 100%);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .card-khonshu:hover {
+      border-color: var(--kh-cyan);
+      box-shadow: 0 8px 30px rgba(56, 189, 248, 0.22);
+    }
+    .card-khonshu .logo-container {
+      background: #091424;
+      border: 1px solid rgba(211, 162, 43, 0.45);
+    }
+    .card-khonshu .project-title {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(90deg, #f97316 0%, #f43f5e 50%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-khonshu .badge-chip {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--kh-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
+    .card-khonshu .arrow-icon-btn {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--kh-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+    }
+    .card-khonshu:hover .arrow-icon-btn {
+      background: var(--kh-cyan);
+      color: #000;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+    .card-khonshu .card-description {
+      color: #7dd3fc;
+      opacity: 0.85;
+    }
+    .card-khonshu .native-micro-widget {
+      background: rgba(8, 18, 32, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      color: #93c5fd;
+    }
+    .card-khonshu .tech-tag {
+      background: rgba(56, 189, 248, 0.1);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+    .card-khonshu .launch-text {
+      color: var(--kh-cyan);
+    }
+
+
+    /* =========================================================================
+       4. DONESPACE — Elegant Household Glass (https://donespace.ir/)
+       ========================================================================= */
+    .card-donespace {
+      --ds-purple: #8c52ff;
+      background: radial-gradient(ellipse at 95% 15%, rgba(140, 82, 255, 0.18) 0%, #19102c 50%, #0a0714 100%);
+      border: 1px solid rgba(140, 82, 255, 0.38);
+    }
+    .card-donespace:hover {
+      border-color: var(--ds-purple);
+      box-shadow: 0 8px 30px rgba(140, 82, 255, 0.22);
+    }
+    .card-donespace .logo-container {
+      background: #251642;
+      border: 1px solid rgba(140, 82, 255, 0.45);
+    }
+    .card-donespace .project-title {
+      font-family: 'Playfair Display', serif;
+      color: #f5f3ff;
+      font-size: 1.25rem;
+    }
+    .card-donespace .badge-chip {
+      background: rgba(140, 82, 255, 0.18);
+      color: #c084fc;
+      border: 1px solid rgba(140, 82, 255, 0.4);
+    }
+    .card-donespace .arrow-icon-btn {
+      background: var(--ds-purple);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(140, 82, 255, 0.4);
+    }
+    .card-donespace .card-description {
+      color: #d8b4fe;
+      opacity: 0.85;
+    }
+    .card-donespace .native-micro-widget {
+      background: rgba(30, 18, 52, 0.7);
+      border: 1px solid rgba(140, 82, 255, 0.3);
+      color: #e9d5ff;
+    }
+    .card-donespace .tech-tag {
+      background: rgba(140, 82, 255, 0.1);
+      color: #c084fc;
+      border: 1px solid rgba(140, 82, 255, 0.25);
+    }
+    .card-donespace .launch-text {
+      color: #c084fc;
+    }
+
+
+    /* =========================================================================
+       5. M0J (LIFE ARCHITECTURE) — 8-Domain Identity OS (https://m0j.ir/)
+       ========================================================================= */
+    .card-m0j {
+      --m0j-lav: #b084f5;
+      background: radial-gradient(ellipse at 95% 15%, rgba(176, 132, 245, 0.16) 0%, #160e28 50%, #080510 100%);
+      border: 1px solid rgba(176, 132, 245, 0.35);
+    }
+    .card-m0j:hover {
+      border-color: var(--m0j-lav);
+      box-shadow: 0 8px 30px rgba(176, 132, 245, 0.22);
+    }
+    .card-m0j .logo-container {
+      background: #1e1236;
+      border: 1px solid rgba(176, 132, 245, 0.45);
+    }
+    .card-m0j .project-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      color: #ffffff;
+    }
+    .card-m0j .badge-chip {
+      background: rgba(176, 132, 245, 0.15);
+      color: var(--m0j-lav);
+      border: 1px solid rgba(176, 132, 245, 0.4);
+    }
+    .card-m0j .arrow-icon-btn {
+      background: rgba(176, 132, 245, 0.2);
+      color: var(--m0j-lav);
+      border: 1px solid rgba(176, 132, 245, 0.45);
+    }
+    .card-m0j:hover .arrow-icon-btn {
+      background: var(--m0j-lav);
+      color: #000;
+      box-shadow: 0 0 10px rgba(176, 132, 245, 0.5);
+    }
+    .card-m0j .card-description {
+      color: #c4b5fd;
+      opacity: 0.85;
+    }
+    .card-m0j .native-micro-widget {
+      background: rgba(24, 14, 40, 0.7);
+      border: 1px solid rgba(176, 132, 245, 0.28);
+      color: #e9d5ff;
+    }
+    .m0j-dot-node {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .card-m0j .tech-tag {
+      background: rgba(176, 132, 245, 0.1);
+      color: #d8b4fe;
+      border: 1px solid rgba(176, 132, 245, 0.25);
+    }
+    .card-m0j .launch-text {
+      color: var(--m0j-lav);
+    }
+
+
+    /* =========================================================================
+       6. ANKISYNTH AI — The Digital Forge (https://mahdi0jafari.github.io/AnkiSynth/)
+       ========================================================================= */
+    .card-ankisynth {
+      --ak-rose: #f43f5e;
+      background: radial-gradient(ellipse at 95% 15%, rgba(244, 63, 94, 0.16) 0%, #180d1b 50%, #09040b 100%);
+      border: 1px solid rgba(244, 114, 182, 0.35);
+    }
+    .card-ankisynth:hover {
+      border-color: #fb7185;
+      box-shadow: 0 8px 30px rgba(244, 63, 94, 0.22);
+    }
+    .card-ankisynth .logo-container {
+      background: #221025;
+      border: 1px solid rgba(244, 114, 182, 0.45);
+    }
+    .card-ankisynth .project-title {
+      font-family: 'Space Grotesk', sans-serif;
+      color: #ffffff;
+    }
+    .card-ankisynth .badge-chip {
+      background: rgba(244, 114, 182, 0.15);
+      color: #f472b6;
+      border: 1px solid rgba(244, 114, 182, 0.4);
+    }
+    .card-ankisynth .arrow-icon-btn {
+      background: rgba(244, 114, 182, 0.2);
+      color: #f472b6;
+      border: 1px solid rgba(244, 114, 182, 0.45);
+    }
+    .card-ankisynth:hover .arrow-icon-btn {
+      background: #f43f5e;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+    }
+    .card-ankisynth .card-description {
+      color: #fbcfe8;
+      opacity: 0.85;
+    }
+    .card-ankisynth .native-micro-widget {
+      background: rgba(26, 12, 28, 0.7);
+      border: 1px solid rgba(244, 114, 182, 0.28);
+      color: #f472b6;
+    }
+    .card-ankisynth .tech-tag {
+      background: rgba(244, 114, 182, 0.1);
+      color: #f472b6;
+      border: 1px solid rgba(244, 114, 182, 0.25);
+    }
+    .card-ankisynth .launch-text {
+      color: #f472b6;
+    }
+
+
+    /* =========================================================================
+       7. FANUS — Nostalgic Candlelight Sanctuary (https://fanus-space.ir/)
+       ========================================================================= */
+    .card-fanus {
+      --fn-amber: #F5B54D;
+      background: radial-gradient(ellipse at 95% 15%, rgba(245, 181, 77, 0.18) 0%, #1e1309 50%, #0a0703 100%);
+      border: 1px solid rgba(245, 181, 77, 0.38);
+    }
+    .card-fanus:hover {
+      border-color: var(--fn-amber);
+      box-shadow: 0 8px 30px rgba(245, 181, 77, 0.22);
+    }
+    .card-fanus .logo-container {
+      background: #281a0c;
+      border: 1px solid rgba(245, 181, 77, 0.45);
+    }
+    .card-fanus .project-title {
+      font-family: 'Playfair Display', serif;
+      color: #fef3c7;
+      font-size: 1.25rem;
+    }
+    .card-fanus .badge-chip {
+      background: rgba(245, 181, 77, 0.16);
+      color: var(--fn-amber);
+      border: 1px solid rgba(245, 181, 77, 0.4);
+    }
+    .card-fanus .arrow-icon-btn {
+      background: rgba(245, 181, 77, 0.2);
+      color: var(--fn-amber);
+      border: 1px solid rgba(245, 181, 77, 0.45);
+    }
+    .card-fanus:hover .arrow-icon-btn {
+      background: var(--fn-amber);
+      color: #000;
+      box-shadow: 0 0 10px rgba(245, 181, 77, 0.5);
+    }
+    .card-fanus .card-description {
+      color: #fde68a;
+      opacity: 0.85;
+    }
+    .card-fanus .native-micro-widget {
+      background: rgba(30, 18, 8, 0.7);
+      border: 1px solid rgba(245, 181, 77, 0.3);
+      color: #fde68a;
+    }
+    .card-fanus .tech-tag {
+      background: rgba(245, 181, 77, 0.1);
+      color: #fde68a;
+      border: 1px solid rgba(245, 181, 77, 0.25);
+    }
+    .card-fanus .launch-text {
+      color: var(--fn-amber);
+    }
+
+
+    /* =========================================================================
+       8. COWORKMAP — Geospatial Urban Directory (http://coworkmap.ir/)
+       ========================================================================= */
+    .card-cowork {
+      --cw-blue: #1976d2;
+      background: radial-gradient(ellipse at 95% 15%, rgba(25, 118, 210, 0.18) 0%, #0c182b 50%, #030813 100%);
+      border: 1px solid rgba(25, 118, 210, 0.38);
+    }
+    .card-cowork:hover {
+      border-color: #3b82f6;
+      box-shadow: 0 8px 30px rgba(25, 118, 210, 0.22);
+    }
+    .card-cowork .logo-container {
+      background: #11233e;
+      border: 1px solid rgba(25, 118, 210, 0.45);
+    }
+    .card-cowork .project-title {
+      font-family: 'Space Grotesk', sans-serif;
+      color: #ffffff;
+    }
+    .card-cowork .badge-chip {
+      background: rgba(25, 118, 210, 0.16);
+      color: #60a5fa;
+      border: 1px solid rgba(25, 118, 210, 0.4);
+    }
+    .card-cowork .arrow-icon-btn {
+      background: rgba(25, 118, 210, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(25, 118, 210, 0.45);
+    }
+    .card-cowork:hover .arrow-icon-btn {
+      background: #2563eb;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+    }
+    .card-cowork .card-description {
+      color: #93c5fd;
+      opacity: 0.85;
+    }
+    .card-cowork .native-micro-widget {
+      background: rgba(12, 24, 46, 0.7);
+      border: 1px solid rgba(25, 118, 210, 0.3);
+      color: #93c5fd;
+    }
+    .card-cowork .tech-tag {
+      background: rgba(25, 118, 210, 0.1);
+      color: #60a5fa;
+      border: 1px solid rgba(25, 118, 210, 0.25);
+    }
+    .card-cowork .launch-text {
+      color: #60a5fa;
+    }
+
+    /* Bottom CLI Tile */
+    .cli-footer {
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--canvas-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin-top: 24px;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+    .cli-footer:hover {
+      border-color: var(--portfolio-accent);
+      color: #fff;
+      background: rgba(0, 240, 255, 0.025);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Portfolio Navigation Header -->
+    <header class="top-header">
+      <div class="brand-id">
+        <div class="brand-avatar">M</div>
+        <span class="brand-handle">mahdi0jafari</span>
+      </div>
+      <nav class="nav-items">
+        <a href="#projects" style="color:var(--portfolio-accent)">Projects</a>
+        <a href="#stack">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- Hero Title Section -->
+    <section class="hero-banner">
+      <div class="pill-eyebrow">
+        <span>&gt; DEPLOYED_ECOSYSTEM // PRODUCTION</span>
+      </div>
+      <h1 class="hero-title">Live Production Projects</h1>
+      <p class="hero-desc">
+        8 engineered production applications. Each card is crafted directly from that product's native design system, vector iconography, and signature interactive widget.
+      </p>
+    </section>
+
+    <!-- Control Bar: Category Filters -->
+    <div class="control-bar">
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterProjects('all')">All Products (8)</button>
+        <button class="filter-tab" onclick="filterProjects('ai')">AI & Quant</button>
+        <button class="filter-tab" onclick="filterProjects('social')">Social & Comms</button>
+        <button class="filter-tab" onclick="filterProjects('tools')">Tools & OS</button>
+      </div>
+
+      <div class="total-counter">
+        <span>8 Production Microcosms</span>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         2-COLUMN BALANCED RESPONSIVE GRID
+         ========================================================================= -->
+    <div class="projects-grid" id="projects-container">
+
+      <!-- 1. LYRAZ (Audio Brutalism) -->
+      <a href="https://lyraz.ir/landing" target="_blank" rel="noopener noreferrer" class="project-card card-lyraz" data-category="tools">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <img src="./assets/logos/lyraz.svg" alt="Lyraz SVG Logo" />
+            </div>
+            <div class="title-group">
+              <span class="project-title">LYRAZ</span>
+              <span class="project-domain">lyraz.ir</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-pulse-fill"></i> 320kbps</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Collaborative sound grid with real-time synchronized live lyrics, Web Audio synthesis & Telegram bot queueing.
+        </p>
+
+        <div class="native-micro-widget">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="lz-bars">
+              <div class="lz-bar"></div>
+              <div class="lz-bar"></div>
+              <div class="lz-bar"></div>
+              <div class="lz-bar"></div>
+              <div class="lz-bar"></div>
+            </div>
+            <span>Lossless Sound Grid</span>
+          </div>
+          <span style="opacity:0.8;">@LyrazBot Queue</span>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">Web Audio API</span>
+            <span class="tech-tag">WebSockets</span>
+            <span class="tech-tag">Telegram Bot</span>
+          </div>
+          <span class="launch-text">Launch App &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 2. NAJVAGRAM (Cyber-Noir Encrypted Transit) -->
+      <a href="https://najvagram.ir/" target="_blank" rel="noopener noreferrer" class="project-card card-najva" data-category="social">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <img src="./assets/logos/najva.svg" alt="Najvagram SVG Logo" />
+            </div>
+            <div class="title-group">
+              <span class="project-title">Najvagram</span>
+              <span class="project-domain">najvagram.ir</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-shield-keyhole-line"></i> Zero-Knowledge</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Anonymous encrypted transit messenger with train compartment metaphor and ephemeral access key pairing.
+        </p>
+
+        <div class="native-micro-widget">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <i class="ri-key-2-line"></i>
+            <span>KEY: AES-256 HKDF</span>
+          </div>
+          <span style="opacity:0.75;">0 User Logs</span>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">AES-256</span>
+            <span class="tech-tag">WebSockets</span>
+          </div>
+          <span class="launch-text">Enter Transit &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 3. KHONSHU (Quant Terminal) -->
+      <a href="https://khonshu.ir/" target="_blank" rel="noopener noreferrer" class="project-card card-khonshu" data-category="ai">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <img src="./assets/logos/khonshu.svg" alt="Khonshu SVG Logo" />
+            </div>
+            <div class="title-group">
+              <span class="project-title">Khonshu</span>
+              <span class="project-domain">khonshu.ir</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-line-chart-line"></i> Quant Gateway</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Enterprise quant execution gateway with sub-15ms WebSocket streaming, agentic security & OKLCH palette.
+        </p>
+
+        <div class="native-micro-widget">
+          <div>SIGNAL: <span style="color:#22c55e;font-weight:700;">LONG 98.4%</span></div>
+          <div>LATENCY: <span style="color:#38bdf8;font-weight:700;">14ms</span></div>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">Next.js 15</span>
+            <span class="tech-tag">FastAPI</span>
+            <span class="tech-tag">OKLCH</span>
+          </div>
+          <span class="launch-text">Terminal &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 4. DONESPACE (Household OS) -->
+      <a href="https://donespace.ir/" target="_blank" rel="noopener noreferrer" class="project-card card-donespace" data-category="tools">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <img src="./assets/logos/donespace.svg" alt="DoneSpace SVG Logo" />
+            </div>
+            <div class="title-group">
+              <span class="project-title">DoneSpace</span>
+              <span class="project-domain">donespace.ir</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-home-smile-line"></i> Household OS</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Smart shared household chore manager and meal planner synced with Google Calendar and gamified XP rewards.
+        </p>
+
+        <div class="native-micro-widget">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <i class="ri-checkbox-circle-fill" style="color:#c084fc;"></i>
+            <span>Clean Kitchen</span>
+          </div>
+          <span style="background:rgba(253,224,71,0.25);color:#fef08a;padding:1px 6px;border-radius:4px;font-size:0.65rem;font-weight:700;">+15 pts</span>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">PWA</span>
+            <span class="tech-tag">Google Calendar</span>
+          </div>
+          <span class="launch-text">Open Space &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 5. M0J (8-Domain Identity OS) -->
+      <a href="https://m0j.ir/" target="_blank" rel="noopener noreferrer" class="project-card card-m0j" data-category="tools">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <svg viewBox="0 0 32 32">
+                <circle cx="16" cy="16" r="14" fill="none" stroke="#b084f5" stroke-width="2.5"/>
+                <rect x="11" y="11" width="10" height="10" fill="#b084f5" rx="2"/>
+              </svg>
+            </div>
+            <div class="title-group">
+              <span class="project-title">Life Architecture</span>
+              <span class="project-domain">m0j.ir</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-compass-3-line"></i> Identity OS</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Gamified life operating system scaffolding 8 foundational domains of human potential with physics-driven UI.
+        </p>
+
+        <div class="native-micro-widget">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="m0j-dot-node" style="background:#6D7CFF"></span>
+            <span class="m0j-dot-node" style="background:#FF7A7A"></span>
+            <span class="m0j-dot-node" style="background:#8AD66D"></span>
+            <span class="m0j-dot-node" style="background:#FFB454"></span>
+            <span class="m0j-dot-node" style="background:#67D9E8"></span>
+            <span class="m0j-dot-node" style="background:#B084F5"></span>
+          </div>
+          <span style="font-size:0.7rem;opacity:0.8;">8-Domain Spectrum</span>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">FastAPI</span>
+            <span class="tech-tag">Spring Physics</span>
+            <span class="tech-tag">Bilingual</span>
+          </div>
+          <span class="launch-text">Explore Matrix &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 6. ANKISYNTH AI (Digital Forge) -->
+      <a href="https://mahdi0jafari.github.io/AnkiSynth/" target="_blank" rel="noopener noreferrer" class="project-card card-ankisynth" data-category="ai">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <img src="./assets/logos/ankisynth.svg" alt="AnkiSynth SVG Logo" />
+            </div>
+            <div class="title-group">
+              <span class="project-title">AnkiSynth AI</span>
+              <span class="project-domain">github.io/AnkiSynth</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-brain-line"></i> Knowledge Forge</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Cognitive distillation engine converting raw research into atomic spaced-repetition Anki decks with Gemini AI.
+        </p>
+
+        <div class="native-micro-widget">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <i class="ri-command-line"></i>
+            <span>Shortcut: ⌘ + Enter</span>
+          </div>
+          <span style="color:#f472b6;font-weight:700;">Gemini 3.1</span>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">Next.js</span>
+            <span class="tech-tag">Gemini AI</span>
+            <span class="tech-tag">Spaced Rep</span>
+          </div>
+          <span class="launch-text">Open Forge &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 7. FANUS (Candlelight Sanctuary) -->
+      <a href="https://fanus-space.ir/" target="_blank" rel="noopener noreferrer" class="project-card card-fanus" data-category="social">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <img src="./assets/logos/fanus.svg" alt="Fanus SVG Logo" />
+            </div>
+            <div class="title-group">
+              <span class="project-title">Fanus</span>
+              <span class="project-domain">fanus-space.ir</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-fire-line"></i> Sanctuary</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Emotional digital sanctuary and public whisper wall preserving midnight community reflections and candlelight.
+        </p>
+
+        <div class="native-micro-widget">
+          <div>🕯️ Anonymous Reflections</div>
+          <span style="opacity:0.75;">Legacy Sanctuary</span>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">Whisper Engine</span>
+            <span class="tech-tag">CSS Modules</span>
+          </div>
+          <span class="launch-text">Visit Sanctuary &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 8. COWORKMAP (Geospatial Urban Directory) -->
+      <a href="http://coworkmap.ir/" target="_blank" rel="noopener noreferrer" class="project-card card-cowork" data-category="tools">
+        <div class="card-header-row">
+          <div class="brand-group">
+            <div class="logo-container">
+              <img src="./assets/logos/coworkmap.svg" alt="CoWorkMap SVG Logo" />
+            </div>
+            <div class="title-group">
+              <span class="project-title">CoWorkMap</span>
+              <span class="project-domain">coworkmap.ir</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="badge-chip"><i class="ri-map-pin-2-line"></i> Urban Map</span>
+            <div class="arrow-icon-btn"><i class="ri-arrow-right-up-line"></i></div>
+          </div>
+        </div>
+
+        <p class="card-description">
+          Interactive map and directory of Iranian coworking spaces with live amenity filtering and Neshan routing.
+        </p>
+
+        <div class="native-micro-widget">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <i class="ri-map-pin-fill" style="color:#ef4444;"></i>
+            <span>Tehran • Isfahan • Shiraz</span>
+          </div>
+          <span style="color:#60a5fa;font-weight:700;">Neshan Maps</span>
+        </div>
+
+        <div class="card-footer-row">
+          <div class="tech-pills">
+            <span class="tech-tag">Vue 3</span>
+            <span class="tech-tag">Vuetify 3</span>
+            <span class="tech-tag">Neshan API</span>
+          </div>
+          <span class="launch-text">Explore Map &rarr;</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Bottom CLI Explorer Tile -->
+    <a href="https://github.com/mahdi0jafari?tab=repositories" target="_blank" rel="noopener noreferrer" class="cli-footer">
+      <span style="color:var(--portfolio-accent)">&gt; cd ./archive && ls -la</span>
+      <span style="opacity:0.35">|</span>
+      <span>Explore all 24+ open-source GitHub repositories &rarr;</span>
+    </a>
+
+  </div>
+
+  <script>
+    function filterProjects(category) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const cards = document.querySelectorAll('.project-card');
+      cards.forEach(c => {
+        if (category === 'all' || c.getAttribute('data-category') === category) {
+          c.style.display = 'flex';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
